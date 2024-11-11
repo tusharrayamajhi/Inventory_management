@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/dashboard.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo_section">
+        <div class="bar"><i class="fa-solid fa-bars"></i></div>
+        <div class="logo">
+          <img
+            src="https://th.bing.com/th/id/OIP.kKCKGMv2UvoWsO5e9PVCOwHaD4?rs=1&pid=ImgDetMain"
+            alt=""
+          />
+        </div>
+        <div class="cmp_name">stock HUB</div>
+      </div>
+      <div class="profile_section">
+        <div class="pro_pic" id="profile">
+          <img
+            src="https://avatars.githubusercontent.com/u/84193854?v=4"
+            alt=""
+            />
+            <div class="profile_option">
+                <a href="" class="setting"><i class="fa-thin fa-gear"></i>seting</a>
+                <a href="/auth/logout" class="logout"><i class="fa-thin fa-arrow-right-from-bracket"></i>logout</a>
+            </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="card_sections">
+        <%if(roles == "superadmin"){%>
+        <div class="card">
+          <div class="card_title">users</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">company</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <%}else if(roles === "admin"){%>
+        <div class="card">
+          <div class="card_title">category</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">brand</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/unit/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">unit</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/unit/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">user</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">customer</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">product</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">vendor</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">purchases</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">invoices</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <%}else if(roles == "normal"){%>
+        <div class="card">
+          <div class="card_title">invoices</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card_title">customer</div>
+          <div class="card_btm">
+            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
+            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+          </div>
+        </div>
+        <%}%>
+      </div>
+    </main>
+  </body>
+  <script src="/dashboard.js"></script>
+</html>

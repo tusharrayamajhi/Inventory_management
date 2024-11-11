@@ -1,0 +1,27 @@
+{
+  "name": "inventory_management",
+  "version": "1.0.0",
+  "description": "this is inventory management website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tusharrayamajhi/Inventory_management.git"
+  },
+  "author": "Tushar|Raja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tusharrayamajhi/Inventory_management/issues"
+  },
+  "homepage": "https://github.com/tusharrayamajhi/Inventory_management#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "inventory_management": "file:",
+    "mysql2": "^3.11.3"
+  }
+}
