@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Unit</title>
+</head>
+<body>
+    <h1>Edit Unit</h1>
+    <form id="editbrand">
+        <input type="hidden" name="brand_id" value="<%= data.brand_id%>">
+        <label for="brand_name">brand name:</label>
+        <input type="text" id="brand_name" name="brand_name" value="<%= data.brand_name%>" required>
+        <br><br>
+        
+        <label for="brand_desc">brand description:</label>
+        <textarea id="brand_desc" name="brand_desc" required><%= data.brand_desc%></textarea>
+        <br><br>
+        
+        <button type="submit">Update Unit</button>
+    </form>
+</body>
+<script src="/editbrand.js"></script>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+</head>
+<body>
+    <form id="edituser">
+        <!-- Name -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="<%= data.result.name %>" required />
+
+        <!-- Address -->
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" value="<%= data.result.address %>" />
+
+        <!-- Phone -->
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" value="<%= data.result.phone %>" maxlength="10" />
+
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="<%= data.result.email %>" required />
+
+        <!-- Is Active -->
+        <label for="is_active">Is Active:</label>
+        <input type="checkbox" id="is_active" name="is_active" value="1" <%= data.result.is_active ? 'checked' : '' %> />
+        <input type="hidden" id="user_id" name="user_id" value="<%=data.result.user_id%>"  />
+        <!-- Roles -->
+        <label for="roles">Role:</label>
+        <select id="roles" name="roles" required>
+          <option value="admin" <%= data.result.roles === 'admin' ? 'selected' : '' %>>Admin</option>
+          <option value="normal" <%= data.result.roles === 'normal' ? 'selected' : '' %>>Normal</option>
+          <% if (data.user.roles === 'superadmin') { %>
+            <option value="superadmin" <%= data.result.roles === 'superadmin' ? 'selected' : '' %>>Superadmin</option>
+          <% } %>
+        </select>
+        <% if (data.user.roles == 'superadmin') { %>
+            <label for="company">company:</label>
+            <select id="company" name="company" required>
+                <option> select company</option>
+                <%for(let company of data.company){%>
+                    <option value="<%= company.company_id %>" <%= data.result.company_id === company.company_id ? 'selected' : '' %>><%= company.company_name %></option>
+                <%}%>
+            </select>
+        <% } %>
+
+        <!-- Submit Button -->
+        <button type="submit">Update User</button>
+    </form>
+</body>
+<script src="/edituser.js"></script>
+</html>
+

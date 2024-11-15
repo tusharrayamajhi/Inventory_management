@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,4 +30,102 @@
     </form>
 </body>
 <script src="/signup.js"></script>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Form</title>
+    <link rel="stylesheet" href="/signup.css" />
+  </head>
+  <body>
+    <!-- Login from container -->
+    <div class="signup_form">
+      <form id="signupDetails">
+        <!-- <h3>Welcome to <span>STOCK HUB</span></h3> -->
+        <h3>Registration</h3>
+
+        <!-- Full name input box -->
+        <div class="items_div">
+          <input
+            class="items_input"
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Full Name"
+            required
+          />
+          <span id="error_name"></span>
+        </div>
+
+        <!-- Address input box -->
+        <div class="items_div">
+          <input
+            class="items_input"
+            type="text"
+            id="address"
+            name="address"
+            placeholder="Address"
+            required
+          />
+        </div>
+
+        <!-- Phone input box -->
+        <div class="items_div">
+          <input
+            class="items_input"
+            type="number"
+            id="phone"
+            name="phone"
+            placeholder="Phone"
+            required
+          />
+          <span id="error_phone"></span>
+        </div>
+
+        <!-- Email input box -->
+        <div class="items_div">
+          <input
+            class="items_input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            required
+          />
+          <span id="error_email"></span>
+        </div>
+
+        <!-- Password input box -->
+        <div class="items_div">
+          <input
+            class="items_input"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <span id="error_password"></span>
+        </div>
+
+        <!-- Check box for policy -->
+        <!-- <div class="policy">
+					<input type="checkbox" required>
+					<p>I accept all terms & condition</p>
+				</div> -->
+
+        <!-- Signup button -->
+        <button type="submit">Register Now</button>
+        <span class="error"></span>
+
+        <!-- Direction to Login page -->
+        <div class="text">
+          <p>Already have an account? <a href="/auth/login">Login now</a></p>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script src="/signup.js"></script>
 </html>

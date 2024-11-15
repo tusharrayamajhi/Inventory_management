@@ -9,10 +9,10 @@ document.getElementById("unit_form").addEventListener("submit",async (e)=>{
         },
         body:JSON.stringify(formdata)
     })
-    const result = response.json();
-    if(response.ok){
-        alert(result.message);
-    }else{
+     response.json().then(result=>{
         alert(result.message)
-    }
+     }).catch(err=>{
+        alert(result.message)
+     })
+   
 })

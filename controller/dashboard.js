@@ -1,18 +1,9 @@
 
 const ejs = require('ejs')
-
+const {render,renderFileWithData} = require("../util/renderfile")
 const fs = require('fs')
 const path = require('path')
-let sessions = require('../util/object');
-const mimeType = {
-    ".html": "text/html",
-    ".css": "text/css",
-    ".js": "application/javascript",
-    ".json": "application/json",
-    ".jpg": "image/jpeg",
-    ".png": "image/png",
-    ".ejs": "ejs",
-  };
+let{sessions,mimeType} = require('../util/object');
   
 module.exports = async function dashboard(req, res) {
     let filepath = "";
@@ -54,18 +45,6 @@ module.exports = async function dashboard(req, res) {
     const ext = req.url.split(".");
     filepath = path.join(__dirname, `../public/${ext[1]}`, req.url);
   }
-  fs.readFile(filepath, (err, data) => {
-    if (err) {
-      fs.readFile("../public/html/error.html", (err, data) => {
-        res.writeHead(404, { "Content-Type": "text/html" });
-        return res.end(data);
-      });
-    } else {
-      const extname = path.extname(filepath);
-      const contentType = mimeType[extname] || "text/plain";
-      res.writeHead(200, { "Content-Type": contentType });
-      console.log(contentType);
-      return res.end(data);
-    }
-  });
+  render(req,res,filepath)
+  
 };

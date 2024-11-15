@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Unit</title>
+</head>
+<body>
+    <h1>Edit category</h1>
+    <form id="editcategory">
+        <input type="hidden" name="category_id" value="<%= data.category_id%>">
+        <label for="category_name">category name:</label>
+        <input type="text" id="category_name" name="category_name" value="<%= data.category_name%>" required>
+        <br><br>
+        
+        <label for="category_description">category description:</label>
+        <textarea id="category_description" name="category_des" required><%= data.category_des%></textarea>
+        <br><br>
+        
+        <button type="submit">Update Unit</button>
+    </form>
+</body>
+<script src="/editcategory.js"></script>
+</html>

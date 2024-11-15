@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Form</title>
+</head>
+<body>
+    <h2>Customer Form</h2>
+    <form action="your_server_endpoint" method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required maxlength="100"><br><br>
+
+        <label for="phone">Phone:</label><br>
+        <input type="text" id="phone" name="phone" pattern="\d{10}" maxlength="10"><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" maxlength="100"><br><br>
+
+        <label for="address">Address:</label><br>
+        <input type="text" id="address" name="address" required maxlength="100"><br><br>
+
+        <label for="country">Country:</label><br>
+        <input type="text" id="country" name="country" maxlength="50"><br><br>
+
+        <label for="state">State:</label><br>
+        <input type="text" id="state" name="state" maxlength="50"><br><br>
+
+        <label for="city">City:</label><br>
+        <input type="text" id="city" name="city" maxlength="50"><br><br>
+
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

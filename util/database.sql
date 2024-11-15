@@ -1,74 +1,7 @@
-Drop Database inventory;
+Drop Database inventory; 
 CREATE DATABASE IF NOT EXISTS Inventory;
 USE Inventory;
 
-CREATE TABLE users (
-		user_id INT NOT NULL PRIMARY KEY auto_increment,
-        name VARCHAR(100) NOT NULL,
-        address VARCHAR(100),
-        phone char(10),
-        email VARCHAR(100) NOT NULL,
-        password varchar(100) NOT NULL,
-        is_active TINYINT(1) DEFAULT 0,
-        roles enum("admin","normal","superadmin") default "normal" not null,
-        created_at TimeStamp DEFAULT CURRENT_TIMESTAMP ,
-        updated_at DateTime DEFAULT CURRENT_TIMESTAMP on update current_timestamp
-	);
-    
-CREATE TABLE customers(
-		customer_id INT NOT NULL PRIMARY KEY auto_increment,
-		name VARCHAR(100) NOT NULL,
-        phone char(10),
-        email VARCHAR(100),
-        address VARCHAR(100) Not null , 
-        country VARCHAR(50), 
-        state VARCHAR(50) , 
-        city VARCHAR(50) ,
-        user_id int,
-        created_at timestamp default current_timestamp,
-        updated_at timestamp default current_timestamp on update current_timestamp,
-        foreign key(user_id) references users(user_id)
-        );
-        
-Create Table categorys( 
-			category_id int primary key auto_increment,
-            category_name varchar(100) not null,
-            category_des varchar(255),
-            created_at timestamp default current_timestamp,
-            updated_at timestamp default current_timestamp on update current_timestamp
-);
-
-CREATE TABLE products(
-		product_id int primary key auto_increment,
-        product_name varchar(100) not null,
-        brand varchar(50),
-        unit varchar(30),
-        buying_rate decimal(10,2) ,
-        vat decimal(5,2),
-        selling_rate decimal(10,2) ,
-        stock int unsigned,
-        category_id int,
-        created_at timestamp default current_timestamp,
-        updated_at timestamp default current_timestamp on update current_timestamp,
-        foreign key(category_id) references categorys(category_id)
-        );
-
-CREATE TABLE vendors(
-		vendor_id int primary key auto_increment,
-        vendor_name varchar(100) not null,
-        email varchar(50),
-        phone char(10) not null,
-        pan_no char(9),
-        pin_code varchar(50),
-        country varchar(50) not null,
-        state varchar(50),
-        city varchar(50) not null,
-        address varchar(100) not null,
-        created_by int not null,
-        created_at timestamp default current_timestamp,
-        updated_at timestamp default current_timestamp on update current_timestamp,
-        foreign key(created_by) references users(user_id)
-        );
 
 CREATE TABLE companies(
 		company_id int primary key auto_increment,
@@ -94,6 +27,100 @@ CREATE TABLE companies(
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp
         );
+CREATE TABLE users (
+		user_id INT NOT NULL PRIMARY KEY auto_increment,
+        name VARCHAR(100) NOT NULL,
+        address VARCHAR(100),
+        phone char(10),
+        email VARCHAR(100) NOT NULL unique,
+        password varchar(200) NOT NULL,
+        is_active TINYINT(1) DEFAULT 0,
+        roles enum("admin","normal","superadmin") ,
+        company_id int default null,
+        created_by int,
+        created_at TimeStamp DEFAULT CURRENT_TIMESTAMP ,
+        updated_at DateTime DEFAULT CURRENT_TIMESTAMP on update current_timestamp,
+        foreign key(company_id) references companies(company_id),
+        foreign key(created_by) references users(user_id)
+	);
+CREATE TABLE customers(
+		customer_id INT NOT NULL PRIMARY KEY auto_increment,
+		name VARCHAR(100) NOT NULL,
+        phone char(10),
+        email VARCHAR(100),
+        address VARCHAR(100) Not null , 
+        country VARCHAR(50), 
+        state VARCHAR(50) , 
+        city VARCHAR(50) ,
+        user_id int,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp default current_timestamp on update current_timestamp,
+        foreign key(user_id) references users(user_id)
+        );
+        
+Create Table categorys( 
+			category_id int primary key auto_increment,
+            category_name varchar(100) not null,
+            category_des varchar(255),
+            user int not null,
+            foreign key(user) references users(user_id),
+            created_at timestamp default current_timestamp,
+            updated_at timestamp default current_timestamp on update current_timestamp
+);
+create table brands(
+			brand_id int primary key auto_increment,
+            brand_name varchar(100) not null unique,
+            brand_desc varchar(255),
+            brand_img varchar(100),
+            user int not null,
+			created_at timestamp default current_timestamp,
+			updated_at timestamp default current_timestamp on update current_timestamp,
+            foreign key(user) references users(user_id)
+            );
+create table units(
+			unit_id int primary key auto_increment,
+			unit_name varchar(30) not null,
+            short_name varchar(10) not null,
+            user int not null,
+			created_at timestamp default current_timestamp,
+			updated_at timestamp default current_timestamp on update current_timestamp,
+            foreign key(user) references users(user_id)
+);
+
+CREATE TABLE products(
+		product_id int primary key auto_increment,
+        product_name varchar(100) not null,
+        brand int not null,
+        unit int not null,
+        buying_rate decimal(10,2) ,
+        vat decimal(5,2),
+        selling_rate decimal(10,2) ,
+        stock int unsigned,
+        category int,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp default current_timestamp on update current_timestamp,
+        foreign key(unit) references units(unit_id),
+        foreign key(brand) references brands(brand_id),
+        foreign key(category) references categorys(category_id)
+        );
+
+CREATE TABLE vendors(
+		vendor_id int primary key auto_increment,
+        vendor_name varchar(100) not null,
+        email varchar(50),
+        phone char(10) not null,
+        pan_no char(9),
+        pin_code varchar(50),
+        country varchar(50) not null,
+        state varchar(50),
+        city varchar(50) not null,
+        address varchar(100) not null,
+        created_by int not null,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp default current_timestamp on update current_timestamp,
+        foreign key(created_by) references users(user_id)
+        );
+
 CREATE TABLE purchases(
 		purchase_id int primary key auto_increment,
         ordered_qnt int unsigned,
@@ -103,12 +130,11 @@ CREATE TABLE purchases(
         pruchase_date timestamp default current_timestamp,
         status enum("pending","received","cancle") default "received",
         remarks text,
-        vendor_id int not null,
-        product_id int not null,
-        foreign key(vendor_id) references users(user_id),
-        foreign key(product_id) references products(product_id)
+        vendor int not null,
+        product int not null,
+        foreign key(vendor) references users(user_id),
+        foreign key(product) references products(product_id)
     );
-    
     
 CREATE TABLE invoices(
 		invoices_id int primary key auto_increment,
@@ -129,24 +155,19 @@ CREATE TABLE invoices(
 
 
 
-
-
-
-
 INSERT INTO users (name, address, phone, email, password, is_active, roles)
 VALUES
-    ('John Doe', '123 Main St, Butwal', '9876543210', 'john.doe@example.com', "abcd" , 1, 'admin'),
-    ('Alice Smith', '456 Oak St, Pokhara', '9867345678', 'alice.smith@example.com',"abcd" , 1, 'normal'),
-    ('Bob Johnson', '789 Pine St, Kathmandu', '9856345678', 'bob.johnson@example.com',"abcd" , 0, 'normal'),
+    ('John Doe', '123 Main St, Butwal', '9876543210', 'john.doe@example.com', "52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 1, 'admin'),
+    ('Alice Smith', '456 Oak St, Pokhara', '9867345678', 'alice.smith@example.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 1, 'normal'),
+    ('Bob Johnson', '789 Pine St, Kathmandu', '9856345678', 'bob.johnson@example.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 0,"normal"),
     ('Charlie Brown', '321 Maple St, Lalitpur', '9845678901', 'charlie.brown@example.com',"abcd" , 1, 'normal'),
     ('David Lee', '123 Birch St, Bhaktapur', '9834567890', 'david.lee@example.com',"abcd" , 1, 'normal'),
     ('Emma Green', '654 Cedar St, Pokhara', '9823456789', 'emma.green@example.com',"abcd" , 1, 'normal'),
     ('Frank White', '789 Oak St, Butwal', '9812345678', 'frank.white@example.com',"abcd" , 0, 'normal'),
     ('Grace Black', '987 Pine St, Kathmandu', '9801234567', 'grace.black@example.com',"abcd" , 1, 'normal'),
     ('Helen Blue', '432 Elm St, Pokhara', '9798765432', 'helen.blue@example.com',"abcd" , 0, 'normal'),
-    ('tushar rayamajhi', '432 Elm St, butwal', '9798765432', 'tusharrayamajhi@gmail.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9
-" , 0, 'superadmin'),
-    ('Ivy Yellow', '876 Maple St, Lalitpur', '9787654321', 'ivy.yellow@example.com',"abcd" , 1, 'normal');
+    ('tushar rayamajhi', '432 Elm St, butwal', '9798765432', 'tusharrayamajhi@gmail.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 1, 'superadmin'),
+    ('Ivy Yellow', '876 Maple St, Lalitpur', '9787654321', 'ivy.yellow@exampe.com',"abcd" , 1, 'normal');
 
 INSERT INTO customers (name, phone, email, address, country, state, city, user_id)
 VALUES
@@ -162,39 +183,50 @@ VALUES
     ('Mia Lee', '9689988776', 'mia.lee@example.com', '444 East Rd, Pokhara', 'Nepal', 'Gandaki', 'Pokhara', 10);
 
 
-INSERT INTO categorys (category_name, category_des)
+INSERT INTO categorys (category_name, category_des,user)
 VALUES
-    ('Electronics', 'Devices and accessories like mobile phones, laptops, and TVs'),
-    ('Home Appliances', 'Kitchen and home appliances like refrigerators, washing machines'),
-    ('Furniture', 'Indoor and outdoor furniture like tables, chairs, sofas'),
-    ('Toys', 'Kids toys and games'),
-    ('Sports', 'Sporting equipment and accessories'),
-    ('Clothing', 'Apparel for men, women, and children'),
-    ('Books', 'Books and educational material'),
-    ('Groceries', 'Food items and groceries'),
-    ('Automobiles', 'Cars, motorcycles, and accessories'),
-    ('Health & Beauty', 'Cosmetics, wellness, and healthcare products');
+    ('Electronics', 'Devices and accessories like mobile phones, laptops, and TVs',1),
+    ('Home Appliances', 'Kitchen and home appliances like refrigerators, washing machines',2),
+    ('Furniture', 'Indoor and outdoor furniture like tables, chairs, sofas',2),
+    ('Toys', 'Kids toys and games',1),
+    ('Sports', 'Sporting equipment and accessories',2),
+    ('Clothing', 'Apparel for men, women, and children',1),
+    ('Books', 'Books and educational material',2),
+    ('Groceries', 'Food items and groceries',1),
+    ('Automobiles', 'Cars, motorcycles, and accessories',2),
+    ('Health & Beauty', 'Cosmetics, wellness, and healthcare products',1);
+
+-- Insert into brands
+INSERT INTO brands (brand_name, brand_desc, brand_img,user) VALUES 
+("Apple", "This is Apple brand", "image_url_apple",1),
+("Samsung", "This is Samsung brand", "image_url_samsung",2),
+("Sony", "This is Sony brand", "image_url_sony",9),
+("Dell", "This is Dell brand", "image_url_dell",2),
+("HP", "This is HP brand", "image_url_hp",2); 
+
+-- Insert into units
+INSERT INTO units (unit_name, short_name,user) VALUES
+("Kilogram", "kg",1),
+("Gram", "g",2),
+("Meter", "m",9),
+("Liter", "l",2),
+("Piece", "pcs",2);
 
 
-INSERT INTO categorys (category_name, category_des)
+INSERT INTO products (product_name, brand, unit, buying_rate, vat, selling_rate, stock, category)
 VALUES
-    ('Electronics', 'Devices and accessories like mobile phones, laptops, and TVs'),
-    ('Home Appliances', 'Kitchen and home appliances like refrigerators, washing machines'),
-    ('Furniture', 'Indoor and outdoor furniture like tables, chairs, sofas');
+    ('Samsung Galaxy S21', 1, 1, 70000.00, 13.00, 80000.00, 100, 1),
+    ('Whirlpool Refrigerator', 1, 2, 35000.00, 13.00, 42000.00, 50, 2),
+    ('Wooden Dining Table', 2, 3, 10000.00, 13.00, 15000.00, 200, 3),
+    ('Lego Building Set', 4, 4, 1500.00, 13.00, 2000.00, 300, 4),
+    ('Football', 3, 1, 1200.00, 13.00, 1500.00, 150, 5),
+    ('Mens T-Shirt', 2, 3, 800.00, 13.00, 1200.00, 500, 6),
+    ('C Programming Book', 1, 4, 350.00, 13.00, 500.00, 250, 7),
+    ('Rice', 2, 1, 50.00, 13.00, 70.00, 1000, 8),
+    ('Car Battery', 3, 2, 5000.00, 13.00, 7000.00, 75, 9),
+    ('Shampoo', 1, 3, 250.00, 13.00, 350.00, 600, 10);
 
 
-INSERT INTO products (product_name, brand, unit, buying_rate, vat, selling_rate, stock, category_id)
-VALUES
-    ('Samsung Galaxy S21', 'Samsung', 'Piece', 70000.00, 13.00, 80000.00, 100, 1),
-    ('Whirlpool Refrigerator', 'Whirlpool', 'Piece', 35000.00, 13.00, 42000.00, 50, 2),
-    ('Wooden Dining Table', 'Woodcraft', 'Piece', 10000.00, 13.00, 15000.00, 200, 3),
-    ('Lego Building Set', 'Lego', 'Set', 1500.00, 13.00, 2000.00, 300, 4),
-    ('Football', 'Adidas', 'Piece', 1200.00, 13.00, 1500.00, 150, 5),
-    ('Mens T-Shirt', 'Nike', 'Piece', 800.00, 13.00, 1200.00, 500, 6),
-    ('C Programming Book', 'Tech Publishers', 'Piece', 350.00, 13.00, 500.00, 250, 7),
-    ('Rice', 'Organic Farms', 'Kg', 50.00, 13.00, 70.00, 1000, 8),
-    ('Car Battery', 'Bosch', 'Piece', 5000.00, 13.00, 7000.00, 75, 9),
-    ('Shampoo', 'Dove', 'Bottle', 250.00, 13.00, 350.00, 600, 10);
 
 
 INSERT INTO vendors (vendor_name, email, phone, pan_no, pin_code, country, state, city, address, created_by)
@@ -228,7 +260,7 @@ INSERT INTO companies (
 
 
 INSERT INTO purchases (
-    ordered_qnt, received_qnt, unit_rate, vat_rate, pruchase_date, status, remarks, vendor_id, product_id
+    ordered_qnt, received_qnt, unit_rate, vat_rate, pruchase_date, status, remarks, vendor, product
 ) VALUES
     (10, 10, 150, 13.5, '2024-10-10', 'received', 'First bulk order', 1, 1),
     (15, 15, 200, 10.0, '2024-10-12', 'received', 'Urgent purchase', 2, 2),
@@ -256,3 +288,4 @@ INSERT INTO invoices (
     (8, 8, 45, 260, 11700, 'paid', 11.5, 'Seasonal order', '2024-10-24', '2024-10-24', '2024-10-24'),
     (9, 9, 50, 100, 5000, 'paid', 9.0, 'New supplier', '2024-10-25', '2024-10-25', '2024-10-25'),
     (10, 10, 55, 150, 8250, 'pending', 10.5, 'Payment pending', '2024-10-27', '2024-10-27', '2024-10-27');
+  

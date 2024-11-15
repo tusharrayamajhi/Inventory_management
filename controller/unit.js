@@ -1,19 +1,12 @@
 const ejs = require("ejs");
-const processPost = require("../util/post")
-const connection = require('../util/connect')
+const processPost = require("../util/post");
+const connection = require("../util/connect");
 const fs = require("fs");
 const path = require("path");
-let sessions = require("../util/object");
-const mimeType = {
-  ".html": "text/html",
-  ".css": "text/css",
-  ".js": "application/javascript",
-  ".json": "application/json",
-  ".jpg": "image/jpeg",
-  ".png": "image/png",
-  ".ejs": "ejs",
-};
-
+const url = require("url");
+let { sessions, mimeType, roles } = require("../util/object");
+let { render, renderFileWithData } = require("../util/renderfile");
+const {isAdmin} = require("../util/isAdmin")
 const {
   isValidPhoneNo,
   isValidCharacter,
@@ -23,100 +16,177 @@ const {
   isValidPassword,
 } = require("../util/validaton");
 
-
 module.exports = async function units(req, res) {
   let filepath = "";
-  if (req.url == "/unit/add" && req.method == "GET") {
-      console.log(req.headers.referer)
-    if (!req.headers.cookie) {
-      res.writeHead(302, { location: "/" });
-      return res.end();
-    } else {
-      const sessions_id = req.headers.cookie.split("=")[1];
-      const user = sessions[sessions_id];
-      if (!user) {
-        res.writeHead(302, {
-          "Set-Cookie": `sessionId=;HttpOnly;Max-Age=0;path=/`,
-          location: "/",
-        });
-        res.end();
-        return;
-      }
-      if(user.roles != 'admin'){
-        res.writeHead(302, {
-            location: "/",
-          });
-          res.end();
-          return;
-      }
-
-    }
-    filepath = path.join(__dirname, "../public/html", "unit.ejs");
-    fs.readFile(filepath, (err, data) => {
-      if (err) {
-        fs.readFile("../public/html/error.html", (err, data) => {
-          res.writeHead(400, { "Content-Type": "text/html" });
-          return res.end(data);
-        });
-      } else {
-        const extname = path.extname(filepath);
-        const contentType = mimeType[extname] || "text/plain";
-        res.writeHead(200, { "Content-Type": contentType });
-        return res.end(data);
-      }
+  let user = {};
+  if (!req.headers.cookie) {
+    res.writeHead(302, { location: "/" });
+    return res.end();
+  }
+  const sessions_id = req.headers.cookie.split("=")[1];
+  user = sessions[sessions_id];
+  if (!user) {
+    res.writeHead(302, {
+      "Set-Cookie": `sessionId=;HttpOnly;Max-Age=0;path=/`,
+      location: "/",
     });
+    res.end();
+    return;
+  }
+
+  if (req.url == "/unit/add" && req.method == "GET") {
+    if (!isAdmin(user,res)) return;
+    filepath = path.join(__dirname, "../public/html", "unit.ejs");
+    render(req, res, filepath);
+
     return;
   } else if (req.url == "/unit/add" && req.method == "POST") {
-    if (!req.headers.cookie) {
-      res.writeHead(302, { location: "/" });
-      return res.end();
-    }
-    const session_id = req.headers.cookie.split("=")[1];
-    const user = sessions[session_id];
-    if (!user) {
-      res.writeHead(302, {
-        "Set-Cookie": `sessionId=;HttpOnly;Max-Age=0;path=/`,
-        location: "/",
-      });
-      return res.end();
-    }
-    if (user.roles != "admin") {
-      res.writeHead(302,{location:"/"})
-      return res.end();
-    }
-    const body = await processPost(req)
-    console.log(body)
-    let err ={
-      unit_name:'',
-      short_name:''
-    }
+    if (!isAdmin(user,res)) return;
+
+    const body = await processPost(req);
+    let err = {
+      unit_name: "",
+      short_name: "",
+    };
     let error = false;
-    if(!isValidCharacter(body.unit_name)){
-      err[unit_name] = 'invalid name';
-      error =true;
+    if (!isValidCharacter(body.unit_name)) {
+      err.unit_name = "invalid name";
+      error = true;
     }
-    if(!isValidCharacter(body.short_name)){
-      err[short_name] = 'invalid name';
-      error = true
+    if (!isValidCharacter(body.short_name)) {
+      err.short_name = "invalid short name";
+      error = true;
     }
-    const {rows} = await connection.promise().query("select * from units where unit_name = ? OR short_name = ?",[body.unit_name,body.short_name]);
-    console.log(rows)
-    return
+    if (error) {
+      res.statusCode = 404;
+      return res.end(JSON.stringify(err));
+    }
+    try {
+      const [results] = await connection
+        .promise()
+        .query(
+          "select * from units where (unit_name = ? OR short_name = ?) and user = ?",
+          [body.unit_name, body.short_name, user.id]
+        );
+      if (results.affectedRows > 0) {
+        res.statusCode = 400;
+        return res.end(JSON.stringify({ message: "unit already exits" }));
+      }
+      const [result] = await connection
+        .promise()
+        .query("insert into units (unit_name,short_name,user) values (?,?,?)", [
+          body.unit_name,
+          body.short_name,
+          user.id,
+        ]);
+      if (result.affectedRows > 0) {
+        res.statusCode = 200;
+        return res.end(JSON.stringify({ message: "unit create successfully" }));
+      }
+      res.statusCode = 500;
+      return res.end(JSON.stringify({ message: "something went wrong" }));
+    } catch (err) {
+      return res.end(JSON.stringify({ message: "database error", err }));
+    }
+  } else if (req.url == "/unit/view" && req.method == "GET") {
+    if (!isAdmin(user,res)) return;
+    filepath = path.join(__dirname, "../public/html", "unitview.ejs");
+    const [units] = await connection
+      .promise()
+      .query("select * from units where user = ?", [user.id]);
+    return renderFileWithData(req, res, filepath, units);
+  } else if (req.url.startsWith("/unit/edit") && req.method == "GET") {
+    if (!isAdmin(res)) return;
+    const parseurl = url.parse(req.url, true);
+    const [result] = await connection
+      .promise()
+      .query("select * from units where unit_id = ? AND user = ?", [
+        parseurl.query.id,
+        user.id,
+      ]);
+    filepath = path.join(__dirname, "../public/html", "editunit.ejs");
+    return renderFileWithData(req, res, filepath, result[0]);
+  } else if (req.url == "/unit/edit" && req.method == "PATCH") {
+    if (!isAdmin(res)) return;
+
+    const body = await processPost(req);
+    let err = {
+      unit_name: "",
+      short_name: "",
+    };
+    let error = false;
+    if (!isValidCharacter(body.unit_name)) {
+      err.unit_name = "invalid name";
+      error = true;
+    }
+    if (!isValidCharacter(body.short_name)) {
+      err.short_name = "invalid short name";
+      error = true;
+    }
+    if (error) {
+      res.statusCode = 400;
+      return res.end(JSON.stringify(err));
+    }
+    try {
+      console.log(body);
+      console.log(user);
+      const [results] = await connection.promise().query("select * from units where unit_id = ? AND user = ?",[body.unit_id,user.id]);
+      if(results.length == 0 ){
+        res.statusCode = 404;
+        return res.end(JSON.stringify({message:"no units found"}))
+      }
+      const [result] = await connection
+        .promise()
+        .query(
+          "update units set unit_name = ?, short_name = ? where unit_id = ? and user = ?",
+          [body.unit_name, body.short_name, body.unit_id, user.id]
+        );
+      console.log(result);
+      if (result.affectedRows > 0) {
+        res.statusCode = 200;
+        return res.end(
+          JSON.stringify({ message: "unit updated successfully" })
+        );
+      } else {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ message: "something went wrong" }));
+      }
+    } catch (err) {
+      return res.end(JSON.stringify({ message: "database error", err }));
+    }
+  } else if (req.url.startsWith("/unit/delete") && req.method == "DELETE") {
+    if (!isAdmin(user,res)) return;
+
+    const parse_query = url.parse(req.url, true);
+    const unit_id = parse_query.query.id;
+    try {
+      const [result] = await connection
+        .promise()
+        .query("select * from units where unit_id = ? ", [unit_id]);
+      if (result.length == 0) {
+        res.statusCode = 404;
+        return res.end(JSON.stringify({ message: "no unit found" }));
+      }
+      const [results] = await connection
+        .promise()
+        .query("DELETE FROM units WHERE unit_id = ? AND user = ?", [
+          unit_id,
+          user.id,
+        ]);
+      if (results.affectedRows > 0) {
+        res.statusCode = 200;
+        return res.end(
+          JSON.stringify({ message: "unit deleted successfully" })
+        );
+      }
+      res.statusCode = 500;
+      return res.end(JSON.stringify({ message: "something went wrong" }));
+    } catch (err) {
+      return res.end(JSON.stringify({ message: "database error", err }));
+    }
   } else {
     const ext = req.url.split(".");
     filepath = path.join(__dirname, `../public/${ext[1]}`, req.url);
   }
-  fs.readFile(filepath, (err, data) => {
-    if (err) {
-      fs.readFile("../public/html/error.html", (err, data) => {
-        res.writeHead(404, { "Content-Type": "text/html" });
-        return res.end(data);
-      });
-    } else {
-      const extname = path.extname(filepath);
-      const contentType = mimeType[extname] || "text/plain";
-      res.writeHead(200, { "Content-Type": contentType });
-      return res.end(data);
-    }
-  });
+return render(req, res, filepath);
 };
