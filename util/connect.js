@@ -4,9 +4,9 @@ const { log } = require('console');
 
     const connection = sql.createConnection({
         host:"localhost",
-        port:3307,
+        port:3302,
         user:"root",
-        password:"tushar",
+        password:"rasonar0002",
         multipleStatements:true,
         database:"inventory"
     })

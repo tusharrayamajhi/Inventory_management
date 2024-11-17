@@ -28,6 +28,7 @@ module.exports = async function auth(req, res) {
   } else if (req.url == "/auth/login" && req.method == "POST") {
     try {
       const body = await processPost(req);
+      console.log(body);
       const result = await getUserByEmail(body.email);
       if (!result) {
         res.statusCode = 404;
