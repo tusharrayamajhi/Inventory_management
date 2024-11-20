@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+        <thead>
+            <tr>
+                <th>vendor name</th>
+                <th>created by</th>
+                <th>product name</th>
+                <th>purchase code</th>
+                <th>ordered quantity</th>
+                <th>received quantity</th>
+                <th>remaining</th>
+                <th>balance</th>
+                <th>unit rate</th>
+                <th>vat rate</th>
+                <th>total</th>
+                <th>purchase date</th>
+                <th>status</th>
+                <th>remarks</th>
+                <th>action</th>
+            </tr>
+            <tbody>
+                <% for(let purchase of data){%>
+                    <tr>
+                        <td><%= purchase.vendor_name%></td>
+                        <td><%= purchase.name  %></td>
+                        <td><%= purchase.product_name%></td>
+                        <td><%= purchase.purchase_code%></td>
+                        <td><%= purchase.ordered_qnt %></td>
+                        <td><%= purchase.received_qnt%></td>
+                        <td><%= purchase.remaining%></td>
+                        <td><%= purchase.balance%></td>
+                        <td><%= purchase.unit_rate%></td>
+                        <td><%= purchase.vat_rate %>%</td>
+                        <td><%= purchase.total%></td>
+                        <td><%= purchase.pruchase_date%></td>
+                        <td><%= purchase.status %></td>
+                        <td><%= purchase.remarks%></td>
+                        <td>
+                          <a href="/purchase/edit?id=<%= purchase.purchase_id %>" style="text-decoration: none; color: blue;">Edit</a> 
+                          <form class="deletepurchase">
+                            <input type="hidden" name="id" value="<%= purchase.purchase_id %>">
+                              <button  style="text-decoration: none; color: red;" type="submit" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+        
+                          </form> 
+                        </td>
+                      </tr>
+                    <% } %>
+            </tbody>
+        </thead>
+    </table>
+</body>
+<script src="/viewpurchase.js"></script>
+</html>

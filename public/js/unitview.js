@@ -7,12 +7,13 @@ document.querySelectorAll(".deleteunit").forEach(form=>{
             method:"DELETE"
         })
         response.json().then(result=>{
+            console.log(result)
             if(response.status == 200){
                 console.log(result);
                 alert(result.message);
                 window.location = "/unit/view"
             }else {
-                alert(result.err.message)
+                alert(result.message)
             }
         }).catch(err=>{
             console.log(err)

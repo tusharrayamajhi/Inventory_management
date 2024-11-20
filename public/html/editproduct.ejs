@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Product</title>
+</head>
+<body>
+  <h1 style="text-align: center;">Edit Product</h1>
+
+  <form id="editproduct">
+    <input type="hidden" name="product_id" value="<%= data.product.product_id %>">
+
+    <!-- Product Name -->
+    <label for="product_name">Product Name:</label><br>
+    <input type="text" id="product_name" name="product_name" value="<%= data.product.product_name %>" required><br><br>
+
+    <!-- Brand -->
+    <label for="brand">Brand:</label><br>
+    <select id="brand" name="brand" required>
+      <option value="">Select Brand</option>
+      <% data.brands.forEach(brand => { %>
+        <option value="<%= brand.brand_id %>" <%= brand.brand_id === data.product.brand ? 'selected' : '' %>><%= brand.brand_name %></option>
+      <% }); %>
+    </select><br><br>
+
+    <!-- Unit -->
+    <label for="unit">Unit:</label><br>
+    <select id="unit" name="unit" required>
+      <option value="">Select Unit</option>
+      <% data.units.forEach(unit => { %>
+        <option value="<%= unit.unit_id %>" <%= unit.unit_id === data.product.unit ? 'selected' : '' %>><%= unit.unit_name %></option>
+      <% }); %>
+    </select><br><br>
+
+    <!-- VAT -->
+    <label for="vat">VAT:</label><br>
+    <input type="checkbox" id="vat" name="vat" value='1' <%= data.product.vat ? 'checked' : '' %>> Include VAT<br><br>
+
+    <!-- Selling Rate -->
+    <label for="selling_rate">Selling Rate:</label><br>
+    <input type="number" id="selling_rate" name="selling_rate" step="0.01" value="<%= data.product.selling_rate %>" required><br><br>
+
+    
+    <!-- Category -->
+    <label for="category">Category:</label><br>
+    <select id="category" name="category">
+      <option value="">Select Category</option>
+      <% data.categories.forEach(category => { %>
+        <option value="<%= category.category_id %>" <%= category.category_id === data.product.category ? 'selected' : '' %>><%= category.category_name %></option>
+      <% }); %>
+    </select><br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Update Product</button>
+  </form>
+
+  <!-- Back to Product List -->
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="/products" style="text-decoration: none; color: blue;">Back to Product List</a>
+  </div>
+</body>
+<script src="/editproduct.js"></script>
+</html>

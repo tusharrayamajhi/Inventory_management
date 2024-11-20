@@ -3,7 +3,7 @@ const path = require('path');
 const ejs = require('ejs')
 const {mimeType} = require('../util/object')
 function render(req,res,filepath){
-    fs.readFile(filepath, (err, data) => {
+    ejs.renderFile(filepath, (err, data) => {
         if (err) {
           fs.readFile("../public/html/error.html", (err, data) => {
             res.writeHead(404, { "Content-Type": "text/html" });

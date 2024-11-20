@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product</title>
+</head>
+<body>
+  <h1>Add Product</h1>
+  <form id="addproduct">
+    <!-- Product Name -->
+    <div>
+      <label for="product_name">Product Name:</label><br>
+      <input type="text" id="product_name" name="product_name" required >
+    </div>
+    
+    <!-- Brand -->
+    <div>
+      <label for="brand">Brand:</label><br>
+      <select id="brand" name="brand" >
+        <option value="">Select Brand</option>
+        <% data.brands.forEach(brand => { %>
+          <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
+        <% }); %>
+      </select>
+    </div>
+    
+    <!-- Unit -->
+    <div>
+      <label for="unit">Unit:</label><br>
+      <select id="unit" name="unit" >
+        <option value="">Select Unit</option>
+        <% data.units.forEach(unit => { %>
+          <option value="<%= unit.unit_id %>"><%= unit.unit_name %></option>
+        <% }); %>
+      </select>
+    </div>
+    
+    <!-- VAT -->
+    <div>
+      <label for="vat">VAT:</label><br>
+      <input type="checkbox" id="vat" name="vat" ">
+    </div>
+    
+    <!-- Selling Rate -->
+    <div>
+      <label for="selling_rate">Selling Rate:</label><br>
+      <input type="number" id="selling_rate" name="selling_rate" step="0.01">
+    </div>
+    
+    <!-- Stock -->
+    <!-- <div>
+      <label for="stock">Stock:</label><br>
+      <input type="number" id="stock" name="stock" min="0" >
+    </div> -->
+    
+    <!-- Category -->
+    <div>
+      <label for="category">Category:</label><br>
+      <select id="category" name="category">
+        <option value="" selected>Select Category</option>
+        <% data.categories.forEach(category => { %>
+          <option value="<%= category.category_id %>"><%= category.category_name %></option>
+        <% }); %>
+      </select>
+    </div>
+    
+    <button type="submit">Add Product</button>
+  </form>
+</body>
+<script src="/addproduct.js"></script>
+</html>

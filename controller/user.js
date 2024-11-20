@@ -38,27 +38,34 @@ module.exports = async function user(req, res) {
     return res.end();
   }
   if (req.url == "/user/add" && req.method == "GET") {
-    let company = {};
+    let company = [];
     if (user.roles == roles.superadmin) {
       const [company_ids] = await connection
         .promise()
         .query("select company_id from users where company_id is not null");
-      let newcompany_ids = company_ids.map((data) => data.company_id);
-      let query = "select * from companies";
-      let params = [];
-      if (newcompany_ids.length > 0) {
-        query = "select * from companies where company_id  not in (?)";
-        params = [newcompany_ids];
-      }
-      const [result] = await connection.promise().query(query, params);
-      if (result.length == 0) {
-        company = {};
-      } else {
+        let newcompany_ids = company_ids.map((data) => data.company_id);
+        let query = "select * from companies";
+        let params = [];
+        if (newcompany_ids.length > 0) {
+          query = "select * from companies where company_id  not in (?)";
+          params = [newcompany_ids];
+        }
+        const [result] = await connection.promise().query(query, params);
+      if (result.length != 0) {
         company = result;
+      }else {
+        company = []
       }
+
     }
     filepath = path.join(__dirname, "../public/html", "adduser.ejs");
-    const data = { user, company };
+    let data;
+    if(company.length != 0){
+      data = { user, company };
+    }else {
+      data = { user};
+    }
+    console.log(data)
     return renderFileWithData(req, res, filepath, data);
   } else if (req.url == "/user/add" && req.method == "POST") {
     const body = await processPost(req);
@@ -226,7 +233,6 @@ module.exports = async function user(req, res) {
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/user/delete") && req.method == "DELETE") {
     const parse_query = url.parse(req.url, true);
-    console.log(parse_query.query.id);
     try {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection
@@ -260,6 +266,10 @@ module.exports = async function user(req, res) {
         JSON.stringify({ message: "cannot delete user" })
       );
     } catch (err) {
+      if(err.code == 'ER_ROW_IS_REFERENCED_2'){
+        res.statusCode = 409
+        return res.end(JSON.stringify({message:"The user cannot be deleted because it is associated with other"}))
+      }
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error" }));
     }
@@ -383,8 +393,8 @@ module.exports = async function user(req, res) {
       const [result] = await connection
       .promise()
       .query(
-        "select * from users where user_id = ? and created_by = ?",
-        [parseInt(body.user_id),user.id]
+        "select * from users where user_id = ?",
+        [parseInt(body.user_id)]
       );
       console.log(result)
       if (result.length == 0) {

@@ -46,8 +46,10 @@
         <label for="company">company:</label>
         <select id="company" name="company">
             <option value="" selected>select company</option>
+            <% if(data.company){ %>
             <%for(let company of data.company){%>
                 <option value="<%=company.company_id%>"><%=company.company_name%></option>
+            <%}%>
             <%}%>
         </select><br><br>
         <%}%>

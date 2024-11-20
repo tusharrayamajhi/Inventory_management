@@ -9,6 +9,10 @@ const category = require("./controller/category")
 const brand = require("./controller/brand")
 const customer = require('./controller/customer')
 const user = require("./controller/user")
+const product = require("./controller/product")
+const vendor = require("./controller/vendor")
+const purchase = require("./controller/purchase")
+const company = require("./controller/company")
 const server = http.createServer(async (req, res) => {
   let filepath = "";
   if( req.url == "/" || req.url.startsWith("/auth")){
@@ -25,6 +29,14 @@ const server = http.createServer(async (req, res) => {
     return customer(req,res)
   }else if(req.url.startsWith("/user")){
     return user(req,res)
+  }else if(req.url.startsWith("/product")){
+    return product(req,res)
+  }else if(req.url.startsWith("/vendor")){
+    return vendor(req,res)
+  }else if(req.url.startsWith("/purchase")){
+    return purchase(req,res)
+  }else if(req.url.startsWith("/company")){
+    return company(req,res)
   }
    else {
     const ext = req.url.split(".");

@@ -2,7 +2,7 @@ const path = require("path");
 const url = require("url");
 const { sessions, mimeType, roles } = require("../util/object");
 const { isAdmin } = require("../util/isAdmin");
-const {isNormalUser} = require("../util/isNormalUser")
+const { isNormalUser } = require("../util/isNormalUser");
 const { render, renderFileWithData } = require("../util/renderfile");
 const processPost = require("../util/post");
 const connection = require("../util/connect");
@@ -11,6 +11,7 @@ const {
   isValidCharacter,
   isValidEmail,
   isValidPassword,
+  isValidDigit,
 } = require("../util/validaton");
 
 module.exports = async function customer(req, res) {
@@ -30,34 +31,40 @@ module.exports = async function customer(req, res) {
     res.end();
     return;
   }
+  if (user.roles != roles.admin && user.roles != roles.normal) {
+    res.writeHead(302, {
+      location: "/",
+    });
+    return res.end();
+  }
   if (req.url == "/customer/add" && req.method == "GET") {
-    if (user.roles != roles.admin && user.roles != roles.normal) {
-        res.writeHead(302, {
-            location: "/",
-          });
-          return res.end();
-    };
+   
     filepath = path.join(__dirname, "../public/html", "addcustomer.ejs");
     return render(req, res, filepath);
-  } else if (req.url == "/brand/add" && req.method == "POST") {
-    if (user.roles != roles.admin && user.roles != roles.normal) {
-        res.writeHead(302, {
-            location: "/",
-          });
-          return res.end();
-    };
+  } else if (req.url == "/customer/add" && req.method == "POST") {
+   
     const body = await processPost(req);
     const err = {
-      err_brand_name: "",
-      err_brand_desc: "",
+      err_name: "",
+      err_phone: "",
+      err_email: "",
+      err_pan: "",
     };
     let have_err = false;
-    if (!isValidCharacter(body.brand_name)) {
-      err.err_brand_name = "name most be string";
+    if (!isValidCharacter(body.name)) {
+      err.err_name = "name most be string";
       have_err = true;
     }
-    if (!isValidCharacter(body.brand_desc)) {
-      err.err_brand_desc = "description most be string";
+    if (!isValidEmail(body.email)) {
+      err.err_email = " invalid email address";
+      have_err = true;
+    }
+    if (!isValidPhoneNo(body.phone)) {
+      err.err_phone = "invalid phone number";
+      have_err = true;
+    }
+    if (!isValidDigit(body.pan)) {
+      err.err_pan = "pan no most be number";
       have_err = true;
     }
     res.setHeader("Content-Type", "application/json");
@@ -66,23 +73,22 @@ module.exports = async function customer(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
       const [result] = await connection
         .promise()
-        .query(
-          "select * from brands where (brand_name = ?) AND user = ?",
-          [body.category_name, user.id]
-        );
+        .query("select * from customers where (pan = ?) AND user_id = ?", [
+          body.pan,
+          user.id,
+        ]);
       console.log(result);
       if (result.length > 0) {
         res.statusCode = 400;
-        return res.end(JSON.stringify({ message: "brand already exits" }));
+        return res.end(JSON.stringify({ message: "customer already exits" }));
       }
       const [results] = await connection
         .promise()
         .query(
-          "insert into brands (brand_name,brand_desc,user) values (?,?,?)",
-          [body.brand_name, body.brand_desc, user.id]
+          "insert into customers (name, phone, email, address, pan , user_id) values (?,?,?,?,?,?)",
+          [body.name, body.phone, body.email, body.address, body.pan, user.id]
         );
       if (results.affectedRows == 0) {
         res.statusCode == 400;
@@ -91,104 +97,121 @@ module.exports = async function customer(req, res) {
         );
       }
       res.statusCode == 200;
-      return res.end(JSON.stringify({ message: "brand save sccessfully" }));
+      return res.end(JSON.stringify({ message: "customer save sccessfully" }));
     } catch (err) {
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
-  } else if (req.url == "/brand/view" && req.method == "GET") {
-    if (!isAdmin(user, res)) return;
-    filepath = path.join(__dirname, "../public/html", "viewbrand.ejs");
+  } else if (req.url == "/customer/view" && req.method == "GET") {
+    
+    filepath = path.join(__dirname, "../public/html", "viewcustomer.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from brands where user = ?", [user.id]);
+      .query("select * from customers where user_id = ?", [user.id]);
     return renderFileWithData(req, res, filepath, result);
-  } else if (req.url.startsWith("/brand/delete") && req.method == "DELETE") {
-    if (!isAdmin(user, res)) return;
+  } else if (req.url.startsWith("/customer/delete") && req.method == "DELETE") {
+    
     const parse_query = url.parse(req.url, true);
     console.log(parse_query.query.id);
 
     try {
-        res.setHeader("Content-Type", "application/json");
+      res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from brands where brand_id = ? AND user = ?", [
+        .query("select * from customers where customer_id = ? AND user_id = ?", [
           parse_query.query.id,
           user.id,
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
         return res.end(
-          JSON.stringify({ message: "no brands found for given id" })
+          JSON.stringify({ message: "no customer found for given id" })
         );
       }
       const [results] = await connection
         .promise()
-        .query("delete from brands where brand_id = ? AND user = ?", [
+        .query("delete from customers where customer_id = ? AND user_id = ?", [
           parse_query.query.id,
           user.id,
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
-        return res.end(JSON.stringify({
-          message: "successfully delete brand",
-        }));
+        return res.end(
+          JSON.stringify({
+            message: "successfully delete customer",
+          })
+        );
       }
       res.statusCode = 400;
-      return res.end(
-        JSON.stringify({ message: "cannot delete data" })
-      );
+      return res.end(JSON.stringify({ message: "cannot delete data" }));
     } catch (err) {
+      if(err.code == 'ER_ROW_IS_REFERENCED_2'){
+        res.statusCode = 409
+        return res.end(JSON.stringify({message:"The customer cannot be deleted because it is associated with one or more sells."}))
+      }
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error" }));
     }
-  } else if(req.url.startsWith("/brand/edit") && req.method == "GET"){
-    if(!isAdmin(user,res)) return;
+  } else if (req.url.startsWith("/customer/edit") && req.method == "GET") {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
-      .query("select * from brands where brand_id = ? AND user = ?", [
+      .query("select * from customers where customer_id = ? AND user_id = ?", [
         parseurl.query.id,
         user.id,
       ]);
-    filepath = path.join(__dirname, "../public/html", "editbrand.ejs");
+    filepath = path.join(__dirname, "../public/html", "editcustomer.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
-  }else if(req.url == "/brand/edit" && req.method == "PATCH"){
-    if(!isAdmin(user,res))return;
-    
+  } else if (req.url == "/customer/edit" && req.method == "PATCH") {
+   
     const body = await processPost(req);
-    let err = {
-      err_brand_name: "",
-      err_brand_desc: "",
+    const err = {
+      err_name: "",
+      err_phone: "",
+      err_email: "",
+      err_pan: "",
     };
-    let error = false;
-    if (!isValidCharacter(body.brand_name)) {
-      err.err_brand_name = "name most be string";
-      error = true;
+    let have_err = false;
+    if (!isValidCharacter(body.name)) {
+      err.err_name = "name most be string";
+      have_err = true;
     }
-    if (!isValidCharacter(body.brand_desc)) {
-      err.err_brand_desc = "description most be string";
-      error = true;
+    if (!isValidEmail(body.email)) {
+      err.err_email = " invalid email address";
+      have_err = true;
+    }
+    if (!isValidPhoneNo(body.phone)) {
+      err.err_phone = "invalid phone number";
+      have_err = true;
+    }
+    if (!isValidDigit(body.pan)) {
+      err.err_pan = "pan no most be number";
+      have_err = true;
     }
     res.setHeader("Content-Type", "application/json");
-    if (error) {
+    if (have_err) {
       res.statusCode = 400;
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
-      console.log(user);
+     const [results] = await connection.promise().query("select * from customers where customer_id = ? AND user_id = ?",[body.id,user.id])
+     if(results.length == 0){
+      res.statusCode = 404;
+        return res.end(
+          JSON.stringify({ message: "invalid customer" })
+        );
+     }
       const [result] = await connection
         .promise()
         .query(
-          "update brands set brand_name = ?, brand_desc = ? where brand_id = ? and user = ?",
-          [body.brand_name, body.brand_desc, body.brand_id, user.id]
+          "update customers set name = ?, phone = ?,email = ?,address = ?,pan = ? where customer_id = ? and user_id = ?",
+          [body.name, body.phone, body.email, body.address,body.pan,body.id,user.id]
         );
       console.log(result);
       if (result.affectedRows > 0) {
         res.statusCode = 200;
         return res.end(
-          JSON.stringify({ message: "brand updated successfully" })
+          JSON.stringify({ message: "customer updated successfully" })
         );
       } else {
         res.statusCode = 500;
@@ -197,8 +220,7 @@ module.exports = async function customer(req, res) {
     } catch (err) {
       return res.end(JSON.stringify({ message: "database error", err }));
     }
-  }
-   else {
+  } else {
     const ext = req.url.split(".");
     filepath = path.join(__dirname, `../public/${ext[1]}`, req.url);
   }

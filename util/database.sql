@@ -1,6 +1,7 @@
 Drop Database inventory; 
 CREATE DATABASE IF NOT EXISTS Inventory;
 USE Inventory;
+select * from purchases  inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id where purchases.user = 1;
 
 
 CREATE TABLE companies(
@@ -49,9 +50,7 @@ CREATE TABLE customers(
         phone char(10),
         email VARCHAR(100),
         address VARCHAR(100) Not null , 
-        country VARCHAR(50), 
-        state VARCHAR(50) , 
-        city VARCHAR(50) ,
+		pan varchar(100),
         user_id int,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp,
@@ -67,9 +66,10 @@ Create Table categorys(
             created_at timestamp default current_timestamp,
             updated_at timestamp default current_timestamp on update current_timestamp
 );
+
 create table brands(
 			brand_id int primary key auto_increment,
-            brand_name varchar(100) not null unique,
+            brand_name varchar(100) not null,
             brand_desc varchar(255),
             brand_img varchar(100),
             user int not null,
@@ -86,19 +86,19 @@ create table units(
 			updated_at timestamp default current_timestamp on update current_timestamp,
             foreign key(user) references users(user_id)
 );
-
 CREATE TABLE products(
 		product_id int primary key auto_increment,
         product_name varchar(100) not null,
         brand int not null,
         unit int not null,
-        buying_rate decimal(10,2) ,
-        vat decimal(5,2),
-        selling_rate decimal(10,2) ,
-        stock int unsigned,
-        category int,
+        vat tinyint(1) default 0 check (vat >= 0),
+        selling_rate decimal(10,2) check (selling_rate >= 0),
+        stock int unsigned default 0,
+        category int not null,
+        user int not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp,
+        foreign key(user) references users(user_id),
         foreign key(unit) references units(unit_id),
         foreign key(brand) references brands(brand_id),
         foreign key(category) references categorys(category_id)
@@ -109,32 +109,36 @@ CREATE TABLE vendors(
         vendor_name varchar(100) not null,
         email varchar(50),
         phone char(10) not null,
-        pan_no char(9),
-        pin_code varchar(50),
+        pan_no varchar(30),
         country varchar(50) not null,
         state varchar(50),
-        city varchar(50) not null,
         address varchar(100) not null,
-        created_by int not null,
+        user int not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp,
-        foreign key(created_by) references users(user_id)
+        foreign key(user) references users(user_id)
         );
-
+drop table purchases;
 CREATE TABLE purchases(
 		purchase_id int primary key auto_increment,
+        purchase_code varchar(100),
         ordered_qnt int unsigned,
         received_qnt int unsigned,
         unit_rate int unsigned,
-        vat_rate decimal(5,2),
+        vat_rate int,
+        balance int,
+        total decimal(30,5),
         pruchase_date timestamp default current_timestamp,
-        status enum("pending","received","cancle") default "received",
+        status enum("pending","received","partial received") default "received",
         remarks text,
         vendor int not null,
         product int not null,
+        user int not null,
+        foreign key(user) references users(user_id),
         foreign key(vendor) references users(user_id),
         foreign key(product) references products(product_id)
     );
+    select * from purchases;
     
 CREATE TABLE invoices(
 		invoices_id int primary key auto_increment,
@@ -169,18 +173,18 @@ VALUES
     ('tushar rayamajhi', '432 Elm St, butwal', '9798765432', 'tusharrayamajhi@gmail.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 1, 'superadmin'),
     ('Ivy Yellow', '876 Maple St, Lalitpur', '9787654321', 'ivy.yellow@exampe.com',"abcd" , 1, 'normal');
 
-INSERT INTO customers (name, phone, email, address, country, state, city, user_id)
+INSERT INTO customers (name, phone, email, address, pan , user_id)
 VALUES
-    ('Sammy Watson', '9777888999', 'sammy.watson@example.com', '101 Main Road, Butwal', 'Nepal', 'Lumbini', 'Butwal', 1),
-    ('Evelyn Clarke', '9766655443', 'evelyn.clarke@example.com', '45 Oak Lane, Pokhara', 'Nepal', 'Gandaki', 'Pokhara', 2),
-    ('Mason King', '9755566778', 'mason.king@example.com', '123 Lake Road, Pokhara', 'Nepal', 'Gandaki', 'Pokhara', 3),
-    ('Sophia Williams', '9744455667', 'sophia.williams@example.com', '789 River Road, Kathmandu', 'Nepal', 'Bagmati', 'Kathmandu', 4),
-    ('Jackson Adams', '9733344556', 'jackson.adams@example.com', '654 Mountain St, Lalitpur', 'Nepal', 'Bagmati', 'Lalitpur', 5),
-    ('Liam Davis', '9722233445', 'liam.davis@example.com', '111 Park Ave, Bhaktapur', 'Nepal', 'Bagmati', 'Bhaktapur', 6),
-    ('Olivia Scott', '9711122334', 'olivia.scott@example.com', '567 Church Rd, Pokhara', 'Nepal', 'Gandaki', 'Pokhara', 7),
-    ('Emma Moore', '9700011223', 'emma.moore@example.com', '333 Hill St, Kathmandu', 'Nepal', 'Bagmati', 'Kathmandu', 8),
-    ('Lucas White', '9690099887', 'lucas.white@example.com', '222 West End, Butwal', 'Nepal', 'Lumbini', 'Butwal', 9),
-    ('Mia Lee', '9689988776', 'mia.lee@example.com', '444 East Rd, Pokhara', 'Nepal', 'Gandaki', 'Pokhara', 10);
+    ('Sammy Watson', '9777888999', 'sammy.watson@example.com','butwal', '1234123412', 1),
+    ('Evelyn Clarke', '9766655443', 'evelyn.clarke@example.com', 'kathmandu','3345234523453', 2),
+    ('Mason King', '9755566778', 'mason.king@example.com', 'pokhara','1234123424', 3),
+    ('Sophia Williams', '9744455667', 'sophia.williams@example.com','lalitpur', '53434534534', 4),
+    ('Jackson Adams', '9733344556', 'jackson.adams@example.com','bhaktapur','42334535354', 5),
+    ('Liam Davis', '9722233445', 'liam.davis@example.com', 'palpa','34534523453', 6),
+    ('Olivia Scott', '9711122334', 'olivia.scott@example.com', 'gulmi','2345345345345', 7),
+    ('Emma Moore', '9700011223', 'emma.moore@example.com', 'chitwal','234534534535', 8),
+    ('Lucas White', '9690099887', 'lucas.white@example.com','ilam','23435345345345', 9),
+    ('Mia Lee', '9689988776', 'mia.lee@example.com','jhapa', '23532453453454', 10);
 
 
 INSERT INTO categorys (category_name, category_des,user)
@@ -212,35 +216,35 @@ INSERT INTO units (unit_name, short_name,user) VALUES
 ("Liter", "l",2),
 ("Piece", "pcs",2);
 
-
-INSERT INTO products (product_name, brand, unit, buying_rate, vat, selling_rate, stock, category)
-VALUES
-    ('Samsung Galaxy S21', 1, 1, 70000.00, 13.00, 80000.00, 100, 1),
-    ('Whirlpool Refrigerator', 1, 2, 35000.00, 13.00, 42000.00, 50, 2),
-    ('Wooden Dining Table', 2, 3, 10000.00, 13.00, 15000.00, 200, 3),
-    ('Lego Building Set', 4, 4, 1500.00, 13.00, 2000.00, 300, 4),
-    ('Football', 3, 1, 1200.00, 13.00, 1500.00, 150, 5),
-    ('Mens T-Shirt', 2, 3, 800.00, 13.00, 1200.00, 500, 6),
-    ('C Programming Book', 1, 4, 350.00, 13.00, 500.00, 250, 7),
-    ('Rice', 2, 1, 50.00, 13.00, 70.00, 1000, 8),
-    ('Car Battery', 3, 2, 5000.00, 13.00, 7000.00, 75, 9),
-    ('Shampoo', 1, 3, 250.00, 13.00, 350.00, 600, 10);
-
-
+select * from products;
+-- INSERT INTO products (product_name, brand, unit, vat, selling_rate, stock, category,user)
+-- VALUES
+--     ('Samsung Galaxy S21', 1, 1, 1, 80000.00, 100, 1,1),
+--     ('Whirlpool Refrigerator', 1, 2, 1, 42000.00, 50, 2,1),
+--     ('Wooden Dining Table', 2, 3, 1, 15000.00, 200, 3,1),
+--     ('Lego Building Set', 4, 4, 1, 2000.00, 300, 4,1),
+--     ('Football', 3, 1, 1, 1500.00, 150, 5,1),
+--     ('Mens T-Shirt', 2, 3, 1, 1200.00, 500, 6,1),
+--     ('C Programming Book', 1, 4, 1, 500.00, 250, 7,1),
+--     ('Rice', 2, 1, 0, 70.00, 1000, 8,1),
+--     ('Car Battery', 3, 2, 1, 7000.00, 75, 9,1),
+--     ('Shampoo', 1, 3, 1, 350.00, 600, 10,1);
 
 
-INSERT INTO vendors (vendor_name, email, phone, pan_no, pin_code, country, state, city, address, created_by)
-VALUES
-    ('Tech Suppliers Pvt Ltd', 'techsuppliers@example.com', '9843234567', '123456789', '44555', 'Nepal', 'Bagmati', 'Kathmandu', 'Tech Park, New Road', 1),
-    ('Home Goods Wholesale', 'homegoods@example.com', '9812345678', '987654321', '66322', 'Nepal', 'Gandaki', 'Pokhara', 'Lake Road, Pokhara', 2),
-    ('Sports Direct', 'sportsdirect@example.com', '9809876543', '112233445', '88441', 'Nepal', 'Bagmati', 'Kathmandu', 'Sports Avenue, Kathmandu', 3),
-    ('Fashion Trends', 'fashiontrends@example.com', '9798765432', '556677889', '99322', 'Nepal', 'Bagmati', 'Lalitpur', 'Fashion Street, Lalitpur', 4),
-    ('Bookstore Nepal', 'bookstore@example.com', '9787654321', '223344556', '66212', 'Nepal', 'Gandaki', 'Pokhara', 'Book City, Pokhara', 5),
-    ('Auto Parts Suppliers', 'autoparts@example.com', '9776543210', '998877665', '44533', 'Nepal', 'Bagmati', 'Kathmandu', 'Automobile Street, Kathmandu', 6),
-    ('Beauty Hub Pvt Ltd', 'beautyhub@example.com', '9765432109', '554433221', '22311', 'Nepal', 'Gandaki', 'Pokhara', 'Beauty Lane, Pokhara', 7),
-    ('Green Grocers', 'greengrocers@example.com', '9754321098', '667788990', '22322', 'Nepal', 'Gandaki', 'Pokhara', 'Grocery Road, Pokhara', 8),
-    ('Gadgets Shop', 'gadgetsshop@example.com', '9743210987', '334455667', '22333', 'Nepal', 'Bagmati', 'Kathmandu', 'Gadgets Square, Kathmandu', 9),
-    ('Furniture Warehouse', 'furniturewarehouse@example.com', '9732109876', '998877665', '66311', 'Nepal', 'Bagmati', 'Lalitpur', 'Furniture Park, Lalitpur', 10);
+
+
+-- INSERT INTO vendors (vendor_name, email, phone, pan_no, pin_code, country, state, city, address, created_by)
+-- VALUES
+--     ('Tech Suppliers Pvt Ltd', 'techsuppliers@example.com', '9843234567', '123456789', '44555', 'Nepal', 'Bagmati', 'Kathmandu', 'Tech Park, New Road', 1),
+--     ('Home Goods Wholesale', 'homegoods@example.com', '9812345678', '987654321', '66322', 'Nepal', 'Gandaki', 'Pokhara', 'Lake Road, Pokhara', 2),
+--     ('Sports Direct', 'sportsdirect@example.com', '9809876543', '112233445', '88441', 'Nepal', 'Bagmati', 'Kathmandu', 'Sports Avenue, Kathmandu', 3),
+--     ('Fashion Trends', 'fashiontrends@example.com', '9798765432', '556677889', '99322', 'Nepal', 'Bagmati', 'Lalitpur', 'Fashion Street, Lalitpur', 4),
+--     ('Bookstore Nepal', 'bookstore@example.com', '9787654321', '223344556', '66212', 'Nepal', 'Gandaki', 'Pokhara', 'Book City, Pokhara', 5),
+--     ('Auto Parts Suppliers', 'autoparts@example.com', '9776543210', '998877665', '44533', 'Nepal', 'Bagmati', 'Kathmandu', 'Automobile Street, Kathmandu', 6),
+--     ('Beauty Hub Pvt Ltd', 'beautyhub@example.com', '9765432109', '554433221', '22311', 'Nepal', 'Gandaki', 'Pokhara', 'Beauty Lane, Pokhara', 7),
+--     ('Green Grocers', 'greengrocers@example.com', '9754321098', '667788990', '22322', 'Nepal', 'Gandaki', 'Pokhara', 'Grocery Road, Pokhara', 8),
+--     ('Gadgets Shop', 'gadgetsshop@example.com', '9743210987', '334455667', '22333', 'Nepal', 'Bagmati', 'Kathmandu', 'Gadgets Square, Kathmandu', 9),
+--     ('Furniture Warehouse', 'furniturewarehouse@example.com', '9732109876', '998877665', '66311', 'Nepal', 'Bagmati', 'Lalitpur', 'Furniture Park, Lalitpur', 10);
 
 
 INSERT INTO companies (
@@ -259,19 +263,19 @@ INSERT INTO companies (
     ('Visionary Tech', 'RE901234', '8876543210', 'contact@visionarytech.com', 'PAN901234', 'VAT901234', '707 Vision St', 'Nepal', 'Makwanpur', 'Thaha', 44760, 'Visionary Bank', '4455667788', 'Thaha Branch', 'Thaha', 132, 'www.visionarytech.com', 'visionary_logo.png');
 
 
-INSERT INTO purchases (
-    ordered_qnt, received_qnt, unit_rate, vat_rate, pruchase_date, status, remarks, vendor, product
-) VALUES
-    (10, 10, 150, 13.5, '2024-10-10', 'received', 'First bulk order', 1, 1),
-    (15, 15, 200, 10.0, '2024-10-12', 'received', 'Urgent purchase', 2, 2),
-    (20, 15, 250, 12.5, '2024-10-15', 'pending', 'Delayed shipment', 3, 3),
-    (25, 20, 300, 14.0, '2024-10-17', 'received', 'Special discount', 4, 4),
-    (30, 30, 120, 10.0, '2024-10-18', 'received', 'Restocking', 5, 5),
-    (35, 30, 180, 12.0, '2024-10-20', 'pending', 'Awaiting clearance', 6, 6),
-    (40, 35, 220, 15.0, '2024-10-22', 'received', 'Bulk order discount', 7, 7),
-    (45, 40, 260, 11.5, '2024-10-24', 'received', 'Seasonal purchase', 8, 8),
-    (50, 50, 100, 9.0, '2024-10-25', 'received', 'New supplier', 9, 9),
-    (55, 50, 150, 10.5, '2024-10-27', 'pending', 'Payment issues', 10, 10);
+-- INSERT INTO purchases (
+--     ordered_qnt, received_qnt, unit_rate, vat_rate, pruchase_date, status, remarks, vendor, product
+-- ) VALUES
+--     (10, 10, 150, 13.5, '2024-10-10', 'received', 'First bulk order', 1, 1),
+--     (15, 15, 200, 10.0, '2024-10-12', 'received', 'Urgent purchase', 2, 2),
+--     (20, 15, 250, 12.5, '2024-10-15', 'pending', 'Delayed shipment', 3, 3),
+--     (25, 20, 300, 14.0, '2024-10-17', 'received', 'Special discount', 4, 4),
+--     (30, 30, 120, 10.0, '2024-10-18', 'received', 'Restocking', 5, 5),
+--     (35, 30, 180, 12.0, '2024-10-20', 'pending', 'Awaiting clearance', 6, 6),
+--     (40, 35, 220, 15.0, '2024-10-22', 'received', 'Bulk order discount', 7, 7),
+--     (45, 40, 260, 11.5, '2024-10-24', 'received', 'Seasonal purchase', 8, 8),
+--     (50, 50, 100, 9.0, '2024-10-25', 'received', 'New supplier', 9, 9),
+--     (55, 50, 150, 10.5, '2024-10-27', 'pending', 'Payment issues', 10, 10);
 
 
 
@@ -288,4 +292,5 @@ INSERT INTO invoices (
     (8, 8, 45, 260, 11700, 'paid', 11.5, 'Seasonal order', '2024-10-24', '2024-10-24', '2024-10-24'),
     (9, 9, 50, 100, 5000, 'paid', 9.0, 'New supplier', '2024-10-25', '2024-10-25', '2024-10-25'),
     (10, 10, 55, 150, 8250, 'pending', 10.5, 'Payment pending', '2024-10-27', '2024-10-27', '2024-10-27');
-  
+    
+

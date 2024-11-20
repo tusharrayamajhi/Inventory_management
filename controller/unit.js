@@ -33,9 +33,9 @@ module.exports = async function units(req, res) {
     res.end();
     return;
   }
+  if (!isAdmin(user,res)) return;
 
   if (req.url == "/unit/add" && req.method == "GET") {
-    if (!isAdmin(user,res)) return;
     filepath = path.join(__dirname, "../public/html", "unit.ejs");
     render(req, res, filepath);
 
@@ -89,14 +89,12 @@ module.exports = async function units(req, res) {
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else if (req.url == "/unit/view" && req.method == "GET") {
-    if (!isAdmin(user,res)) return;
     filepath = path.join(__dirname, "../public/html", "unitview.ejs");
     const [units] = await connection
       .promise()
       .query("select * from units where user = ?", [user.id]);
     return renderFileWithData(req, res, filepath, units);
   } else if (req.url.startsWith("/unit/edit") && req.method == "GET") {
-    if (!isAdmin(res)) return;
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
@@ -107,7 +105,6 @@ module.exports = async function units(req, res) {
     filepath = path.join(__dirname, "../public/html", "editunit.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
   } else if (req.url == "/unit/edit" && req.method == "PATCH") {
-    if (!isAdmin(res)) return;
 
     const body = await processPost(req);
     let err = {
@@ -155,7 +152,6 @@ module.exports = async function units(req, res) {
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else if (req.url.startsWith("/unit/delete") && req.method == "DELETE") {
-    if (!isAdmin(user,res)) return;
 
     const parse_query = url.parse(req.url, true);
     const unit_id = parse_query.query.id;
@@ -182,6 +178,11 @@ module.exports = async function units(req, res) {
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "something went wrong" }));
     } catch (err) {
+      if(err.code == 'ER_ROW_IS_REFERENCED_2'){
+        res.statusCode = 409
+        return res.end(JSON.stringify({message:"The unit cannot be deleted because it is associated with one or more products."}))
+      }
+      console.log(err)
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else {

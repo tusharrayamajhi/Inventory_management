@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/addpurchase.css">
+</head>
+<body>
+    <select name="vendor_id" id="vendorlist">
+        <option value="" selected>select vendor</option>
+        <% for(let vendor of data.vendors){ %>
+            <option value="<%= vendor.vendor_id  %>"><%=vendor.vendor_name%></option>
+        <% } %>
+    </select>
+    <select name="product_id" id="select_product">
+        <option value="" selected>select product</option>
+        <% for(let product of data.products){ %>
+            <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
+        <% } %>
+    </select>
+    <div id="formsection">
+
+    </div>
+    <div>
+        <label for="total">total purchase amount</label><br>
+        <input readonly id="total_amt" id="total" value=0></input>
+        
+    </div>
+<button type="button" id="savepurchase">save</button>
+</body>
+<script src="/addpurchase.js"></script>
+</html>

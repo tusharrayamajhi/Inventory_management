@@ -128,6 +128,10 @@ module.exports = async function brand(req, res) {
         JSON.stringify({ message: "cannot delete data" })
       );
     } catch (err) {
+      if(err.code == 'ER_ROW_IS_REFERENCED_2'){
+        res.statusCode = 409
+        return res.end(JSON.stringify({message:"The brand cannot be deleted because it is associated with one or more products."}))
+      }
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error" }));
     }
