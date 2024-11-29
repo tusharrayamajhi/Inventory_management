@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Purchases</title>
+</head>
+<body>
+    <!-- Vendor and Product Information at the Top (common for all purchases) -->
+    <div>
+        <h2>Vendor: <%= data[0].vendor_name %> (ID: <%= data[0].vendor_id %>)</h2>
+    </div>
+
+    <!-- Loop through the data to create a form for each purchase -->
+    <% data.forEach((purchase) => { %>
+        
+        <form class="editpurchase">
+            <input type="hidden" class="purchase_id" value="<%=purchase.purchase_id%>" name="product_id">
+            <input type="hidden" class="product_id" value="<%=purchase.product_id%>" name="product_id">
+            <input type="text" class="productName" name="productName" value="<%=purchase.product_name%>" placeholder="Product Name" readonly required>
+            <input type="number" class="stock" name="stock" placeholder="Stock" value="<%=purchase.stock%>" required readonly>
+            <input type="number" class="ordered" name="ordered" placeholder="Ordered" value="<%=purchase.ordered_qnt%>" required>
+            <input type="number" class="received" name="received" placeholder="Received" value="<%=purchase.received_qnt%>" required>
+            <input type="number" class="new_received" name="new_received" id="new_received" min="0" max="<%=purchase.ordered_qnt - purchase.received_qnt%>">
+            <input type="number" step="0.01" class="rate" name="rate" placeholder="Rate" value="<%=purchase.unit_rate%>" required>
+            <input type="number" class="balance" name="balance" placeholder="Balance" value="<%=purchase.balance%>" readonly>
+            <input type="number" step="0.01" class="total" name="total" placeholder="Total" value="<%=purchase.total%>" readonly>
+            <select class="status" name="status" required>
+              <option value="pending" <%= purchase.status === 'pending' ? 'selected' : ''%>>Pending</option>
+              <option value="received" <%= purchase.status === 'received' ? 'selected' : ''%>>Received</option>
+              <option value="partial received" <%= purchase.status === 'partial received' ? 'selected' : ''%>>Partial Received</option>
+            </select>
+            <input type="text" step="0.01" class="vat" name="vat" placeholder="VAT" value="<%=purchase.vat_rate%>%" required readonly>
+            <textarea class="remark" name="remark" placeholder="Remark"><%=purchase.remarks%></textarea>
+        </form>
+        <% }); %>
+        <div>
+            <label for="total">total amount</label><br>
+            <input readonly id="total_amt" value=0></input>
+            <label for="total_vatable_amt">vatable amount</label>
+            <input readonly id="total_vatable_amt" value=0></input>
+            <label for="vatamt">vat amount</label>
+            <input readonly id="vatamt" value=0></input>
+            <label for="amt_after_vat">total amount after vat</label>
+            <input readonly id="total_amt_after_vat" value=0></input>  
+        </div>
+        <button type="button" class="update">update</button>
+
+</body>
+<script src="/editpurchase.js"></script>
+</html>

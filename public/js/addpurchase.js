@@ -48,7 +48,7 @@ document
               newform
                 .querySelector("input[class='received']")
                 .addEventListener("keyup", () => {
-                  console.log("button clicked");
+                 
                   const ordered = newform.querySelector(
                     "input[class='ordered']"
                   ).value;
@@ -65,10 +65,12 @@ document
                   newform.querySelector("input[class='balance']").value =
                     ordered - received;
                   newform.querySelector("input[class='total']").value =
-                    received * unit_rate +
-                    (received * unit_rate * parseFloat(vat)) / 100;
+                    received * unit_rate;
                   let totalFormAmt = 0;
+                  let vatableAmt = 0;
                   document.querySelectorAll(".forms").forEach((form) => {
+                    vatableAmt = form.querySelector("input[class='vat']").value == "13%" ?parseFloat(form.querySelector("input[class='total']").value) + parseFloat(vatableAmt):vatableAmt
+                    
                     totalFormAmt =
                       parseFloat(totalFormAmt) +
                       parseFloat(
@@ -76,11 +78,15 @@ document
                       );
                   });
                   document.getElementById("total_amt").value = totalFormAmt;
+                  document.getElementById("total_vatable_amt").value = vatableAmt;
+                  let vatamt =  (vatableAmt * 13/100);
+                  document.getElementById("vatamt").value = vatamt
+                  document.getElementById("total_amt_after_vat").value = (totalFormAmt + vatamt)
                 });
               newform
                 .querySelector("input[class='rate']")
                 .addEventListener("keyup", () => {
-                  console.log("button clicked");
+                  
                   const ordered = newform.querySelector(
                     "input[class='ordered']"
                   ).value;
@@ -97,10 +103,12 @@ document
                   newform.querySelector("input[class='balance']").value =
                     ordered - received;
                   newform.querySelector("input[class='total']").value =
-                    received * unit_rate +
-                    (received * unit_rate * parseFloat(vat)) / 100;
+                    received * unit_rate;
                   let totalFormAmt = 0;
+                  let vatableAmt = 0;
                   document.querySelectorAll(".forms").forEach((form) => {
+                    vatableAmt = form.querySelector("input[class='vat']").value == "13%" ?parseFloat(form.querySelector("input[class='total']").value) + parseFloat(vatableAmt):vatableAmt
+                    
                     totalFormAmt =
                       parseFloat(totalFormAmt) +
                       parseFloat(
@@ -108,11 +116,16 @@ document
                       );
                   });
                   document.getElementById("total_amt").value = totalFormAmt;
+                  document.getElementById("total_vatable_amt").value = vatableAmt;
+                  let vatamt =  (vatableAmt * 13/100);
+                  document.getElementById("vatamt").value = vatamt
+                  document.getElementById("total_amt_after_vat").value = (totalFormAmt + vatamt)
                 });
-              newform.addEventListener("submit", (e) => {
-                e.preventDefault();
+              newform.querySelector('button[class="delete-btn"]').addEventListener("click", () => {
                 newform.remove()
               });
+
+              
             })
             .catch((err) => {
               throw err;
@@ -132,7 +145,7 @@ document.getElementById("savepurchase").addEventListener("click", async () => {
   let formids = [];
   document.querySelectorAll(".forms").forEach((form) => {
     const id = form.querySelector('input[name="product_id"]').value;
-    console.log(id);
+    
     formids.push(id);
   });
   console.log(formids);
@@ -160,6 +173,7 @@ document.getElementById("savepurchase").addEventListener("click", async () => {
       body: JSON.stringify({ formsdata, vendor }),
     });
     const result = await response.json();
+    console.log(response.status)
     if(response.status == 200){
       alert(result.message)
       window.location = "/purchase/add"

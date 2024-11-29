@@ -127,7 +127,7 @@ module.exports = async function product(req, res) {
   }else if(req.url == "/product/view" && req.method == "GET"){
     try{
       filepath = path.join(__dirname,"../public/html","viewproduct.ejs")
-      const [products] = await connection.promise().query("select * from products where user = ?",[user.id])
+      const [products] = await connection.promise().query("select * from products inner join units on products.unit = units.unit_id inner join brands on products.brand = brands.brand_id inner join categorys on products.category = categorys.category_id where products.user = ?",[user.id])
       return renderFileWithData(req,res,filepath,products)
     }catch(err){
       filepath = path.join(__dirname,"../public/html",'error.html');

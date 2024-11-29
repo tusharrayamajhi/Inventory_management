@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Invoice</title>
+    <!-- <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle, #0d0d0d, #020202);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #00ff99;
+            text-shadow: 0 0 10px #00ff99, 0 0 20px #00ffcc;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: linear-gradient(145deg, #1a1a1a, #282828);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 255, 153, 0.3), inset 0 0 10px rgba(0, 255, 153, 0.2);
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .row div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #00ffcc;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 2px solid #00ff99;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff99;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.2);
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            background: #00ff99;
+            color: #000;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #00ff99, 0 0 20px #00ff99;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99;
+        }
+
+        hr {
+            border: 1px solid #00ff99;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .totals {
+            text-align: right;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        .totals span {
+            color: #00ff99;
+        }
+    </style> -->
+</head>
+<body>
+    <h1>Edit Invoice - <%= data[0].sells_code %></h1>
+    <% let totalAmount = 0; let totalVATAmount = 0; %>
+    <% data.forEach((item) => { 
+        const total = item.Quantity * item.rate;
+        const vatAmount = item.vat ? total * 0.13 : 0; // Assuming 13% VAT
+        totalAmount += total;
+        totalVATAmount += vatAmount;
+    %>
+        <form class="editinvoice">
+            <div class="row">
+                    <input type="hidden" readonly class="invoices_id" id="invoices_id<%= item.invoices_id %>" name="invoices_id" value="<%= item.invoices_id %>" required />
+                    <input type="hidden" class="product_id" readonly id="product_id<%= item.invoices_id %>" name="invoices_id" value="<%= item.product_id %>" required />
+                <div>
+                    <label for="product_name_<%= item.invoices_id %>">Product Name</label>
+                    <input type="text" readonly id="product_name_<%= item.invoices_id %>" name="product_name" value="<%= item.product_name %>" required />
+                </div>
+                <div>
+                    <label for="quantity_<%= item.invoices_id %>">Quantity</label>
+                    <input type="number" readonly id="quantity_<%= item.invoices_id %>" name="quantity" value="<%= item.Quantity %>" required />
+                </div>
+                <div>
+                    <label for="new_qnt">new_qnt</label>
+                    <input type="number" class="new_qnt" name="new_qnt" value=0 required />
+                </div>
+                <div>
+                    <label for="rate_<%= item.invoices_id %>">Rate</label>
+                    <input type="text" id="rate_<%= item.invoices_id %>" name="rate" value="<%= item.rate %>" required />
+                </div>
+                <div>
+                    <label for="total_<%= item.invoices_id %>">Total</label>
+                    <input type="text" id="total_<%= item.invoices_id %>" name="total" value="<%= total %>" readonly />
+                </div>
+                <div>
+                    <label>Payment</label>
+                    <select class="status" name="status"  required>
+                        <option value="" <%= !item.payment ? 'selected' : '' %>>Payment Status</option>
+                        <option value="pending" <%= item.payment === 'pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="received" <%= item.payment === 'received' ? 'selected' : '' %>>Received</option>
+                        <option value="partial received" <%= item.payment === 'partial received' ? 'selected' : '' %>>Partial Received</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="vat_<%= item.invoices_id %>">VAT</label>
+                    <input type="checkbox" id="vat_<%= item.invoices_id %>" readonly name="vat" <%= item.vat ? 'checked' : '' %> />
+                </div>
+                <div>
+                    <label for="remark_<%= item.invoices_id %>">Remark</label>
+                    <textarea id="remark_<%= item.invoices_id %>" name="remark" class="remark"><%= item.remark %></textarea>
+                </div>
+            </div>
+            </form>
+            <hr />
+            <% }) %>
+            <button type="submit" class="update">Update Invoice</button>
+    <div class="totals">
+        <p>Total Amount (Excluding VAT): <span><%= totalAmount.toFixed(2) %></span></p>
+        <p>Total VAT Amount: <span><%= totalVATAmount.toFixed(2) %></span></p>
+        <p>Total Amount (Including VAT): <span><%= (totalAmount + totalVATAmount).toFixed(2) %></span></p>
+    </div>
+</body>
+<script src="/editinvoice.js"></script>
+</html>

@@ -14,6 +14,11 @@ document.getElementById("addcustomerform").addEventListener("submit",async(e)=>{
             body:JSON.stringify(formdata)
         })
         const result= await response.json();
+        if(response.status == 200){
+            alert(result.message)
+        }else{
+            alert(result.message)
+        }
         console.log(result)
     }catch(err){
         console.log(err)
