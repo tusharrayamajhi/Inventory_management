@@ -2,14 +2,30 @@ const sql = require('mysql2');
 const fs = require("fs");
 const { log } = require('console');
 
+    // const connection = sql.createConnection({
+    //     host:"localhost",
+    //     port:3307,
+    //     user:"root",
+    //     password:"tushar",
+    //     multipleStatements:true,
+    //     database:"inventory"
+    // })
     const connection = sql.createConnection({
-        host:"localhost",
-        port:3307,
-        user:"root",
-        password:"tushar",
+        host:process.env.host,
+        port:process.env.port,
+        user:process.env.user,
+        password:process.env.password,
         multipleStatements:true,
-        database:"inventory"
+        database:process.env.database
     })
+    connection.connect((err) => {
+        if (err) {
+            console.log(err)
+            console.error('Error connecting to the database:', err.message);
+        } else {
+            console.log('Connected to the database successfully!');
+        }
+    });
     module.exports = connection;
 
 

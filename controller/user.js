@@ -222,7 +222,7 @@ module.exports = async function user(req, res) {
     let query = '';
     let params = []
     if(user.roles == roles.superadmin){
-      query = "select * from users";
+      query = "select * from users  ";
     }else {
         query = "select * from users where created_by = ? OR user_id = ?"
         params = [user.id,user.id]

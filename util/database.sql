@@ -1,7 +1,7 @@
 Drop Database inventory; 
 CREATE DATABASE IF NOT EXISTS Inventory;
 USE Inventory;
-select * from purchases  inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id where purchases.user = 1;
+
 
 
 CREATE TABLE companies(
@@ -11,8 +11,8 @@ CREATE TABLE companies(
         phone char(10) not null,
         email varchar(100) not null,
         DOJ timestamp not null default current_timestamp,
-        pan_no char(9) not null,
-        vat_no varchar(100) not null,
+        pan_vat_no varchar(100) not null unique,
+        isvat tinyint(1) default 0 not null,
         address varchar(100) not null,
 		country varchar(50) not null,
         state varchar(50),
@@ -28,6 +28,7 @@ CREATE TABLE companies(
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp
         );
+        select * from companies;
 CREATE TABLE users (
 		user_id INT NOT NULL PRIMARY KEY auto_increment,
         name VARCHAR(100) NOT NULL,
@@ -118,7 +119,6 @@ CREATE TABLE vendors(
         updated_at timestamp default current_timestamp on update current_timestamp,
         foreign key(user) references users(user_id)
         );
-drop table purchases;
 CREATE TABLE purchases(
 		purchase_id int primary key auto_increment,
         purchase_code varchar(100),
@@ -131,6 +131,7 @@ CREATE TABLE purchases(
         pruchase_date timestamp default current_timestamp,
         status enum("pending","received","partial received") default "received",
         remarks text,
+        remaining int default (received_qnt),
         vendor int not null,
         product int not null,
         user int not null,
@@ -215,68 +216,6 @@ INSERT INTO units (unit_name, short_name,user) VALUES
 ("Meter", "m",9),
 ("Liter", "l",2),
 ("Piece", "pcs",2);
-
-select * from products;
--- INSERT INTO products (product_name, brand, unit, vat, selling_rate, stock, category,user)
--- VALUES
---     ('Samsung Galaxy S21', 1, 1, 1, 80000.00, 100, 1,1),
---     ('Whirlpool Refrigerator', 1, 2, 1, 42000.00, 50, 2,1),
---     ('Wooden Dining Table', 2, 3, 1, 15000.00, 200, 3,1),
---     ('Lego Building Set', 4, 4, 1, 2000.00, 300, 4,1),
---     ('Football', 3, 1, 1, 1500.00, 150, 5,1),
---     ('Mens T-Shirt', 2, 3, 1, 1200.00, 500, 6,1),
---     ('C Programming Book', 1, 4, 1, 500.00, 250, 7,1),
---     ('Rice', 2, 1, 0, 70.00, 1000, 8,1),
---     ('Car Battery', 3, 2, 1, 7000.00, 75, 9,1),
---     ('Shampoo', 1, 3, 1, 350.00, 600, 10,1);
-
-
-
-
--- INSERT INTO vendors (vendor_name, email, phone, pan_no, pin_code, country, state, city, address, created_by)
--- VALUES
---     ('Tech Suppliers Pvt Ltd', 'techsuppliers@example.com', '9843234567', '123456789', '44555', 'Nepal', 'Bagmati', 'Kathmandu', 'Tech Park, New Road', 1),
---     ('Home Goods Wholesale', 'homegoods@example.com', '9812345678', '987654321', '66322', 'Nepal', 'Gandaki', 'Pokhara', 'Lake Road, Pokhara', 2),
---     ('Sports Direct', 'sportsdirect@example.com', '9809876543', '112233445', '88441', 'Nepal', 'Bagmati', 'Kathmandu', 'Sports Avenue, Kathmandu', 3),
---     ('Fashion Trends', 'fashiontrends@example.com', '9798765432', '556677889', '99322', 'Nepal', 'Bagmati', 'Lalitpur', 'Fashion Street, Lalitpur', 4),
---     ('Bookstore Nepal', 'bookstore@example.com', '9787654321', '223344556', '66212', 'Nepal', 'Gandaki', 'Pokhara', 'Book City, Pokhara', 5),
---     ('Auto Parts Suppliers', 'autoparts@example.com', '9776543210', '998877665', '44533', 'Nepal', 'Bagmati', 'Kathmandu', 'Automobile Street, Kathmandu', 6),
---     ('Beauty Hub Pvt Ltd', 'beautyhub@example.com', '9765432109', '554433221', '22311', 'Nepal', 'Gandaki', 'Pokhara', 'Beauty Lane, Pokhara', 7),
---     ('Green Grocers', 'greengrocers@example.com', '9754321098', '667788990', '22322', 'Nepal', 'Gandaki', 'Pokhara', 'Grocery Road, Pokhara', 8),
---     ('Gadgets Shop', 'gadgetsshop@example.com', '9743210987', '334455667', '22333', 'Nepal', 'Bagmati', 'Kathmandu', 'Gadgets Square, Kathmandu', 9),
---     ('Furniture Warehouse', 'furniturewarehouse@example.com', '9732109876', '998877665', '66311', 'Nepal', 'Bagmati', 'Lalitpur', 'Furniture Park, Lalitpur', 10);
-
-
-INSERT INTO companies (
-    company_name, registration_no, phone, email, pan_no, vat_no, address, country, state, city, zip, bank_name, 
-    account_no, bank_branch, bank_address, bank_code, website, company_logo
-) VALUES
-    ('Tech Enterprises', 'RE123456', '9876543210', 'tech@enterprise.com', 'PAN123456', 'VAT123456', '123 Tech Street', 'Nepal', 'Bagmati', 'Kathmandu', 44600, 'Nepal Bank', '123456789', 'Main Branch', 'Kathmandu', 123, 'www.techenterprises.com', 'tech_logo.png'),
-    ('Global Traders', 'RE654321', '9765432109', 'contact@globaltraders.com', 'PAN654321', 'VAT654321', '456 Market Rd', 'Nepal', 'Lalitpur', 'Patan', 44610, 'Global Bank', '987654321', 'Branch 1', 'Patan', 124, 'www.globaltraders.com', 'global_logo.png'),
-    ('Future Innovations', 'RE234567', '9654321098', 'info@futureinnovations.com', 'PAN234567', 'VAT234567', '789 Innovation Ave', 'Nepal', 'Kaski', 'Pokhara', 44700, 'Pokhara Bank', '123789456', 'Pokhara Branch', 'Pokhara', 125, 'www.futureinnovations.com', 'future_logo.png'),
-    ('Sunrise Solutions', 'RE345678', '9443210987', 'support@sunrise.com', 'PAN345678', 'VAT345678', '101 Sunrise Rd', 'Nepal', 'Bhaktapur', 'Bhaktapur', 44620, 'Sunrise Bank', '654321987', 'Bhaktapur Branch', 'Bhaktapur', 126, 'www.sunrisesolutions.com', 'sunrise_logo.png'),
-    ('Oceanic Ventures', 'RE456789', '9321098765', 'contact@oceanicventures.com', 'PAN456789', 'VAT456789', '202 Ocean Blvd', 'Nepal', 'Chitwan', 'Bharatpur', 44710, 'Oceanic Bank', '9876543210', 'Bharatpur Branch', 'Bharatpur', 127, 'www.oceanicventures.com', 'oceanic_logo.png'),
-    ('Alpha Corporation', 'RE567890', '9210987654', 'alpha@corporation.com', 'PAN567890', 'VAT567890', '303 Alpha St', 'Nepal', 'Pokhara', 'Pokhara', 44720, 'Alpha Bank', '1234567890', 'Pokhara Branch', 'Pokhara', 128, 'www.alphacorp.com', 'alpha_logo.png'),
-    ('Pinnacle Technologies', 'RE678901', '9109876543', 'info@pinnacle.com', 'PAN678901', 'VAT678901', '404 Pinnacle Rd', 'Nepal', 'Kathmandu', 'Kathmandu', 44730, 'Pinnacle Bank', '112233445', 'Kathmandu Branch', 'Kathmandu', 129, 'www.pinnacletech.com', 'pinnacle_logo.png'),
-    ('Vantage Systems', 'RE789012', '9098765432', 'contact@vantagesystems.com', 'PAN789012', 'VAT789012', '505 Vantage Way', 'Nepal', 'Kavre', 'Banepa', 44740, 'Vantage Bank', '2233445566', 'Banepa Branch', 'Banepa', 130, 'www.vantagesystems.com', 'vantage_logo.png'),
-    ('Royal Enterprises', 'RE890123', '8987654321', 'info@royalenterprises.com', 'PAN890123', 'VAT890123', '606 Royal St', 'Nepal', 'Chitwan', 'Hetauda', 44750, 'Royal Bank', '3344556677', 'Hetauda Branch', 'Hetauda', 131, 'www.royalenterprises.com', 'royal_logo.png'),
-    ('Visionary Tech', 'RE901234', '8876543210', 'contact@visionarytech.com', 'PAN901234', 'VAT901234', '707 Vision St', 'Nepal', 'Makwanpur', 'Thaha', 44760, 'Visionary Bank', '4455667788', 'Thaha Branch', 'Thaha', 132, 'www.visionarytech.com', 'visionary_logo.png');
-
-
--- INSERT INTO purchases (
---     ordered_qnt, received_qnt, unit_rate, vat_rate, pruchase_date, status, remarks, vendor, product
--- ) VALUES
---     (10, 10, 150, 13.5, '2024-10-10', 'received', 'First bulk order', 1, 1),
---     (15, 15, 200, 10.0, '2024-10-12', 'received', 'Urgent purchase', 2, 2),
---     (20, 15, 250, 12.5, '2024-10-15', 'pending', 'Delayed shipment', 3, 3),
---     (25, 20, 300, 14.0, '2024-10-17', 'received', 'Special discount', 4, 4),
---     (30, 30, 120, 10.0, '2024-10-18', 'received', 'Restocking', 5, 5),
---     (35, 30, 180, 12.0, '2024-10-20', 'pending', 'Awaiting clearance', 6, 6),
---     (40, 35, 220, 15.0, '2024-10-22', 'received', 'Bulk order discount', 7, 7),
---     (45, 40, 260, 11.5, '2024-10-24', 'received', 'Seasonal purchase', 8, 8),
---     (50, 50, 100, 9.0, '2024-10-25', 'received', 'New supplier', 9, 9),
---     (55, 50, 150, 10.5, '2024-10-27', 'pending', 'Payment issues', 10, 10);
-
 
 
 INSERT INTO invoices (

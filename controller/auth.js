@@ -58,9 +58,12 @@ module.exports = async function auth(req, res) {
         email: body.email,
         id: result.user_id,
         roles: result.roles,
-        company:result.company_id
+        company:result.company_id,
+        exipre:'1h',
+        createdBy:result.created_by
         
       };
+      console.log(sessions)
       res.writeHead(200, {
         "Set-Cookie": `sessionId=${session_id};HttpOnly;Max-Age=3600;path=/`,
       });

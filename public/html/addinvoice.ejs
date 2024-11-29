@@ -4,36 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/addpurchase.css">
 </head>
 <body>
-    <select name="vendor_id" id="vendorlist">
-        <option value="" selected>select vendor</option>
-        <% for(let vendor of data.vendors){ %>
-            <option value="<%= vendor.vendor_id  %>"><%=vendor.vendor_name%></option>
-        <% } %>
+    <select name="customer_id" id="select_customer">
+        <option value="" selected>select Customer</option>
+        <% for(let customer of data.customers){ %>
+            <option value="<%=customer.customer_id%>"><%=customer.name%></option>
+        <%}%>
     </select>
     <select name="product_id" id="select_product">
         <option value="" selected>select product</option>
-        <% for(let product of data.products){ %>
-            <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
-        <% } %>
+        <% for(let product of data.product){ %>
+            <option value="<%=product.product_id%>"><%=product.product_name%></option>
+        <%}%>
     </select>
-    <div id="formsection">
+    <div id="form_section">
 
     </div>
     <div>
         <label for="total">total amount</label><br>
         <input readonly id="total_amt" id="total" value=0></input>
         <label for="vatable">vatable amount</label>
-        <input readonly id="total_vatable_amt"></input>
+        <input readonly id="total_vatable_amt" value=0></input>
         <label for="vatamt">vat amount</label>
         <input readonly id="vatamt"></input>
         <label for="amt_after_vat">total amount after vat</label>
         <input readonly id="total_amt_after_vat" value=0></input>
-
     </div>
-<button type="button" id="savepurchase">save</button>
+<button type="button" id="save">save</button>
+<button type="button" id="save_and_print_Bill">save and print bill</button>
+
 </body>
-<script src="/addpurchase.js"></script>
+<script src="/addinvoice.js"></script>
 </html>

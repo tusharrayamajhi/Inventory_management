@@ -11,7 +11,7 @@
   <table border="1">
     <thead>
       <tr>
-        <th>#</th>
+        <th>SN</th>
         <th>Product Name</th>
         <th>Brand</th>
         <th>Unit</th>
@@ -23,16 +23,16 @@
       </tr>
     </thead>
     <tbody>
-        <% for(let product of data){%>
+        <% data.forEach((product,index )=> {%>
             <tr>
                 <td><%= product.product_id %></td>
                 <td><%= product.product_name %></td>
-                <td><%= product.brand%></td>
-                <td><%= product.unit %></td>
+                <td><%= product.brand_name%></td>
+                <td><%= product.short_name %></td>
                 <td><%= product.vat ? 'Yes' : 'No' %></td>
                 <td><%= product.selling_rate %></td>
                 <td><%= product.stock %></td>
-                <td><%= product.category || 'N/A' %></td>
+                <td><%= product.category_name %></td>
                 <td>
                   <a href="/product/edit?id=<%= product.product_id %>" style="text-decoration: none; color: blue;">Edit</a> 
                   <form class="deleteproduct">
@@ -42,7 +42,7 @@
                   </form> 
                 </td>
               </tr>
-            <% } %>
+            <% }) %>
     </tbody>
   </table>
 

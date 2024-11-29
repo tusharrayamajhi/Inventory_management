@@ -13,6 +13,8 @@ const product = require("./controller/product")
 const vendor = require("./controller/vendor")
 const purchase = require("./controller/purchase")
 const company = require("./controller/company")
+const invoice = require("./controller/invoice");
+const { sessions } = require("./util/object");
 const server = http.createServer(async (req, res) => {
   let filepath = "";
   if( req.url == "/" || req.url.startsWith("/auth")){
@@ -37,6 +39,8 @@ const server = http.createServer(async (req, res) => {
     return purchase(req,res)
   }else if(req.url.startsWith("/company")){
     return company(req,res)
+  }else if(req.url.startsWith("/invoice")){
+    return invoice(req,res)
   }
    else {
     const ext = req.url.split(".");
@@ -47,5 +51,6 @@ render(req,res,filepath)
 });
 
 server.listen(3000, () => {
+  
   console.log("app is running in port no 3000");
 });

@@ -59,8 +59,8 @@
         <td><%= user.email %></td>
         <td><%= user.is_active ? 'Yes' : 'No' %></td>
         <td><%= user.roles %></td>
-        <td><%= user.company_id|| 'N/A' %></td>
-        <td><%= user.created_by|| 'N/A' %></td>
+        <td><%= user.company_id %></td>
+        <td><%= user.created_by || 'N/A' %></td>
         
         <td>
           <a class="btn btn-edit" href="/user/edit?id=<%= user.user_id %>">Edit</a>
