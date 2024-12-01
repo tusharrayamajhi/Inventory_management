@@ -9,7 +9,7 @@
     <select name="customer_id" id="select_customer">
         <option value="" selected>select Customer</option>
         <% for(let customer of data.customers){ %>
-            <option value="<%=customer.customer_id%>"><%=customer.name%></option>
+            <option value="<%=customer.customer_id%>"><%=customer.customer_name%></option>
         <%}%>
     </select>
     <select name="product_id" id="select_product">

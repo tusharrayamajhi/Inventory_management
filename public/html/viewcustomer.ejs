@@ -32,7 +32,7 @@
                 <th>Email</th>
                 <th>Address</th>
                 <th>PAN</th>
-                <th>User ID</th>
+                <th>created by</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -40,12 +40,12 @@
             <% for(let customer of data){ %>
                 <tr>
                     <td><%= customer.customer_id %></td>
+                    <td><%= customer.customer_name %></td>
+                    <td><%= customer.customer_phone %></td>
+                    <td><%= customer.customer_email%></td>
+                    <td><%= customer.customer_address%></td>
+                    <td><%= customer.customer_pan %></td>
                     <td><%= customer.name %></td>
-                    <td><%= customer.phone %></td>
-                    <td><%= customer.email %></td>
-                    <td><%= customer.address %></td>
-                    <td><%= customer.pan %></td>
-                    <td><%= customer.user_id %></td>
                     <td>
                         <form action="/customer/edit" method="GET" style="display:inline;">
                             <input type="hidden" name="id" value="<%= customer.customer_id   %>">

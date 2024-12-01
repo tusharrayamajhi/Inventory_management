@@ -38,10 +38,10 @@ module.exports = async function purchase(req, res) {
     try {
       const [vendors] = await connection
         .promise()
-        .query("select * from vendors where user = ?", [user.id]);
+        .query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ?", [user.company]);
       const [products] = await connection
         .promise()
-        .query("select * from products where user = ?", [user.id]);
+        .query("select * from products inner join users on users.user_id = products.user where users.company_id = ?", [user.company]);
       const data = { vendors, products };
       filepath = path.join(__dirname, "../public/html", "addpurchase.ejs");
       return renderFileWithData(req, res, filepath, data);
@@ -58,9 +58,9 @@ module.exports = async function purchase(req, res) {
     try {
       const [products] = await connection
         .promise()
-        .query("select * from products where product_id = ? and user = ?", [
+        .query("select * from products inner join users on users.user_id = products.user where products.product_id = ? and users.company_id = ?", [
           id,
-          user.id,
+          user.company,
         ]);
       if (products.length == 0) {
         res.statusCode = 400;
@@ -69,7 +69,6 @@ module.exports = async function purchase(req, res) {
       res.statusCode = 200;
       return res.end(JSON.stringify(products[0]));
     } catch (err) {
-      console.log(err);
       return res.end(JSON.stringify({ message: "database err" }));
     }
   } else if (req.url == "/purchase/add" && req.method == "POST") {
@@ -138,9 +137,9 @@ module.exports = async function purchase(req, res) {
     try {
       const [vendor] = await connection
         .promise()
-        .query("select * from vendors where vendor_id = ? and user = ?", [
+        .query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id = ?", [
           body.vendor.vendorid,
-          user.id,
+          user.company,
         ]);
       if (vendor.length == 0) {
         res.statusCode = 404;
@@ -164,8 +163,8 @@ module.exports = async function purchase(req, res) {
       async function getpurchasecode() {
         const [number] = await connection
           .promise()
-          .query("select count(DISTINCT purchase_code) as count from purchases where user = ? ", [
-            user.id,
+          .query("select count(DISTINCT purchase_code) as count from purchases inner join users on users.user_id = purchases.user where users.company_id = ? ", [
+            user.company,
           ]);
 
         const date = new Date();
@@ -222,31 +221,28 @@ module.exports = async function purchase(req, res) {
 
     } catch (err) {
       await connection.promise().rollback();
-      console.log(err);
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
   }else if(req.url == "/purchase/view" && req.method == 'GET'){
     try{
-      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where purchases.user = ?",[user.id]);
+      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ?",[user.company]);
         res.statusCode == 200
         filepath = path.join(__dirname,'../public/html','viewpurchase.ejs');
         return renderFileWithData(req,res,filepath,result)      
     }catch(err){  
-      console.log(err)
       render(req,res,path.join(__dirname,"../public/html",'error.html'))
     }
   }else if(req.url.startsWith("/purchase/edit") && req.method == "GET"){
     const parseurl = url.parse(req.url,true)
     const purchase_code = parseurl.query.purchase_code
     try{
-      const [result] = await connection.promise().query("select * from purchases inner join vendors on purchases.vendor = vendors.vendor_id inner join products on purchases.product = products.product_id where purchases.purchase_code = ? and purchases.user = ?",[purchase_code,user.id])
+      const [result] = await connection.promise().query("select * from purchases inner join vendors on purchases.vendor = vendors.vendor_id inner join products on purchases.product = products.product_id inner join users on users.user_id = purchases.user where purchases.purchase_code = ? and users.company_id = ?",[purchase_code,user.company])
       if(result.length == 0){
       return render(req,res,path.join(__dirname,'../public/html','error.html'))
       }
       return renderFileWithData(req,res,path.join(__dirname,'../public/html','editpurchase.ejs'),result);
     }catch(err){
-      console.log(err)
       res.statusCode = 500
       return render(req,res,path.join(__dirname,'../public/html','error.html'))
     }
@@ -259,8 +255,7 @@ module.exports = async function purchase(req, res) {
         if(data.new_received == ""){
           data.new_received = 0
         }
-        console.log(data)
-        const [purchase] = await connection.promise().query("select * from purchases where purchase_id = ? and user = ? and product = ?",[data.purchase_id,user.id,data.product_id])
+        const [purchase] = await connection.promise().query("select * from purchases inner join users on users.user_id = purchases.user where purchases.purchase_id = ? and users.company_id = ? and purchases.product = ?",[data.purchase_id,user.company,data.product_id])
         if (purchase.length === 0) {
           res.statusCode = 404;
           return res.end(JSON.stringify({ success: false, message: `invalid purchase id` }));
@@ -271,14 +266,13 @@ module.exports = async function purchase(req, res) {
           //   new_rec_amt = new_rec_amt +( new_rec_amt * 13 / 100)
           // }
           let total = parseFloat(purchase[0].total) + new_rec_amt
-          await connection.promise().query("update purchases set received_qnt = received_qnt + ?,balance = ordered_qnt - received_qnt,remaining = remaining + ? ,total= ? where user = ? and purchase_id = ? ",[parseInt(data.new_received),parseInt(data.new_received),total,user.id,data.purchase_id])
-          await connection.promise().query("update products set stock = stock + ? where user = ? and product_id = ?",[parseFloat(data.new_received),user.id,data.product_id])
+          await connection.promise().query("update purchases set received_qnt = received_qnt + ?,balance = ordered_qnt - received_qnt,remaining = remaining + ? ,total= ? where purchase_id = ? ",[parseInt(data.new_received),parseInt(data.new_received),total,data.purchase_id])
+          await connection.promise().query("update products set stock = stock + ? where  product_id = ?",[parseFloat(data.new_received),data.product_id])
         }
       }
       res.statusCode = 200
       return res.end(JSON.stringify({message:"successfully update purchase"}))
       }catch(err){
-        console.log(err)
         res.statusCode = 500
         return res.end(JSON.stringify({message:"internal server error"}))
     }

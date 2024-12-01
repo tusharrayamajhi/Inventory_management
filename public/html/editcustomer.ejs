@@ -40,19 +40,19 @@
     <form id="editcustomer">
         <input type="hidden" id="id" name="id" value="<%= data.customer_id %>" required>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="<%= data.name %>" required>
+        <input type="text" id="name" name="name" value="<%= data.customer_name %>" required>
 
         <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" value="<%= data.phone %>" required>
+        <input type="text" id="phone" name="phone" value="<%= data.customer_phone %>" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<%= data.email %>" required>
+        <input type="email" id="email" name="email" value="<%= data.customer_email %>" required>
 
         <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="3" required><%= data.address %></textarea>
+        <textarea id="address" name="address" rows="3" required><%= data.customer_address %></textarea>
 
         <label for="pan">PAN:</label>
-        <input type="text" id="pan" name="pan" value="<%= data.pan %>" required>
+        <input type="text" id="pan" name="pan" value="<%= data.customer_pan %>" required>
 
         <button type="submit">Update Customer</button>
     </form>

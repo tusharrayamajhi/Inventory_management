@@ -75,11 +75,10 @@ module.exports = async function customer(req, res) {
     try {
       const [result] = await connection
         .promise()
-        .query("select * from customers where (pan = ?) AND user_id = ?", [
+        .query("select * from customers inner join users on users.user_id = customers.user_id where (pan = ?) AND users.company_id = ?", [
           body.pan,
-          user.id,
+          user.company,
         ]);
-      console.log(result);
       if (result.length > 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "customer already exits" }));
@@ -107,20 +106,19 @@ module.exports = async function customer(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewcustomer.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from customers where user_id = ?", [user.id]);
+      .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ?", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/customer/delete") && req.method == "DELETE") {
     
     const parse_query = url.parse(req.url, true);
-    console.log(parse_query.query.id);
 
     try {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from customers where customer_id = ? AND user_id = ?", [
+        .query("select * from customers inner join users on users.user_id = customers.user_id where customers.customer_id = ? AND users.company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
@@ -130,9 +128,9 @@ module.exports = async function customer(req, res) {
       }
       const [results] = await connection
         .promise()
-        .query("delete from customers where customer_id = ? AND user_id = ?", [
+        .query("delete customers from customers inner join users on users.user_id = customers.user_id where customers.customer_id = ? AND users.company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -156,9 +154,9 @@ module.exports = async function customer(req, res) {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
-      .query("select * from customers where customer_id = ? AND user_id = ?", [
+      .query("select customers.customer_id as customer_id, customers.email as customer_email,customers.name AS customer_name,customers.address as customer_address, customers.phone as customer_phone,customers.pan as customer_pan, users.* from customers inner join users on users.user_id = customers.user_id where customers.customer_id = ? AND users.company_id = ?", [
         parseurl.query.id,
-        user.id,
+        user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editcustomer.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
@@ -194,7 +192,7 @@ module.exports = async function customer(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-     const [results] = await connection.promise().query("select * from customers where customer_id = ? AND user_id = ?",[body.id,user.id])
+     const [results] = await connection.promise().query("select * from customers inner join users on users.user_id = customers.user_id where customers.customer_id = ? AND users.company_id = ?",[body.id,user.company])
      if(results.length == 0){
       res.statusCode = 404;
         return res.end(
@@ -204,20 +202,26 @@ module.exports = async function customer(req, res) {
       const [result] = await connection
         .promise()
         .query(
-          "update customers set name = ?, phone = ?,email = ?,address = ?,pan = ? where customer_id = ? and user_id = ?",
-          [body.name, body.phone, body.email, body.address,body.pan,body.id,user.id]
+          "update customers set customers.name = ?, customers.phone = ?,customers.email = ?,customers.address = ?,customers.pan = ? where customers.customer_id = ?",
+          [body.name, body.phone, body.email, body.address,body.pan,body.id]
         );
-      console.log(result);
-      if (result.affectedRows > 0) {
-        res.statusCode = 200;
-        return res.end(
-          JSON.stringify({ message: "customer updated successfully" })
-        );
-      } else {
+      // if (result.affectedRows > 0) {
+      //   res.statusCode = 200;
+      //   return res.end(
+      //     JSON.stringify({ message: "customer updated successfully" })
+      //   );
+      // } 
+      if(result.affectedRows == 0){
         res.statusCode = 500;
         return res.end(JSON.stringify({ message: "something went wrong" }));
       }
+      res.statusCode = 200;
+        return res.end(
+          JSON.stringify({ message: "customer updated successfully" })
+        );
+      
     } catch (err) {
+      res.statusCode = 500
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else {
