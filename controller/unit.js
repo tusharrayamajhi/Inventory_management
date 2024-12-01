@@ -65,10 +65,10 @@ module.exports = async function units(req, res) {
       const [results] = await connection
         .promise()
         .query(
-          "select * from units where (unit_name = ? OR short_name = ?) and user = ?",
-          [body.unit_name, body.short_name, user.id]
+          "select * from units inner join users on users.user_id = units.user where (units.unit_name = ? OR units.short_name = ?) and users.company_id = ?",
+          [body.unit_name, body.short_name, user.company]
         );
-      if (results.affectedRows > 0) {
+      if (results.length > 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "unit already exits" }));
       }
@@ -92,15 +92,15 @@ module.exports = async function units(req, res) {
     filepath = path.join(__dirname, "../public/html", "unitview.ejs");
     const [units] = await connection
       .promise()
-      .query("select * from units where user = ?", [user.id]);
+      .query("select * from units inner join users on users.user_id = units.user where users.company_id = ?", [user.company]);
     return renderFileWithData(req, res, filepath, units);
   } else if (req.url.startsWith("/unit/edit") && req.method == "GET") {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
-      .query("select * from units where unit_id = ? AND user = ?", [
+      .query("select * from units inner join users on users.user_id = units.user where units.unit_id = ? AND users.company_id = ?", [
         parseurl.query.id,
-        user.id,
+        user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editunit.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
@@ -125,9 +125,7 @@ module.exports = async function units(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
-      console.log(user);
-      const [results] = await connection.promise().query("select * from units where unit_id = ? AND user = ?",[body.unit_id,user.id]);
+      const [results] = await connection.promise().query("select * from units inner join users on users.user_id = units.user where units.unit_id = ? AND users.company_id = ?",[body.unit_id,user.company]);
       if(results.length == 0 ){
         res.statusCode = 404;
         return res.end(JSON.stringify({message:"no units found"}))
@@ -135,10 +133,9 @@ module.exports = async function units(req, res) {
       const [result] = await connection
         .promise()
         .query(
-          "update units set unit_name = ?, short_name = ? where unit_id = ? and user = ?",
-          [body.unit_name, body.short_name, body.unit_id, user.id]
+          "update units inner join users on users.user_id = units.user set units.unit_name = ?, units.short_name = ? where units.unit_id = ? and users.company_id = ?",
+          [body.unit_name, body.short_name, body.unit_id, user.company]
         );
-      console.log(result);
       if (result.affectedRows > 0) {
         res.statusCode = 200;
         return res.end(
@@ -158,16 +155,16 @@ module.exports = async function units(req, res) {
     try {
       const [result] = await connection
         .promise()
-        .query("select * from units where unit_id = ? ", [unit_id]);
+        .query("select * from units inner join users on users.user_id = units.user where units.unit_id = ? and users.company_id ", [unit_id,user.company]);
       if (result.length == 0) {
         res.statusCode = 404;
         return res.end(JSON.stringify({ message: "no unit found" }));
       }
       const [results] = await connection
         .promise()
-        .query("DELETE FROM units WHERE unit_id = ? AND user = ?", [
+        .query("DELETE units FROM units inner join users on users.user_id = units.user WHERE units.unit_id = ? AND users.company_id = ?", [
           unit_id,
-          user.id,
+          user.company,
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -182,7 +179,6 @@ module.exports = async function units(req, res) {
         res.statusCode = 409
         return res.end(JSON.stringify({message:"The unit cannot be deleted because it is associated with one or more products."}))
       }
-      console.log(err)
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else {

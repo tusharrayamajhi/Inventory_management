@@ -55,14 +55,12 @@ module.exports = async function category(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
       const [result] = await connection
         .promise()
         .query(
           "select * from categorys where (category_name = ?) AND user = ?",
           [body.category_name, user.id]
         );
-      console.log(result);
       if (result.length > 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "category already exits" }));
@@ -90,20 +88,19 @@ module.exports = async function category(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewcategory.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from categorys where user = ?", [user.id]);
+      .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ?", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/category/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;
     const parse_query = url.parse(req.url, true);
-    console.log(parse_query.query.id);
 
     try {
         res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from categorys where category_id = ? AND user = ?", [
+        .query("select * from categorys inner join users on users.user_id = categorys.user where categorys.category_id = ? AND users.company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
@@ -113,9 +110,10 @@ module.exports = async function category(req, res) {
       }
       const [results] = await connection
         .promise()
-        .query("delete from categorys where category_id = ? AND user = ?", [
+        .query("delete categorys FROM categorys inner join users on users.user_id = categorys.user where categorys.category_id = ? AND users.company_id = ? and users.roles = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
+          roles.admin
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -140,9 +138,9 @@ module.exports = async function category(req, res) {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
-      .query("select * from categorys where category_id = ? AND user = ?", [
+      .query("SELECT * FROM categorys INNER JOIN users ON users.user_id = categorys.user WHERE categorys.category_id = ? AND users.company_id = ?", [
         parseurl.query.id,
-        user.id,
+        user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editcategory.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
@@ -169,15 +167,12 @@ module.exports = async function category(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
-      console.log(user);
       const [result] = await connection
         .promise()
         .query(
-          "update categorys set category_name = ?, category_des = ? where category_id = ? and user = ?",
-          [body.category_name, body.category_des, body.category_id, user.id]
+          "update categorys INNER JOIN users ON users.user_id = categorys.user  SET categorys.category_name = ?, categorys.category_des = ? WHERE categorys.category_id = ?  AND users.company_id = ? and users.roles = ?",
+          [body.category_name, body.category_des, body.category_id, user.company,roles.admin]
         );
-      console.log(result);
       if (result.affectedRows > 0) {
         res.statusCode = 200;
         return res.end(

@@ -46,7 +46,6 @@ module.exports = async function vendor(req, res) {
       err_country: "",
       err_state: "",
     };
-    console.log(body);
     let have_err = false;
     if (!isValidCharacter(body.vendor_name)) {
       err.err_vendor_name = "name most be string";
@@ -81,9 +80,9 @@ module.exports = async function vendor(req, res) {
     try {
       const [pan] = await connection
         .promise()
-        .query("select pan_no from vendors where pan_no = ? AND user = ?", [
+        .query("select pan_no from vendors inner join users on users.user_id = vendors.user where vendors.pan_no = ? AND users.company_id = ?", [
           body.pan_no,
-          user.id,
+          user.company,
         ]);
       if (pan.length > 0) {
         res.statusCode = 400;
@@ -117,15 +116,14 @@ module.exports = async function vendor(req, res) {
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
   } else if(req.url == "/vendor/view" && req.method == "GET"){
-    const [result] = await connection.promise().query("select * from vendors where user = ?",[user.id]);
+    const [result] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ?",[user.company]);
     return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result)
   } else if(req.url.startsWith("/vendor/delete") && req.method == "DELETE"){
     const parse_query = url.parse(req.url, true);
     const id = parse_query.query.id
     try{
 
-        const [result] = await connection.promise().query('delete from vendors where vendor_id = ? and user = ? ',[id,user.id])
-        console.log(result)
+        const [result] = await connection.promise().query('delete vendors from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id = ? ',[id,user.company])
         if(result.affectedRows > 0){
             res.statusCode = 200
             return res.end(JSON.stringify({message:"vendor deleted successfully"}))
@@ -134,7 +132,7 @@ module.exports = async function vendor(req, res) {
             return res.end(JSON.stringify({message:"vendero cannot deleted"}))
         }
     }catch(err){
-        console.log(err)
+      
       if(err.code == 'ER_ROW_IS_REFERENCED_2'){
         res.statusCode = 409
         return res.end(JSON.stringify({message:"cannot delete vendor because it is liked with other data"}))
@@ -145,7 +143,7 @@ module.exports = async function vendor(req, res) {
   }else if(req.url.startsWith("/vendor/edit") && req.method == "GET"){
     const parseurl = url.parse(req.url,true)
     const id = parseurl.query.id
-    const [result] =  await connection.promise().query("select * from vendors where vendor_id = ? and user = ?",[id,user.id])
+    const [result] =  await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id= ?",[id,user.company])
     filepath = path.join(__dirname,'../public/html',"editvendor.ejs")
     return renderFileWithData(req,res,filepath,result[0])
   }else if(req.url == "/vendor/edit" && req.method == "PATCH"){
@@ -158,7 +156,6 @@ module.exports = async function vendor(req, res) {
       err_country: "",
       err_state: "",
     };
-    console.log(body);
     let have_err = false;
     if (!isValidCharacter(body.vendor_name)) {
       err.err_vendor_name = "name most be string";
@@ -191,12 +188,12 @@ module.exports = async function vendor(req, res) {
       return res.end(JSON.stringify(err));
     }
     try{
-      const [vendor] = await connection.promise().query("select * from vendors where vendor_id = ? and user = ?",[body.vendor_id,user.id])
+      const [vendor] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_id,user.company])
       if(vendor.length == 0){
         res.statusCode = 400;
         return res.end(JSON.stringify({message:"invalid vendor id"}))
       }
-      const [result] = await connection.promise().query("update vendors set vendor_name = ?, email = ?, phone=?, pan_no=?, country=?, state=?, address=? where vendor_id = ? and user = ?",[body.vendor_name,body.email,body.phone,body.pan_no,body.country,body.state,body.address,parseInt(body.vendor_id),user.id])
+      const [result] = await connection.promise().query("update vendors inner join users on users.user_id = vendors.user set vendors.vendor_name = ?, vendors.email = ?, vendors.phone=?, vendors.pan_no=?, vendors.country=?, vendors.state=?, vendors.address=? where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_name,body.email,body.phone,body.pan_no,body.country,body.state,body.address,parseInt(body.vendor_id),user.company])
       if(result.affectedRows > 0){
         res.statusCode = 200
         return res.end(JSON.stringify({message:"vendor update successfully"}))
@@ -204,7 +201,6 @@ module.exports = async function vendor(req, res) {
       res.statusCode = 400
       return res.end(JSON.stringify({message:"cannot update vendor"}))
     }catch(err){
-      console.log(err)
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }

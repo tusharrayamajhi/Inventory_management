@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAT Bill</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .vat-bill {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .bill-info {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    .item-table th,
+    .item-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .item-table th {
+      background-color: #f4f4f4;
+    }
+
+    .summary {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .summary p {
+      margin: 4px 0;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="vat-bill">
+    <header>
+      <h1>Business Name</h1>
+      <p>Address: Your Business Address, City</p>
+      <p>VAT No: 123456789</p>
+    </header>
+    <hr>
+    <section class="bill-info">
+      <p>Date: <span id="date">2024-11-30</span></p>
+      <p>Bill No: <span id="bill-number">001</span></p>
+    </section>
+    <table class="item-table">
+      <thead>
+        <tr>
+          <th>SN</th>
+          <th>Description</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody id="item-rows">
+        <!-- Dynamic rows will be inserted here -->
+      </tbody>
+    </table>
+    <hr>
+    <section class="summary">
+      <p>Sub Total: <span id="subtotal">0.00</span> NPR</p>
+      <p>VAT (13%): <span id="vat">0.00</span> NPR</p>
+      <p>Total: <span id="total">0.00</span> NPR</p>
+    </section>
+    <footer>
+      <p>Thank you for your purchase!</p>
+    </footer>
+  </div>
+
+  <script>
+    // Example Data
+    const items = [
+      { sn: 1, description: "Item A", qty: 2, rate: 500, amount: 1000 },
+      { sn: 2, description: "Item B", qty: 1, rate: 1500, amount: 1500 },
+    ];
+
+    // Populate the Table
+    let subtotal = 0;
+    const rows = items.map(item => {
+      subtotal += item.amount;
+      return `
+        <tr>
+          <td>${item.sn}</td>
+          <td>${item.description}</td>
+          <td>${item.qty}</td>
+          <td>${item.rate}</td>
+          <td>${item.amount}</td>
+        </tr>
+      `;
+    }).join("");
+
+    document.getElementById("item-rows").innerHTML = rows;
+
+    // Calculate Totals
+    document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+    const vat = subtotal * 0.13;
+    document.getElementById("vat").textContent = vat.toFixed(2);
+    document.getElementById("total").textContent = (subtotal + vat).toFixed(2);
+  </script>
+</body>
+</html>

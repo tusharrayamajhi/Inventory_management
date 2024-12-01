@@ -63,7 +63,6 @@ module.exports = async function auth(req, res) {
         createdBy:result.created_by
         
       };
-      console.log(sessions)
       res.writeHead(200, {
         "Set-Cookie": `sessionId=${session_id};HttpOnly;Max-Age=3600;path=/`,
       });
@@ -123,6 +122,7 @@ module.exports = async function auth(req, res) {
       const hashpassword = crypto
         .pbkdf2Sync(body.password, process.env.salt, 1000, 64, "sha512")
         .toString("hex");
+        
       const [result] = await connection
         .promise()
         .query(

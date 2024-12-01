@@ -38,13 +38,13 @@ module.exports = async function product(req, res) {
       filepath = path.join(__dirname, "../public/html", "addproduct.ejs");
       const [brands] = await connection
         .promise()
-        .query("select * from brands where user = ?", [user.id]);
+        .query("select * from brands inner join users on users.user_id = brands.user where users.company_id = ?", [user.company]);
       const [units] = await connection
         .promise()
-        .query("select * from units where user = ?", [user.id]);
+        .query("select * from units inner join users on users.user_id = units.user where users.company_id = ?", [user.company]);
       const [categories] = await connection
         .promise()
-        .query("select * from categorys where user = ?", [user.id]);
+        .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ?", [user.company]);
       const data = { brands, units, categories };
       return renderFileWithData(req, res, filepath, data);
     } catch (err) {
@@ -87,7 +87,6 @@ module.exports = async function product(req, res) {
     }else{
       body.vat = 0
     }
-    console.log(body)
     
     res.setHeader("Content-Type", "application/json");
     if (have_err) {
@@ -95,20 +94,19 @@ module.exports = async function product(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      const [brands] = await connection.promise().query("select * from brands where brand_id = ? AND user = ?", [parseInt(body.brand),user.id]);
+      const [brands] = await connection.promise().query("select * from brands inner join users on users.user_id = brands.user where brands.brand_id = ? AND users.company_id= ?", [parseInt(body.brand),user.company]);
      
       if (brands.length == 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "no brand found" }));
       }
-      const [units] = await connection.promise().query("select * from units where unit_id = ? AND user = ?", [parseInt(body.unit),user.id]);
+      const [units] = await connection.promise().query("select * from units inner join users on users.user_id = units.user where units.unit_id = ? AND users.company_id = ?", [parseInt(body.unit),user.company]);
      
       if (units.length == 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "no units found" }));
       }
-      const [category] = await connection.promise().query("select * from categorys where category_id = ? AND user = ?", [parseInt(body.category),user.id]);
-     
+      const [category] = await connection.promise().query("select * from categorys inner join users on users.user_id = categorys.user where categorys.category_id = ? and users.company_id = ?", [parseInt(body.category),user.company]);
       if (category.length == 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "no category found" }));
@@ -127,7 +125,7 @@ module.exports = async function product(req, res) {
   }else if(req.url == "/product/view" && req.method == "GET"){
     try{
       filepath = path.join(__dirname,"../public/html","viewproduct.ejs")
-      const [products] = await connection.promise().query("select * from products inner join units on products.unit = units.unit_id inner join brands on products.brand = brands.brand_id inner join categorys on products.category = categorys.category_id where products.user = ?",[user.id])
+      const [products] = await connection.promise().query("select * from products inner join units on products.unit = units.unit_id inner join brands on products.brand = brands.brand_id inner join categorys on products.category = categorys.category_id inner join users on users.user_id = products.user where users.company_id = ?",[user.company])
       return renderFileWithData(req,res,filepath,products)
     }catch(err){
       filepath = path.join(__dirname,"../public/html",'error.html');
@@ -136,14 +134,13 @@ module.exports = async function product(req, res) {
   }else if(req.url.startsWith("/product/delete") && req.method == "DELETE"){
     const parseurl = url.parse(req.url,true)
     const id = parseurl.query.id;
-    console.log(id)
     try{
-      const [result] = await connection.promise().query("select * from products where product_id = ? AND user = ?",[id,user.id]);
+      const [result] = await connection.promise().query("select * from products inner join users on users.user_id = products.user where product_id = ? AND users.company_id = ?",[id,user.company]);
       if(result.length == 0){
         res.statusCode = 400;
         return res.end(JSON.stringify({message:"no product found for given id"}))
       }
-      const [results] = await connection.promise().query("delete from products where product_id = ? and user = ?",[id,user.id]);
+      const [results] = await connection.promise().query("delete from products where product_id = ?",[id]);
       if(results.affectedRows > 0){
         res.statusCode = 200
         return res.end(JSON.stringify({message:"product delete successfully"}));
@@ -152,7 +149,6 @@ module.exports = async function product(req, res) {
       return res.end(JSON.stringify({message:"cannot delete product"}))
 
     }catch(err){
-      console.log(err)
       if(err.code == 'ER_ROW_IS_REFERENCED_2'){
         res.statusCode = 409
         return res.end(JSON.stringify({message:"cannot delete product because it is liked with other data"}))
@@ -164,19 +160,17 @@ module.exports = async function product(req, res) {
     const editId = url.parse(req.url,true).query.id;
     try{
 
-      const [products] = await connection.promise().query("select * from products where product_id = ? and user = ?",[parseInt(editId),user.id]);
-      const [brands] = await connection.promise().query('select * from brands where user = ?',[user.id]);
-      const [units] = await connection.promise().query('select * from units where user = ?',[user.id]);
-      const [categories] = await connection.promise().query('select * from categorys where user = ?',[user.id])
+      const [products] = await connection.promise().query("select * from products inner join users on users.user_id = products.user where products.product_id = ? and users.company_id = ?",[parseInt(editId),user.company]);
+      const [brands] = await connection.promise().query('select * from brands inner join users on users.user_id = brands.user where users.company_id = ?',[user.company]);
+      const [units] = await connection.promise().query('select * from units inner join users on users.user_id = units.user where users.company_id = ?',[user.company]);
+      const [categories] = await connection.promise().query('select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ?',[user.company])
       if(products.length == 0 || brands.length == 0 || categories.length == 0 || units.length == 0){
         return render(req,res,path.join(__dirname,'../public/html','error.html')); 
       }
       const product = products[0]
       const data = {product,brands,categories,units}
-      console.log(data)
       return renderFileWithData(req,res,path.join(__dirname,'../public/html','editproduct.ejs'),data);
     }catch(err){
-      console.log(err)
       return render(req,res,path.join(__dirname,'../public/html','error.html'))
     }
   }else if(req.url == "/product/edit" && req.method == "PATCH"){
@@ -215,13 +209,11 @@ module.exports = async function product(req, res) {
       err.err_category = "choose a category";
       have_err = true;
     }
-    console.log(body)
     if(body.vat == '1'){
       body.vat = 1
     }else{
       body.vat = 0
     }
-    console.log(body)
     
     res.setHeader("Content-Type", "application/json");
     if (have_err) {
@@ -229,15 +221,15 @@ module.exports = async function product(req, res) {
       return res.end(JSON.stringify(err));
     }
     try{
-      const [products] = await connection.promise().query("select * from products where product_id = ? and user = ?",[body.product_id,user.id])
-      const [units] = await connection.promise().query("select * from units where unit_id = ? and user = ?",[body.unit,user.id])
-      const [brands] = await connection.promise().query("select * from brands where brand_id = ? and user = ?",[body.brand,user.id])
-      const [categories] = await connection.promise().query("select * from categorys where category_id = ? and user = ?",[body.category,user.id])
+      const [products] = await connection.promise().query("select * from products inner join users on users.user_id = products.user where products.product_id = ? and users.company_id = ?",[body.product_id,user.company])
+      const [units] = await connection.promise().query("select * from units inner join users on users.user_id = units.user where units.unit_id = ? and users.company_id = ?",[body.unit,user.company])
+      const [brands] = await connection.promise().query("select * from brands inner join users on users.user_id = brands.user where brands.brand_id = ? and users.company_id = ?",[body.brand,user.company])
+      const [categories] = await connection.promise().query("select * from categorys inner join users on users.user_id = categorys.user where  categorys.category_id = ? and users.company_id = ?",[body.category,user.company])
       if(products.length == 0 || units.length == 0 || brands.length == 0 || categories.length == 0){
         res.statusCode = 400;
         return res.end(JSON.stringify({message:"invalid product id"}))
       }
-      const [results] = await connection.promise().query("update products set product_name = ? , brand = ?, unit = ?, vat = ?,category = ?, selling_rate = ? where product_id = ? and user = ?",[body.product_name,body.brand,body.unit,body.vat,body.category,body.selling_rate,body.product_id,user.id])
+      const [results] = await connection.promise().query("update products inner join users on users.user_id = products.user set products.product_name = ? , products.brand = ?, products.unit = ?, products.vat = ?,products.category = ?, products.selling_rate = ? where products.product_id = ? and users.company_id = ?",[body.product_name,body.brand,body.unit,body.vat,body.category,body.selling_rate,body.product_id,user.company])
       if(results.affectedRows > 0){
         res.statusCode = 200
         return res.end(JSON.stringify({message:"product update successfully"}))
@@ -245,7 +237,6 @@ module.exports = async function product(req, res) {
       res.statusCode == 400
       return res.end(JSON.stringify({message:"cannot update product"}))
     }catch(err){
-      console.log(err)
       return res.end(JSON.stringify({message:"database err"}))
     }
   }

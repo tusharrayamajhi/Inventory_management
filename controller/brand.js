@@ -55,14 +55,12 @@ module.exports = async function brand(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
       const [result] = await connection
         .promise()
         .query(
-          "select * from brands where (brand_name = ?) AND user = ?",
-          [body.category_name, user.id]
+          "select * from brands inner join users on users.user_id = brands.user where brands.brand_name = ? AND users.company_id = ?",
+          [body.category_name, user.company]
         );
-      console.log(result);
       if (result.length > 0) {
         res.statusCode = 400;
         return res.end(JSON.stringify({ message: "brand already exits" }));
@@ -90,20 +88,19 @@ module.exports = async function brand(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewbrand.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from brands where user = ?", [user.id]);
+      .query("select * from brands inner join users on users.user_id = brands.user where users.company_id = ?", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/brand/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;
     const parse_query = url.parse(req.url, true);
-    console.log(parse_query.query.id);
 
     try {
         res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from brands where brand_id = ? AND user = ?", [
+        .query("select * from brands inner join users on users.user_id = brands.user where brands.brand_id = ? AND users.company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
@@ -113,9 +110,9 @@ module.exports = async function brand(req, res) {
       }
       const [results] = await connection
         .promise()
-        .query("delete from brands where brand_id = ? AND user = ?", [
+        .query("delete brands from brands inner join users on users.user_id = brands.user where brands.brand_id = ? AND users.company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -140,9 +137,9 @@ module.exports = async function brand(req, res) {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
       .promise()
-      .query("select * from brands where brand_id = ? AND user = ?", [
+      .query("select * from brands inner join users on users.user_id = brands.user where brands.brand_id = ? AND users.company_id = ?", [
         parseurl.query.id,
-        user.id,
+        user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editbrand.ejs");
     return renderFileWithData(req, res, filepath, result[0]);
@@ -169,15 +166,12 @@ module.exports = async function brand(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
-      console.log(body);
-      console.log(user);
       const [result] = await connection
         .promise()
         .query(
-          "update brands set brand_name = ?, brand_desc = ? where brand_id = ? and user = ?",
-          [body.brand_name, body.brand_desc, body.brand_id, user.id]
+          "update brands inner join users on users.user_id = brands.user set brands.brand_name = ?, brands.brand_desc = ? where brands.brand_id = ? and users.company_id = ?",
+          [body.brand_name, body.brand_desc, body.brand_id, user.company]
         );
-      console.log(result);
       if (result.affectedRows > 0) {
         res.statusCode = 200;
         return res.end(

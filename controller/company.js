@@ -62,7 +62,6 @@ module.exports = async function company(req, res) {
     } else {
       body.vat = 0;
     }
-    console.log(body);
 
     if (!isValidCharacter(body.company_name)) {
       err.err_cmp_name = "company name most be string";
@@ -166,7 +165,6 @@ module.exports = async function company(req, res) {
         result
       );
     } catch (err) {
-      console.log(err);
       return render(
         req,
         res,
@@ -191,7 +189,6 @@ module.exports = async function company(req, res) {
         result[0]
       );
     } catch (err) {
-      console.log(err);
       return render(
         req,
         res,
@@ -200,7 +197,6 @@ module.exports = async function company(req, res) {
     }
   } else if (req.url == "/company/edit" && req.method == "PATCH") {
     const body = await processPost(req);
-    console.log(body);
     let err = {
       err_cmp_name: "",
       err_reg_no: "",
@@ -222,7 +218,6 @@ module.exports = async function company(req, res) {
     } else {
       body.isvat = 0;
     }
-    console.log(body);
 
     if (!isValidCharacter(body.company_name)) {
       err.err_cmp_name = "company name most be string";
@@ -321,7 +316,6 @@ module.exports = async function company(req, res) {
       res.statusCode = 400
       return res.end(JSON.stringify({message:"cannot update company"}))
     } catch (err) {
-      console.log(err)
       if(err.code == "ER_DUP_ENTRY"){
         res.statusCode = 500
         return  res.end(JSON.stringify({message:err.sqlMessage}))

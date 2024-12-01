@@ -65,7 +65,6 @@ module.exports = async function user(req, res) {
     }else {
       data = { user};
     }
-    console.log(data)
     return renderFileWithData(req, res, filepath, data);
   } else if (req.url == "/user/add" && req.method == "POST") {
     const body = await processPost(req);
@@ -188,7 +187,6 @@ module.exports = async function user(req, res) {
         64,
         "sha512"
       ).toString('hex');
-      console.log(body);
       const [results] = await connection
         .promise()
         .query(
@@ -201,7 +199,7 @@ module.exports = async function user(req, res) {
             newpassword,
             parseInt(body.is_active),
             body.roles,
-            body.company,
+            body.company == null?user.company:body.company,
             user.id,
           ]
         );
@@ -224,8 +222,8 @@ module.exports = async function user(req, res) {
     if(user.roles == roles.superadmin){
       query = "select * from users  ";
     }else {
-        query = "select * from users where created_by = ? OR user_id = ?"
-        params = [user.id,user.id]
+        query = "select * from users where company_id = ?"
+        params = [user.company]
     }
     const [result] = await connection
       .promise()
@@ -237,9 +235,9 @@ module.exports = async function user(req, res) {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from users where user_id = ? AND created_by = ?", [
+        .query("select * from users where user_id = ? AND company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
@@ -249,9 +247,9 @@ module.exports = async function user(req, res) {
       }
       const [results] = await connection
         .promise()
-        .query("delete from users where user_id = ? AND created_by = ?", [
+        .query("delete from users where user_id = ? AND company_id = ?", [
           parse_query.query.id,
-          user.id,
+          user.company,
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -389,21 +387,20 @@ module.exports = async function user(req, res) {
           );
         }
       }
-      console.log(body)
       const [result] = await connection
       .promise()
       .query(
         "select * from users where user_id = ?",
         [parseInt(body.user_id)]
       );
-      console.log(result)
       if (result.length == 0) {
         res.statusCode = 404;
         return res.end(
           JSON.stringify({ message: "no user found for the given id or you dont have authority to edit this user" })
         );
       }
-      const [rows] = await connection.promise().query("update users set name = ? , address = ?,phone= ?, email = ?, is_active = ?,roles = ?,company_id = ? where user_id = ?",[body.name,body.address,body.phone,body.email,body.is_active,body.roles,body.company != null ? parseInt(body.company):null,parseInt(body.user_id)]);
+      const [rows] = await connection.promise().query("update users set name = ? , address = ?,phone= ?, email = ?, is_active = ?,roles = ?,company_id = ? where user_id = ?",[body.name,body.address,body.phone,body.email,body.is_active,body.roles,body.company != null ? parseInt(body.company):user.company,parseInt(body.user_id)]);
+      
       if(rows.affectedRows > 0){
         res.statusCode = 200;
         return res.end(JSON.stringify({message:"successfully update user"}))

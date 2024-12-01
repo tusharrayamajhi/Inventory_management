@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice Table</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 </head>
 <body class="bg-gray-100 p-4">
   <div class="container mx-auto">
@@ -13,10 +20,12 @@
       <thead>
         <tr class="bg-gray-200 text-left">
           <th class="border border-gray-300 px-4 py-2">SN</th>
+          <th class="border border-gray-300 px-4 py-2">created by</th>
           <th class="border border-gray-300 px-4 py-2">sells code</th>
           <th class="border border-gray-300 px-4 py-2">Customer Name</th>
           <th class="border border-gray-300 px-4 py-2">Product Name</th>
           <th class="border border-gray-300 px-4 py-2">Quantity</th>
+          <th class="border border-gray-300 px-4 py-2">sells by</th>
           <th class="border border-gray-300 px-4 py-2">Rate</th>
           <th class="border border-gray-300 px-4 py-2">Total</th>
           <th class="border border-gray-300 px-4 py-2">Payment</th>
@@ -27,10 +36,12 @@
         <% data.forEach((invoice,index) => { %>
         <tr>
           <td class="border border-gray-300 px-4 py-2"><%= index + 1 %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.user%></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.sells_code %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.name %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.customer_name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.product_name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.Quantity %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.rate %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.total %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.payment %></td>
@@ -58,7 +69,7 @@
         if(!groupedsells[sells.sells_code]) {
           groupedsells[sells.sells_code] = { 
             sells_code:sells.sells_code,
-            customer_name: sells.name,
+            customer_name: sells.customer_name,
             sells_date: sells.sales_date, 
             total: 0, 
           }; 
@@ -74,11 +85,23 @@
           <td><%= new Date(group.sells_date).toLocaleDateString()  %></td>
           <td><%= group.total %></td>
           <td>
+            <form class="download_invoice" style="display: inline">
+                <input
+                  type="hidden"
+                  name="invoice_sells_code",
+                  class="invoice_sells_code"
+                  value="<%= group.sells_code %>"
+                />
+                <button
+                  type="button"
+                 >
+                 <i class="fa-solid fa-download"></i>
+                </button>
+              </form>
             <a
               href="/invoice/edit?sells_code=<%= group.sells_code %>"
               style="text-decoration: none; color: blue"
-              >Edit</a
-            >
+              >Edit</a>
             <form class="deletepurchase" style="display: inline">
               <input
                 type="hidden"
@@ -104,3 +127,4 @@
   
 </body>
 </html>
+<script src="/viewinvoice.js"></script>
