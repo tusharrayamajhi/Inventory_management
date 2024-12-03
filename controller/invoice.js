@@ -360,7 +360,6 @@ module.exports = async function invoice(req, res) {
         total_include_vat:0
       }
       for(let invoice of invoices){
-        console.log(invoice)
         totals_detals.total_amt = totals_detals.total_amt + parseFloat(invoice.total)
         if(invoice.vat == 1){
           totals_detals.vatable_amt = parseFloat(totals_detals.vatable_amt) +parseFloat(invoice.total)
