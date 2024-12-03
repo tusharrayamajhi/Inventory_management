@@ -119,8 +119,8 @@ module.exports = async function invoice(req, res) {
         // let userIds = userids.map((row) => row.user_id).join(",");
       
       const [number] = await connection.promise().query(
-        `SELECT COUNT(DISTINCT sells_code) AS count from invoices inner join users on users.user_id = invoices.user where users.company_id `,
-        [user.company,]
+        `SELECT COUNT(DISTINCT sells_code) AS count from invoices inner join users on users.user_id = invoices.user where users.company_id = ?  and invoices.created_at = ?`,
+        [user.company,today]
       );
 
 
@@ -209,8 +209,8 @@ module.exports = async function invoice(req, res) {
     try {
       
       if (user.roles == roles.admin) {
-        let result = []
-        const [results] = await connection.promise().query("select products.*,invoices.*, users.* ,customers.name as customer_name from invoices inner join users on users.user_id = invoices.user inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id where users.company_id",[user.company])
+        
+        const [results] = await connection.promise().query("select products.*,invoices.*, users.* ,customers.name as customer_name from invoices inner join users on users.user_id = invoices.user inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id where users.company_id = ? order by invoices.created_at asc",[user.company])
         
         return renderFileWithData(
           req,
@@ -222,7 +222,7 @@ module.exports = async function invoice(req, res) {
         let [result] = await connection
         .promise()
         .query(
-          "select products.*, users.*, invoices.*,customers.name as customer_name from invoices inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user where invoices.user = ?",
+          "select products.*, users.*, invoices.*,customers.name as customer_name from invoices inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user where invoices.user = ? order by invoices.created_at asc",
           [user.id]
         );
         return renderFileWithData(
@@ -333,15 +333,50 @@ module.exports = async function invoice(req, res) {
     let parseurl = url.parse(req.url, true);
     let sells_code = parseurl.query.sells_code;
     try {
-      const [result] = await connection
-        .promise()
-        .query(
-          "select invoices.*,users.*,products.* ,customers.name as customer_name ,customers.email as customer_email,customers.address as customer_address ,customers.phone as customer_phone, customers.pan as customer_pan from invoices inner join customers on customers.customer_id = invoices.customer_id inner join products on products.product_id = invoices.product_id inner join users on users.user_id = invoices.user where invoices.sells_code = ? and invoices.user = ?",
-          [sells_code, user.id]
-        );
+      const [customers] = await connection.promise().query(
+        `
+        select customers.* from invoices
+        inner join customers on customers.customer_id = invoices.customer_id
+        where invoices.sells_code = ? 
+        `,[sells_code]
+      )
+      const [invoices] = await connection.promise().query(
+        `
+        select products.*,units.*,invoices.* from invoices
+        inner join products on products.product_id = invoices.product_id
+        inner join units on products.unit = units.unit_id
+        where invoices.sells_code = ?
+        `,[sells_code]
+      )
+      const [company] = await connection.promise().query(
+        `
+        select * from companies where companies.company_id = ?
+        `,[user.company]
+      )
+      let totals_detals ={
+        total_amt:0,
+        vatable_amt: 0,
+        vat_amt:0,
+        total_include_vat:0
+      }
+      for(let invoice of invoices){
+        totals_detals.total_amt = totals_detals.total_amt + invoice.rate
+        if(invoice.vat == 1){
+          totals_detals.vatable_amt = totals_detals.vatable_amt + invoice.rate
+        }
+        totals_detals.vat_amt = totals_detals.vatable_amt * 13 / 100
+        totals_detals.total_include_vat = totals_detals.vat_amt + totals_detals.total_amt
+      }
+      let data = {
+        customers:customers[0],
+        invoice:invoices,
+        totals_detals:totals_detals,
+        company:company[0]
+      }
         res.statusCode = 200
-        return renderFileWithData(req,res,path.join(__dirname,"../public/html","vatbill.ejs"))
+        return renderFileWithData(req,res,path.join(__dirname,"../public/html","vatbill.ejs"),data)
     } catch (err) {
+      console.log(err)
       res.startsWith = 500;
       return res.end(JSON.stringify({ message: "internal server error" }));
     }

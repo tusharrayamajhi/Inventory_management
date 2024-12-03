@@ -88,7 +88,7 @@ module.exports = async function brand(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewbrand.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from brands inner join users on users.user_id = brands.user where users.company_id = ?", [user.company]);
+      .query("select * from brands inner join users on users.user_id = brands.user where users.company_id = ? order by brands.created_at asc", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/brand/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;

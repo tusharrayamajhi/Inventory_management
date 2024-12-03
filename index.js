@@ -1,6 +1,7 @@
 const http = require("http");
 const path = require("path")
 require("dotenv").config();
+const fs = require('fs')
 let {render} = require("./util/renderfile")
 const auth = require("./controller/auth")
 const dashboard = require('./controller/dashboard')
@@ -41,6 +42,18 @@ const server = http.createServer(async (req, res) => {
     return company(req,res)
   }else if(req.url.startsWith("/invoice")){
     return invoice(req,res)
+  }if (req.method === 'GET' && req.url.startsWith('/uploads/')) {
+    const filePath = path.join(__dirname,"./uploads/", req.url.split("/")[2]);
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+      if (err) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('File not found');
+        return;
+      }
+      const fileStream = fs.createReadStream(filePath);
+      fileStream.pipe(res);
+    });
+    return
   }
    else {
     const ext = req.url.split(".");

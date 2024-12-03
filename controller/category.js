@@ -88,7 +88,7 @@ module.exports = async function category(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewcategory.ejs");
     const [result] = await connection
       .promise()
-      .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ?", [user.company]);
+      .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ? order by categorys.created_at asc", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/category/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;

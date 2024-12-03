@@ -106,7 +106,7 @@ module.exports = async function customer(req, res) {
     filepath = path.join(__dirname, "../public/html", "viewcustomer.ejs");
     const [result] = await connection
       .promise()
-      .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ?", [user.company]);
+      .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ? order by customers.created_at asc", [user.company]);
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/customer/delete") && req.method == "DELETE") {
     

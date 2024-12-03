@@ -32,7 +32,11 @@
     <tbody>
       <% data.forEach((company) => { %>
         <tr>
-            <td><%= company.company_logo %></td>
+          <% if(company.company_logo){ %>
+           <td> <img src='/uploads/<%= company.company_logo %>'</td>
+            <% }else{ %>
+            <td>no logo</td>
+              <% } %>
             <td><%= company.company_id %></td>
             <td><%= company.company_name %></td>
             <td><%= company.registration_no  %></td>

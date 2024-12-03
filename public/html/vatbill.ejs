@@ -3,141 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAT Bill</title>
+  <title>Bill</title>
   <style>
+    /* Page layout */
+    @page {
+      size: 11.6cm 18.7cm; /* Set the custom page size */
+      margin: 0;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    .vat-bill {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-
-    header {
-      text-align: center;
-    }
-
-    header h1 {
       margin: 0;
-      font-size: 24px;
+      padding: 0;
+      width: 100%;
     }
 
-    header p {
-      margin: 4px 0;
-      font-size: 14px;
-      color: #555;
+    /* Main bill container */
+    .bill-container {
+      width: 11.6cm;
+      height: 18.7cm;
+      padding: 10mm;
+      box-sizing: border-box;
+      border: 1px solid #000;
     }
 
-    .bill-info {
-      margin: 10px 0;
-      font-size: 14px;
+    /* Company info at the top */
+    .company-info {
+      text-align: center;
+      margin-bottom: 10mm;
     }
 
-    .item-table {
+    .company-info h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .company-info p {
+      margin: 5px 0;
+      font-size: 12px;
+    }
+
+    .company-logo {
+      width: 50px;
+      height: 50px;
+      background-color: #ddd;
+      margin-bottom: 5mm;
+    }
+
+    /* Customer info */
+    .customer-info {
+      margin-bottom: 8mm;
+      font-size: 12px;
+    }
+
+    .customer-info p {
+      margin: 2px 0;
+    }
+
+    /* Table for products */
+    .product-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0;
+      margin-bottom: 8mm;
     }
 
-    .item-table th,
-    .item-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
+    .product-table th, .product-table td {
+      padding: 5px;
       text-align: left;
+      border: 1px solid #000;
     }
 
-    .item-table th {
-      background-color: #f4f4f4;
+    .product-table th {
+      background-color: #f1f1f1;
     }
 
-    .summary {
-      margin: 10px 0;
-      font-size: 16px;
-    }
-
-    .summary p {
-      margin: 4px 0;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 20px;
+    /* Totals section */
+    .totals {
       font-size: 14px;
-      color: #888;
+      font-weight: bold;
+      margin-top: 10mm;
+    }
+
+    .totals p {
+      margin: 3px 0;
     }
   </style>
 </head>
 <body>
-  <div class="vat-bill">
-    <header>
-      <h1>Business Name</h1>
-      <p>Address: Your Business Address, City</p>
-      <p>VAT No: 123456789</p>
-    </header>
-    <hr>
-    <section class="bill-info">
-      <p>Date: <span id="date">2024-11-30</span></p>
-      <p>Bill No: <span id="bill-number">001</span></p>
-    </section>
-    <table class="item-table">
+
+  <div class="bill-container">
+    <!-- Company Info -->
+    <div class="company-info">
+      <div class="company-logo"></div>
+      <h1><%= data.company.company_name%></h1>
+      <p>VAT No: <%= data.company.pan_vat_no%></p>
+      <p>Address: <%= data.company.address%></p>
+      <p>Email: <%= data.company.email%></p>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="customer-info">
+      <p><strong>Customer Name:</strong> <%= data.customers.name%></p>
+      <p><strong>VAT No:</strong> <%= data.customers.phone %></p>
+      <p><strong>Address:</strong> <%= data.customers.address %></p>
+      <p><strong>Email:</strong> <%= data.customers.email %> </p>
+      <p><strong>Phone:</strong> <%= data.customers.phone %></p>
+    </div>
+
+    <!-- Product Table -->
+    <table class="product-table">
       <thead>
         <tr>
           <th>SN</th>
-          <th>Description</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Amount</th>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Rate (per unit)</th>
+          <th>Total</th>
         </tr>
       </thead>
-      <tbody id="item-rows">
-        <!-- Dynamic rows will be inserted here -->
+      <tbody>
+        <% data.invoice.forEach((invoice,index) => {%>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= invoice.product_name %></td>
+          <td><%= invoice.Quantity %></td>
+          <td><%= invoice.short_name %></td>
+          <td><%= invoice.rate %></td>
+          <td><%= invoice.total %></td>
+        </tr>
+        <% }) %>
       </tbody>
     </table>
-    <hr>
-    <section class="summary">
-      <p>Sub Total: <span id="subtotal">0.00</span> NPR</p>
-      <p>VAT (13%): <span id="vat">0.00</span> NPR</p>
-      <p>Total: <span id="total">0.00</span> NPR</p>
-    </section>
-    <footer>
-      <p>Thank you for your purchase!</p>
-    </footer>
+
+    <!-- Total Amounts -->
+    <div class="totals">
+      <p><strong>Total Amount:</strong> <%=data.totals_detals.total_amt%></p>
+      <p><strong>Total vatable Amount:</strong> <%=data.totals_detals.vatable_amt%></p>
+      <p><strong>Vatable Amount:</strong> <%= data.totals_detals.vat_amt%></p>
+      <p><strong>Total with VAT (13%):</strong> <%= data.totals_detals.total_include_vat%></p>
+    </div>
   </div>
 
-  <script>
-    // Example Data
-    const items = [
-      { sn: 1, description: "Item A", qty: 2, rate: 500, amount: 1000 },
-      { sn: 2, description: "Item B", qty: 1, rate: 1500, amount: 1500 },
-    ];
-
-    // Populate the Table
-    let subtotal = 0;
-    const rows = items.map(item => {
-      subtotal += item.amount;
-      return `
-        <tr>
-          <td>${item.sn}</td>
-          <td>${item.description}</td>
-          <td>${item.qty}</td>
-          <td>${item.rate}</td>
-          <td>${item.amount}</td>
-        </tr>
-      `;
-    }).join("");
-
-    document.getElementById("item-rows").innerHTML = rows;
-
-    // Calculate Totals
-    document.getElementById("subtotal").textContent = subtotal.toFixed(2);
-    const vat = subtotal * 0.13;
-    document.getElementById("vat").textContent = vat.toFixed(2);
-    document.getElementById("total").textContent = (subtotal + vat).toFixed(2);
-  </script>
 </body>
 </html>

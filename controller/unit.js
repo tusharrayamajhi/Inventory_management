@@ -92,7 +92,7 @@ module.exports = async function units(req, res) {
     filepath = path.join(__dirname, "../public/html", "unitview.ejs");
     const [units] = await connection
       .promise()
-      .query("select * from units inner join users on users.user_id = units.user where users.company_id = ?", [user.company]);
+      .query("select * from units inner join users on users.user_id = units.user where users.company_id = ? order by units.created_at asc", [user.company]);
     return renderFileWithData(req, res, filepath, units);
   } else if (req.url.startsWith("/unit/edit") && req.method == "GET") {
     const parseurl = url.parse(req.url, true);

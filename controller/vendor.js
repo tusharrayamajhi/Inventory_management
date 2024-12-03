@@ -116,8 +116,12 @@ module.exports = async function vendor(req, res) {
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
   } else if(req.url == "/vendor/view" && req.method == "GET"){
-    const [result] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ?",[user.company]);
-    return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result)
+    try{
+      const [result] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ? order by vendors.created_at asc",[user.company]);
+      return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result)
+    }catch(err){
+      return render(req,res,path.join(__dirname,"../public/html","error.html"))
+    }
   } else if(req.url.startsWith("/vendor/delete") && req.method == "DELETE"){
     const parse_query = url.parse(req.url, true);
     const id = parse_query.query.id

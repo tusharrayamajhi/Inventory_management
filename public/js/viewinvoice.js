@@ -8,13 +8,25 @@ document.querySelectorAll(".download_invoice").forEach((form)=>{
                 method:"GET"
             })
             const result = await response.text()
-            console.log(result)
             if(response.status == 200){
-                const bodydata = document.body.innerHTML
-                document.body.innerHTML = result   
-                window.print();
-                document.body.innerHTML = bodydata
+                const printframe = document.createElement("iframe")
+                printframe.style.position ="absolute";
+                printframe.style.top = '-10000px'
+                document.body.appendChild(printframe);
+
+                const framedocument = printframe.contentDocument|| printframe.contentWindow.document
+                framedocument.open()
+                framedocument.write(result)
+                framedocument.close()
+                printframe.contentWindow.focus()
+                printframe.contentWindow.print()
+                document.body.removeChild(printframe)
+                // const bodydata = document.body.innerHTML
+                // document.body.innerHTML = result   
+                // window.print();
+                // document.body.innerHTML = bodydata
                 
+                // console.log("print successs fully")
             }else{
                alert("something went wrong cannot print bill")
             }

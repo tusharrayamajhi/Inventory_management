@@ -53,6 +53,12 @@ module.exports = async function auth(req, res) {
           JSON.stringify({ message: "your account is not active" })
         );
       }
+      if (!result.company_id ) {
+        res.statusCode = 403;
+        return res.end(
+          JSON.stringify({ message: "your account have not assign any company" })
+        );
+      }
       const session_id = crypto.randomBytes(16).toString("hex");
       sessions[session_id] = {
         email: body.email,

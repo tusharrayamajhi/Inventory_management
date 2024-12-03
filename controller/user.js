@@ -187,11 +187,11 @@ module.exports = async function user(req, res) {
         64,
         "sha512"
       ).toString('hex');
-      const [results] = await connection
-        .promise()
-        .query(
-          "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
-          [
+      let query = ''
+      let param =[]
+      if(user.roles == roles.superadmin){
+        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
+          param = [
             body.name,
             body.address,
             body.phone,
@@ -199,10 +199,40 @@ module.exports = async function user(req, res) {
             newpassword,
             parseInt(body.is_active),
             body.roles,
-            body.company == null?user.company:body.company,
+            body.company,
             user.id,
           ]
-        );
+      }else{
+        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
+          param = [
+            body.name,
+            body.address,
+            body.phone,
+            body.email,
+            newpassword,
+            parseInt(body.is_active),
+            body.roles,
+            user.company,
+            user.id,
+          ]
+      }
+      // const [results] = await connection
+      //   .promise()
+      //   .query(
+      //     "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
+      //     [
+      //       body.name,
+      //       body.address,
+      //       body.phone,
+      //       body.email,
+      //       newpassword,
+      //       parseInt(body.is_active),
+      //       body.roles,
+      //       body.company,
+      //       user.id,
+      //     ]
+      //   );
+      const [results] = await connection.promise().query(query,param)
       if (results.affectedRows == 0) {
         res.statusCode == 400;
         return res.end(
@@ -212,6 +242,7 @@ module.exports = async function user(req, res) {
       res.statusCode == 200;
       return res.end(JSON.stringify({ message: "user save sccessfully" }));
     } catch (err) {
+      console.log(err)
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
@@ -222,7 +253,7 @@ module.exports = async function user(req, res) {
     if(user.roles == roles.superadmin){
       query = "select * from users  ";
     }else {
-        query = "select * from users where company_id = ?"
+        query = "select * from users where company_id = ? order by created_at asc"
         params = [user.company]
     }
     const [result] = await connection
@@ -231,6 +262,7 @@ module.exports = async function user(req, res) {
     return renderFileWithData(req, res, filepath, result);
   } else if (req.url.startsWith("/user/delete") && req.method == "DELETE") {
     const parse_query = url.parse(req.url, true);
+    console.log(parse_query.query.id)
     try {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection
