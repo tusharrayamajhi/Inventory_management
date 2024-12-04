@@ -35,7 +35,7 @@ module.exports = async function vendor(req, res) {
 
   if (req.url == "/vendor/add" && req.method == "GET") {
     filepath = path.join(__dirname, "../public/html", "addvendor.ejs");
-    return render(req, res, filepath);
+    return renderFileWithData(req, res, filepath,user,user);
   } else if (req.url == "/vendor/add" && req.method == "POST") {
     const body = await processPost(req);
     const err = {
@@ -118,7 +118,7 @@ module.exports = async function vendor(req, res) {
   } else if(req.url == "/vendor/view" && req.method == "GET"){
     try{
       const [result] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ? order by vendors.created_at asc",[user.company]);
-      return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result)
+      return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result,user)
     }catch(err){
       return render(req,res,path.join(__dirname,"../public/html","error.html"))
     }
@@ -149,7 +149,7 @@ module.exports = async function vendor(req, res) {
     const id = parseurl.query.id
     const [result] =  await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id= ?",[id,user.company])
     filepath = path.join(__dirname,'../public/html',"editvendor.ejs")
-    return renderFileWithData(req,res,filepath,result[0])
+    return renderFileWithData(req,res,filepath,result[0],user)
   }else if(req.url == "/vendor/edit" && req.method == "PATCH"){
     const body = await processPost(req);
     const err = {

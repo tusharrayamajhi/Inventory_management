@@ -17,8 +17,9 @@ function render(req,res,filepath){
         }
       });
 }
-function renderFileWithData(req,res,filepath,data){
-    ejs.renderFile(filepath,{data:data}, (err, data) => {
+function renderFileWithData(req,res,filepath,data,user){
+     data= {data,user}
+    ejs.renderFile(filepath,data, (err, data) => {
         if (err) {
           fs.readFile("../public/html/error.html", (err, data) => {
             res.writeHead(404, { "Content-Type": "text/html" });

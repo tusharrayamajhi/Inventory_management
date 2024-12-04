@@ -1,15 +1,16 @@
 document.getElementById("addcompany").addEventListener("submit",async(e)=>{
     e.preventDefault()
-    let formdata = new FormData(document.getElementById("addcompany"))
+    let formdata ={}
+     new FormData(document.getElementById("addcompany")).forEach((value, key)=>formdata[key]= value)
 
     try{
         const response = await fetch("/company/add",{
             method:"POST",
-            // headers:{
-            //     // "Content-Type":"application/json"
-            //     "Content-Type":"multipart/form-data"
-            // },
-            body:formdata
+            headers:{
+                "Content-Type":"application/json"
+                // "Content-Type":"multipart/form-data"
+            },
+            body:JSON.stringify(formdata)
         })
         const result = await response.json();
         console.log(result)

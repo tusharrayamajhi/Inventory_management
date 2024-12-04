@@ -6,6 +6,8 @@
     <title>Document</title>
 </head>
 <body>
+    <%- include("./navbar.ejs") %>
+
     <select name="customer_id" id="select_customer">
         <option value="" selected>select Customer</option>
         <% for(let customer of data.customers){ %>

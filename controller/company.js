@@ -5,9 +5,7 @@ const { sessions, mimeType, roles } = require("../util/object");
 const { isAdmin } = require("../util/isAdmin");
 const { render, renderFileWithData } = require("../util/renderfile");
 const connection = require("../util/connect");
-const multer = require('multer');
 const fs = require('fs')
-const bodyParser = require('body-parser');
 const processPost = require('../util/post')
 const {
   isValidPhoneNo,
@@ -17,25 +15,8 @@ const {
   isValidDigit,
   isvalidurl,
 } = require("../util/validaton");
-const parseMultipartData = require('../util/parseMultiPartData')
 
-const parseBody =  (req,boundary) => {
-  return new Promise((resolve, reject) => {
-    const rawBody = [];
 
-    req.on('data', (chunk) => {
-      rawBody.push(chunk);
-    });
-    req.on('end',  () => {
-      const bodyBuffer = Buffer.concat(rawBody).toString();
-      const body = parseMultipartData(bodyBuffer, boundary);
-       resolve(body)
-    })
-    req.on('error',(err)=>{
-      reject(err)
-    })
-})
-}
 
 
 
@@ -65,18 +46,11 @@ module.exports = async function company(req, res) {
   }
   if (req.url == "/company/add" && req.method == "GET") {
     filepath = path.join(__dirname, "../public/html", "addcompany.ejs");
+    return renderFileWithData(req,res,filepath,user,user);
   } else if (req.url == "/company/add" && req.method == "POST") {
 
-
-
-    const boundary = req.headers['content-type'].split('boundary=')[1];
-   
-    const body = await parseBody(req,boundary);
-    console.log(body)
-       
-       
-       
-       
+    const body = await processPost(req);
+       console.log(body)
        let err = {
          err_cmp_name: "",
          err_reg_no: "",
@@ -180,6 +154,7 @@ module.exports = async function company(req, res) {
         res.statusCode = 404;
         return res.end(JSON.stringify({ message: "unable to create a company" }));
       } catch (err) {
+        console.log(err)
         if (err.code == "ER_DUP_ENTRY") {
           res.statusCode = 400;
           return res.end(
@@ -199,7 +174,8 @@ module.exports = async function company(req, res) {
         req,
         res,
         path.join(__dirname, "../public/html", "viewcompany.ejs"),
-        result
+        result,
+        user
       );
     } catch (err) {
       return render(
@@ -223,7 +199,7 @@ module.exports = async function company(req, res) {
         req,
         res,
         path.join(__dirname, "../public/html", "editcompany.ejs"),
-        result[0]
+        result[0],user
       );
     } catch (err) {
       return render(
@@ -325,7 +301,7 @@ module.exports = async function company(req, res) {
       const [results] = await connection
         .promise()
         .query(
-          "update companies set company_name = ?, registration_no = ? , phone = ? , email = ? , DOJ = ? , pan_vat_no = ? , isvat = ? , address = ?, country = ? , state = ? ,city = ? , zip = ? , bank_name = ? , bank_address = ? , bank_code = ? ,website = ? where company_id = ?",
+          "update companies set company_name = ?, registration_no = ? , phone = ? , email = ? , DOJ = ? , pan_vat_no = ? , isvat = ? , address = ?, country = ? , state = ? ,city = ? , zip = ? , bank_name = ? , bank_address = ? , bank_code = ? ,website = ?,company_logo = ? where company_id = ?",
           [
             body.company_name,
             body.registration_no,
@@ -343,6 +319,7 @@ module.exports = async function company(req, res) {
             body.bank_address,
             body.bank_code,
             body.website,
+            body.company_logo,
             body.company_id,
           ]
         );

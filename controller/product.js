@@ -46,7 +46,7 @@ module.exports = async function product(req, res) {
         .promise()
         .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ?", [user.company]);
       const data = { brands, units, categories };
-      return renderFileWithData(req, res, filepath, data);
+      return renderFileWithData(req, res, filepath, data,user);
     } catch (err) {
       return render(req,res,path.join(__dirname, "../public/html", "error.html"));
     }
@@ -126,7 +126,7 @@ module.exports = async function product(req, res) {
     try{
       filepath = path.join(__dirname,"../public/html","viewproduct.ejs")
       const [products] = await connection.promise().query("select * from products inner join units on products.unit = units.unit_id inner join brands on products.brand = brands.brand_id inner join categorys on products.category = categorys.category_id inner join users on users.user_id = products.user where users.company_id = ? order by products.created_at asc",[user.company])
-      return renderFileWithData(req,res,filepath,products)
+      return renderFileWithData(req,res,filepath,products,user)
     }catch(err){
       filepath = path.join(__dirname,"../public/html",'error.html');
       return render(req,res,filepath);
@@ -169,7 +169,7 @@ module.exports = async function product(req, res) {
       }
       const product = products[0]
       const data = {product,brands,categories,units}
-      return renderFileWithData(req,res,path.join(__dirname,'../public/html','editproduct.ejs'),data);
+      return renderFileWithData(req,res,path.join(__dirname,'../public/html','editproduct.ejs'),data,user);
     }catch(err){
       return render(req,res,path.join(__dirname,'../public/html','error.html'))
     }

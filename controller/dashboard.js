@@ -26,19 +26,22 @@ module.exports = async function dashboard(req, res) {
         return;
       }
       filepath = path.join(__dirname, "../public/html", "dashboard.ejs");
-      ejs.renderFile(filepath,user, (err, data) => {
-        if (err) {
-          ejs.readFile("../public/html/error.html", (err, data) => {
-            res.writeHead(404, { "Content-Type": "text/html" });
-            return res.end(data);
-          });
-        } else {
-          const extname = path.extname(filepath);
-          const contentType = mimeType[extname] || "text/plain";
-          res.writeHead(200, { "Content-Type": contentType });
-          return res.end(data);
-        }
-      });
+      return renderFileWithData(req,res,filepath,user,user)
+      // const fdata= {user}
+      // ejs.renderFile(filepath,fdata, (err, data) => {
+      //   if (err) {
+      //     ejs.renderFile("../public/html/error.html", (err, data) => {
+      //       res.writeHead(404, { "Content-Type": "text/html" });
+      //       return res.end(data);
+      //     });
+      //   } else {
+      //     const extname = path.extname(filepath);
+      //     const contentType = mimeType[extname] || "text/plain";
+      //     res.writeHead(200, { "Content-Type": contentType });
+      //     return res.end(data);
+      //   }
+    
+      // });
       return
     }
   }else{

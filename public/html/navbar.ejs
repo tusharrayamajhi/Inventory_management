@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="/navbar.css">
+<header>
+    <div class="logo_section">
+        <div class="bar"><i class="fa-solid fa-bars"></i></div>
+        <div class="logo">
+            <img
+            src="<%= user.company_logo != null ? user.company_logo : 'https://i.pinimg.com/originals/b3/05/75/b30575a11ffe62d8c9b43da30ee77fc1.jpg' %>"
+            alt="Company Logo"
+            />
+        </div>
+        <div class="cmp_name"><%= user.company_name %></div>
+    </div>
+    <div class="profile_section">
+        <div class="personal_info2">
+            <h3><%= user.username %></h3>
+            <h4><%= user.roles %></h4>
+        </div>
+        <div class="pro_pic" id="profile">
+            <img
+            src="https://avatars.githubusercontent.com/u/84193854?v=4"
+            alt=""
+            />
+            <div class="profile_option">
+                <a href="" class="setting"><i class="fa-thin fa-gear"></i>seting</a>
+                <a href="/auth/logout" class="logout"><i class="fa-thin fa-arrow-right-from-bracket"></i>logout</a>
+            </div>
+        </div>
+    </div>
+</header>
+<script src="/navbar.js"></script>
+  

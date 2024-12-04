@@ -54,7 +54,7 @@ module.exports = async function invoice(req, res) {
         req,
         res,
         path.join(__dirname, "../public/html", "addinvoice.ejs"),
-        data
+        data,user
       );
     } catch (err) {
       return render(req, res, path.join(__dirname, "../public/html", "error.html"));
@@ -216,7 +216,7 @@ module.exports = async function invoice(req, res) {
           req,
           res,
           path.join(__dirname, "../public/html", "viewinvoice.ejs"),
-          results
+          results,user
         );
       }else{
         let [result] = await connection
@@ -229,7 +229,7 @@ module.exports = async function invoice(req, res) {
           req,
           res,
           path.join(__dirname, "../public/html", "viewinvoice.ejs"),
-          result
+          result,user
         );
       }
     } catch (err) {
@@ -280,7 +280,7 @@ module.exports = async function invoice(req, res) {
           req,
           res,
           path.join(__dirname, "../public/html", "editinvoice.ejs"),
-          result
+          result,user
         );
       }else{
         
@@ -294,7 +294,7 @@ module.exports = async function invoice(req, res) {
           req,
           res,
           path.join(__dirname, "../public/html", "editinvoice.ejs"),
-          result
+          result,user
         );
       }
     } catch (err) {
@@ -374,7 +374,7 @@ module.exports = async function invoice(req, res) {
         company:company[0]
       }
         res.statusCode = 200
-        return renderFileWithData(req,res,path.join(__dirname,"../public/html","vatbill.ejs"),data)
+        return renderFileWithData(req,res,path.join(__dirname,"../public/html","vatbill.ejs"),data,user)
     } catch (err) {
       console.log(err)
       res.startsWith = 500;

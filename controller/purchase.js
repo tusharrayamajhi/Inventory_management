@@ -44,7 +44,7 @@ module.exports = async function purchase(req, res) {
         .query("select * from products inner join users on users.user_id = products.user where users.company_id = ?", [user.company]);
       const data = { vendors, products };
       filepath = path.join(__dirname, "../public/html", "addpurchase.ejs");
-      return renderFileWithData(req, res, filepath, data);
+      return renderFileWithData(req, res, filepath, data,user);
     } catch (err) {
       filepath = path.join(__dirname, "../public/html", "error.html");
       return render(req, res, filepath);
@@ -229,7 +229,7 @@ module.exports = async function purchase(req, res) {
       const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ? order by purchases.created_at asc",[user.company]);
         res.statusCode == 200
         filepath = path.join(__dirname,'../public/html','viewpurchase.ejs');
-        return renderFileWithData(req,res,filepath,result)      
+        return renderFileWithData(req,res,filepath,result,user)      
     }catch(err){  
       render(req,res,path.join(__dirname,"../public/html",'error.html'))
     }
@@ -241,7 +241,7 @@ module.exports = async function purchase(req, res) {
       if(result.length == 0){
       return render(req,res,path.join(__dirname,'../public/html','error.html'))
       }
-      return renderFileWithData(req,res,path.join(__dirname,'../public/html','editpurchase.ejs'),result);
+      return renderFileWithData(req,res,path.join(__dirname,'../public/html','editpurchase.ejs'),result,user);
     }catch(err){
       res.statusCode = 500
       return render(req,res,path.join(__dirname,'../public/html','error.html'))

@@ -65,7 +65,7 @@ module.exports = async function user(req, res) {
     }else {
       data = { user};
     }
-    return renderFileWithData(req, res, filepath, data);
+    return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url == "/user/add" && req.method == "POST") {
     const body = await processPost(req);
     if (!body.is_active) {
@@ -259,7 +259,7 @@ module.exports = async function user(req, res) {
     const [result] = await connection
       .promise()
       .query(query,params);
-    return renderFileWithData(req, res, filepath, result);
+    return renderFileWithData(req, res, filepath, result,user);
   } else if (req.url.startsWith("/user/delete") && req.method == "DELETE") {
     const parse_query = url.parse(req.url, true);
     console.log(parse_query.query.id)
@@ -323,7 +323,7 @@ module.exports = async function user(req, res) {
     filepath = path.join(__dirname, "../public/html", "edituser.ejs");
     let result = results[0]
     let data = {user,result,company}
-    return renderFileWithData(req, res, filepath, data);
+    return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url == "/user/edit" && req.method == "PATCH") {
     const body = await processPost(req);
     if (!body.is_active) {

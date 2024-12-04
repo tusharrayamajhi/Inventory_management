@@ -32,7 +32,7 @@ module.exports = async function brand(req, res) {
   if (req.url == "/brand/add" && req.method == "GET") {
     if (!isAdmin(user, res)) return;
     filepath = path.join(__dirname, "../public/html", "addbrand.ejs");
-    return render(req, res, filepath);
+    return renderFileWithData(req, res, filepath,user,user);
   } else if (req.url == "/brand/add" && req.method == "POST") {
     if (!isAdmin(user, res)) return;
     const body = await processPost(req);
@@ -89,7 +89,7 @@ module.exports = async function brand(req, res) {
     const [result] = await connection
       .promise()
       .query("select * from brands inner join users on users.user_id = brands.user where users.company_id = ? order by brands.created_at asc", [user.company]);
-    return renderFileWithData(req, res, filepath, result);
+    return renderFileWithData(req, res, filepath, result,user);
   } else if (req.url.startsWith("/brand/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;
     const parse_query = url.parse(req.url, true);
@@ -142,7 +142,7 @@ module.exports = async function brand(req, res) {
         user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editbrand.ejs");
-    return renderFileWithData(req, res, filepath, result[0]);
+    return renderFileWithData(req, res, filepath, result[0],user);
   }else if(req.url == "/brand/edit" && req.method == "PATCH"){
     if(!isAdmin(user,res))return;
     

@@ -37,7 +37,7 @@ module.exports = async function units(req, res) {
 
   if (req.url == "/unit/add" && req.method == "GET") {
     filepath = path.join(__dirname, "../public/html", "unit.ejs");
-    render(req, res, filepath);
+    renderFileWithData(req, res, filepath,user,user);
 
     return;
   } else if (req.url == "/unit/add" && req.method == "POST") {
@@ -93,7 +93,7 @@ module.exports = async function units(req, res) {
     const [units] = await connection
       .promise()
       .query("select * from units inner join users on users.user_id = units.user where users.company_id = ? order by units.created_at asc", [user.company]);
-    return renderFileWithData(req, res, filepath, units);
+    return renderFileWithData(req, res, filepath, units,user);
   } else if (req.url.startsWith("/unit/edit") && req.method == "GET") {
     const parseurl = url.parse(req.url, true);
     const [result] = await connection
@@ -103,7 +103,7 @@ module.exports = async function units(req, res) {
         user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editunit.ejs");
-    return renderFileWithData(req, res, filepath, result[0]);
+    return renderFileWithData(req, res, filepath, result[0],user);
   } else if (req.url == "/unit/edit" && req.method == "PATCH") {
 
     const body = await processPost(req);

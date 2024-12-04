@@ -32,7 +32,7 @@ module.exports = async function category(req, res) {
   if (req.url == "/category/add" && req.method == "GET") {
     if (!isAdmin(user, res)) return;
     filepath = path.join(__dirname, "../public/html", "addcategory.ejs");
-    return render(req, res, filepath);
+    return renderFileWithData(req, res, filepath,user,user);
   } else if (req.url == "/category/add" && req.method == "POST") {
     if (!isAdmin(user, res)) return;
     const body = await processPost(req);
@@ -89,7 +89,7 @@ module.exports = async function category(req, res) {
     const [result] = await connection
       .promise()
       .query("select * from categorys inner join users on users.user_id = categorys.user where users.company_id = ? order by categorys.created_at asc", [user.company]);
-    return renderFileWithData(req, res, filepath, result);
+    return renderFileWithData(req, res, filepath, result,user);
   } else if (req.url.startsWith("/category/delete") && req.method == "DELETE") {
     if (!isAdmin(user, res)) return;
     const parse_query = url.parse(req.url, true);
@@ -143,7 +143,7 @@ module.exports = async function category(req, res) {
         user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editcategory.ejs");
-    return renderFileWithData(req, res, filepath, result[0]);
+    return renderFileWithData(req, res, filepath, result[0],user);
   }else if(req.url == "/category/edit" && req.method == "PATCH"){
     if(!isAdmin(user,res))return;
     

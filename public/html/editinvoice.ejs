@@ -105,6 +105,8 @@
     </style> -->
 </head>
 <body>
+    <%- include("./navbar.ejs") %>
+
     <h1>Edit Invoice - <%= data[0].sells_code %></h1>
     <% let totalAmount = 0; let totalVATAmount = 0; %>
     <% data.forEach((item) => { 

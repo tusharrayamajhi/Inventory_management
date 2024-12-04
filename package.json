@@ -18,12 +18,9 @@
   },
   "homepage": "https://github.com/tusharrayamajhi/Inventory_management#readme",
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.3",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "inventory_management": "file:",
-    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.3"
   }
 }

@@ -37,6 +37,8 @@
             </tr>
         </thead>
         <tbody>
+    <%- include("./navbar.ejs") %>
+
             <% for(let customer of data){ %>
                 <tr>
                     <td><%= customer.customer_id %></td>

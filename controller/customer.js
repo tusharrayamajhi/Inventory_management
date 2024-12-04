@@ -40,7 +40,7 @@ module.exports = async function customer(req, res) {
   if (req.url == "/customer/add" && req.method == "GET") {
    
     filepath = path.join(__dirname, "../public/html", "addcustomer.ejs");
-    return render(req, res, filepath);
+    return renderFileWithData(req, res, filepath,user,user);
   } else if (req.url == "/customer/add" && req.method == "POST") {
    
     const body = await processPost(req);
@@ -107,7 +107,7 @@ module.exports = async function customer(req, res) {
     const [result] = await connection
       .promise()
       .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ? order by customers.created_at asc", [user.company]);
-    return renderFileWithData(req, res, filepath, result);
+    return renderFileWithData(req, res, filepath, result,user);
   } else if (req.url.startsWith("/customer/delete") && req.method == "DELETE") {
     
     const parse_query = url.parse(req.url, true);
@@ -159,7 +159,7 @@ module.exports = async function customer(req, res) {
         user.company,
       ]);
     filepath = path.join(__dirname, "../public/html", "editcustomer.ejs");
-    return renderFileWithData(req, res, filepath, result[0]);
+    return renderFileWithData(req, res, filepath, result[0],user);
   } else if (req.url == "/customer/edit" && req.method == "PATCH") {
    
     const body = await processPost(req);

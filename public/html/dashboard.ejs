@@ -14,33 +14,10 @@
     />
   </head>
   <body>
-    <header>
-      <div class="logo_section">
-        <div class="bar"><i class="fa-solid fa-bars"></i></div>
-        <div class="logo">
-          <img
-            src="https://th.bing.com/th/id/OIP.kKCKGMv2UvoWsO5e9PVCOwHaD4?rs=1&pid=ImgDetMain"
-            alt=""
-          />
-        </div>
-        <div class="cmp_name">stock HUB</div>
-      </div>
-      <div class="profile_section">
-        <div class="pro_pic" id="profile">
-          <img
-            src="https://avatars.githubusercontent.com/u/84193854?v=4"
-            alt=""
-            />
-            <div class="profile_option">
-                <a href="" class="setting"><i class="fa-thin fa-gear"></i>seting</a>
-                <a href="/auth/logout" class="logout"><i class="fa-thin fa-arrow-right-from-bracket"></i>logout</a>
-            </div>
-        </div>
-      </div>
-    </header>
+    <%- include("./navbar.ejs") %>
     <main>
       <div class="card_sections">
-        <%if(roles == "superadmin"){%>
+        <%if(user.roles == "superadmin"){%>
         <div class="card">
           <div class="card_title">users</div>
           <div class="card_btm">
@@ -55,7 +32,7 @@
             <a class="card_logo see" href="/company/view"><i class="fa-solid fa-eye"></i></a>
           </div>
         </div>
-        <%}else if(roles === "admin"){%>
+        <%}else if(user.roles === "admin"){%>
         <div class="card">
           <div class="card_title">category</div>
           <div class="card_btm">
@@ -119,7 +96,7 @@
             <a class="card_logo see" href="/invoice/view"><i class="fa-solid fa-eye"></i></a>
           </div>
         </div>
-        <%}else if(roles == "normal"){%>
+        <%}else if(user.roles == "normal"){%>
         <div class="card">
           <div class="card_title">invoices</div>
           <div class="card_btm">

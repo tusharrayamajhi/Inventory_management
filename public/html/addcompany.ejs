@@ -62,6 +62,8 @@
     </style> -->
 </head>
 <body>
+    <%- include("./navbar.ejs") %>
+
 <div class="container">
     <h2>Company Registration Form</h2>
     <form id="addcompany">
@@ -125,8 +127,8 @@
           </div>
 
           <div>
-            <label for="company_logo">is company register in vat</label><br>
-            <input type="file" id="company_logo" name="company_logo">
+            <label for="company_logo">company logo url</label><br>
+            <input type="url" id="company_logo" name="company_logo">
           </div>
         <button type="submit">Submit</button>
     </form>
