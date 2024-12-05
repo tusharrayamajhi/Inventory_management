@@ -203,7 +203,7 @@ module.exports = async function purchase(req, res) {
       let values = ''
       let count = 0;
       purchaserecord.forEach(record=>{
-            let value = `("${purchasecode}",${record.ordered_qnt},${record.received_qnt},${record.unit_rate},${record.vatrate.split('%')[0]},${record.balance},${record.total},"${record.status}","${record.remark}","${record.remaining}",${body.vendor.vendorid},${record.product_id},${user.id})`
+        let value = `("${purchasecode}",${record.ordered_qnt},${record.received_qnt},${record.unit_rate},${record.vatrate.split('%')[0]},${record.balance},${record.total},"${record.status}","${record.remark}","${record.remaining}",${body.vendor.vendorid},${record.product_id},${user.id})`
         if(count < purchaserecord.length - 1){
           values+=value + ','
           count = count + 1
@@ -220,6 +220,7 @@ module.exports = async function purchase(req, res) {
         return res.end(JSON.stringify({message:"purchase save successfully"}))
 
     } catch (err) {
+      console.log(err)
       await connection.promise().rollback();
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
@@ -273,6 +274,7 @@ module.exports = async function purchase(req, res) {
       res.statusCode = 200
       return res.end(JSON.stringify({message:"successfully update purchase"}))
       }catch(err){
+        console.log(err)
         res.statusCode = 500
         return res.end(JSON.stringify({message:"internal server error"}))
     }

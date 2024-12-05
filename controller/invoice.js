@@ -332,7 +332,7 @@ module.exports = async function invoice(req, res) {
         `
         select customers.* from invoices
         inner join customers on customers.customer_id = invoices.customer_id
-        where invoices.sells_code = ? 
+        where invoices.sells_code = ?   
         `,[sells_code]
       )
       const [invoices] = await connection.promise().query(
@@ -340,8 +340,9 @@ module.exports = async function invoice(req, res) {
         select products.*,units.*,invoices.* from invoices
         inner join products on products.product_id = invoices.product_id
         inner join units on products.unit = units.unit_id
-        where invoices.sells_code = ?
-        `,[sells_code]
+        inner join users on users.user_id = invoices.user
+        where invoices.sells_code = ? and users.company_id = ?
+        `,[sells_code,user.company]
       )
       const [company] = await connection.promise().query(
         `
