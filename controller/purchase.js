@@ -226,12 +226,12 @@ module.exports = async function purchase(req, res) {
     }
   }else if(req.url == "/purchase/view" && req.method == 'GET'){
     try{
-      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ? order by purchases.created_at desc",[user.company]);
+      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ? order by purchases.pruchase_date desc",[user.company]);
         res.statusCode == 200
         filepath = path.join(__dirname,'../public/html','viewpurchase.ejs');
         return renderFileWithData(req,res,filepath,result,user)      
     }catch(err){  
-      render(req,res,path.join(__dirname,"../public/html",'error.html'))
+      return render(req,res,path.join(__dirname,"../public/html",'error.html'))
     }
   }else if(req.url.startsWith("/purchase/edit") && req.method == "GET"){
     const parseurl = url.parse(req.url,true)
