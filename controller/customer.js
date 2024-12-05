@@ -101,13 +101,23 @@ module.exports = async function customer(req, res) {
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
-  } else if (req.url == "/customer/view" && req.method == "GET") {
-    
+  } else if ((req.url == "/customer/view" || req.url.startsWith("/customer/view")) && req.method == "GET") {
+    const parse_url = url.parse(req.url,true)
+    let page = parse_url.query.page
+    if(!page || page == 0){
+      page = 0
+    }else{
+      page = page - 1;
+    }
     filepath = path.join(__dirname, "../public/html", "viewcustomer.ejs");
     const [result] = await connection
       .promise()
-      .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ? order by customers.created_at asc", [user.company]);
-    return renderFileWithData(req, res, filepath, result,user);
+      .query("SELECT customers.name AS customer_name,customers.customer_id as customer_id, customers.phone as customer_phone,customers.email as customer_email,customers.address as customer_address,customers.pan as customer_pan, users.* FROM customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ? order by customers.created_at asc limit ? offset ?", [user.company,10,page*10]);
+
+      const [no_of_customer] = await connection.promise().query("select count(*) as total from customers INNER JOIN users ON users.user_id = customers.user_id WHERE users.company_id = ?",[user.company])
+      const total_page = Math.ceil(no_of_customer[0].total/10)
+      const data = {result,total_page}
+    return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url.startsWith("/customer/delete") && req.method == "DELETE") {
     
     const parse_query = url.parse(req.url, true);

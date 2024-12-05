@@ -33,17 +33,11 @@ module.exports = async function invoice(req, res) {
     let cus_params = [];
     let pro_query = "";
     let pro_params = [];
-    // if (user.roles == roles.admin) {
       cus_query = "SELECT customers.name AS customer_name,customers.customer_id as customer_id from customers inner join users on users.user_id = customers.user_id where users.company_id = ?";
       cus_params = [user.company];
       pro_query = "select * from products inner join users on users.user_id = products.user where users.company_id = ?";
       pro_params = [user.company];
-    // } else {
-    //   cus_query = "select * from customers where user_id = ?";
-    //   cus_params = [user.createdBy];
-    //   pro_query = "select * from products where user = ?";
-    //   pro_params = [user.createdBy];
-    // }
+    
     try {
       const [customers] = await connection
         .promise()
@@ -210,8 +204,9 @@ module.exports = async function invoice(req, res) {
       
       if (user.roles == roles.admin) {
         
-        const [results] = await connection.promise().query("select products.*,invoices.*, users.* ,customers.name as customer_name from invoices inner join users on users.user_id = invoices.user inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id where users.company_id = ? order by invoices.created_at asc",[user.company])
+        const [results] = await connection.promise().query("select products.*,invoices.*, users.*,units.* ,customers.name as customer_name from invoices inner join users on users.user_id = invoices.user inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join units on products.unit = units.unit_id where users.company_id = ?  order by invoices.created_at desc",[user.company])
         
+        console.log(results)
         return renderFileWithData(
           req,
           res,
@@ -222,7 +217,7 @@ module.exports = async function invoice(req, res) {
         let [result] = await connection
         .promise()
         .query(
-          "select products.*, users.*, invoices.*,customers.name as customer_name from invoices inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user where invoices.user = ? order by invoices.created_at asc",
+          "select products.*, users.*, invoices.*,units.*,customers.name as customer_name from invoices inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user inner join units on products.unit = units.unit_id where invoices.user = ? order by invoices.created_at desc",
           [user.id]
         );
         return renderFileWithData(
@@ -272,7 +267,7 @@ module.exports = async function invoice(req, res) {
         
         const [result] = await connection
         .promise()
-        .query("select * from invoices inner join users on users.user_id = invoices.user where invoices.sells_code = ? and users.company_id = ?", [
+        .query("select * from invoices inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user where invoices.sells_code = ? and users.company_id = ?", [
           sells_code,
           user.company 
         ]);
@@ -286,7 +281,7 @@ module.exports = async function invoice(req, res) {
         
         const [result] = await connection
         .promise()
-        .query("select * from invoices inner join users on users.user_id = invoices.user where invoices.sells_code = ? and users.user_id= ?", [
+        .query("select * from invoices inner join products on invoices.product_id = products.product_id inner join users on users.user_id = invoices.user where invoices.sells_code = ? and users.user_id= ?", [
           sells_code,
           user.id,
         ]);

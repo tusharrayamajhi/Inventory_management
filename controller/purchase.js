@@ -226,7 +226,7 @@ module.exports = async function purchase(req, res) {
     }
   }else if(req.url == "/purchase/view" && req.method == 'GET'){
     try{
-      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ? order by purchases.created_at asc",[user.company]);
+      const [result] = await connection.promise().query("select * from purchases inner join products on purchases.product = products.product_id inner join vendors on purchases.vendor = vendors.vendor_id inner join users on purchases.user = users.user_id where users.company_id = ? order by purchases.created_at desc",[user.company]);
         res.statusCode == 200
         filepath = path.join(__dirname,'../public/html','viewpurchase.ejs');
         return renderFileWithData(req,res,filepath,result,user)      

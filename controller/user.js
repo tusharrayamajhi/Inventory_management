@@ -246,23 +246,39 @@ module.exports = async function user(req, res) {
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
-  } else if (req.url == "/user/view" && req.method == "GET") {
+  } else if ((req.url == "/user/view" || req.url.startsWith("/user/view")) && req.method == "GET") {
+    const parse_url = url.parse(req.url,true)
+    let page = parse_url.query.page
+    if(!page || page == 0){
+      page = 0
+    }else{
+      page = page - 1;
+    }
     filepath = path.join(__dirname, "../public/html", "viewuser.ejs");
     let query = '';
     let params = []
+    let countquery = ""
+    let countparams = []
     if(user.roles == roles.superadmin){
-      query = "select * from users  ";
+      query = "select * from users inner join companies on users.company_id = companies.company_id order by users.created_at asc limit ? offset ?";
+      params = [10,page*10]
+      countquery = "select count(*) as total from users";
     }else {
-        query = "select * from users where company_id = ? order by created_at asc"
-        params = [user.company]
+        query = "select * from users inner join companies on users.user_id = companies.company_id  where users.company_id = ? order by users.created_at asc limit ? offset ?"
+        params = [user.company,10,page*10]
+        countquery ="select count(*) as total from users where company_id = ? ";
+        countparams = [user.company]
+
     }
     const [result] = await connection
       .promise()
       .query(query,params);
-    return renderFileWithData(req, res, filepath, result,user);
+      const [no_of_users] = await connection.promise().query(countquery,countparams)
+      const total_page = Math.ceil(no_of_users[0].total/10)
+      const data = {result,total_page}
+    return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url.startsWith("/user/delete") && req.method == "DELETE") {
     const parse_query = url.parse(req.url, true);
-    console.log(parse_query.query.id)
     try {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection

@@ -50,7 +50,6 @@ module.exports = async function company(req, res) {
   } else if (req.url == "/company/add" && req.method == "POST") {
 
     const body = await processPost(req);
-       console.log(body)
        let err = {
          err_cmp_name: "",
          err_reg_no: "",
@@ -164,17 +163,26 @@ module.exports = async function company(req, res) {
         res.statusCode = 500;
         return res.end(JSON.stringify({ message: "something went wrong", err }));
       }
-  } else if (req.url == "/company/view" && req.method == "GET") {
+  } else if ((req.url == "/company/view" || req.url.startsWith("/company/view")) && req.method == "GET") {
+    const parse_url = url.parse(req.url,true)
+    let page = parse_url.query.page;
+    if(!page || page == 0){
+      page = 0;
+    }else{
+      page = page - 1
+    }
     try {
       const [result] = await connection
         .promise()
-        .query("select * from companies order by created_at asc");
-
+        .query(`select * from companies order by created_at asc limit ${10} offset ${(page*10)}`);
+      const [no_of_company] = await connection.promise().query("select count(*) as total from companies") 
+      const total_page = Math.ceil(no_of_company[0].total/10)
+      const data = {result,total_page}
       return renderFileWithData(
         req,
         res,
         path.join(__dirname, "../public/html", "viewcompany.ejs"),
-        result,
+        data,
         user
       );
     } catch (err) {

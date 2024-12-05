@@ -26,7 +26,7 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Customer ID</th>
+                <th>SN</th>
                 <th>Name</th>
                 <th>Phone</th>
                 <th>Email</th>
@@ -39,9 +39,9 @@
         <tbody>
     <%- include("./navbar.ejs") %>
 
-            <% for(let customer of data){ %>
+            <% data.result.forEach((customer,index)=>{ %>
                 <tr>
-                    <td><%= customer.customer_id %></td>
+                    <td><%= index + 1 %></td>
                     <td><%= customer.customer_name %></td>
                     <td><%= customer.customer_phone %></td>
                     <td><%= customer.customer_email%></td>
@@ -59,9 +59,12 @@
                         </form>
                     </td>
                 </tr>
-            <% } %>
+            <% }) %>
         </tbody>
     </table>
+    <% for(let i =1; i<= data.total_page; i++){ %>
+        <a href="?page=<%= i %>"><%= i %></a>
+      <% } %>
 </body>
 <script src="/viewcustomer.js"></script>
 </html>

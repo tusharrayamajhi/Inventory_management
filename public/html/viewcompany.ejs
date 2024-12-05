@@ -5,62 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Companies List</title>
 </head>
+<style>
+
+
+</style>
 <body>
+  <%- include("./navbar.ejs") %>
+
   <h1>Companies List</h1>
   <table border="1" cellspacing="0" cellpadding="10">
     <thead>
       <tr>
+        <th>SN</th>
         <th>logo</th>
-        <th>Company ID</th>
         <th>Company Name</th>
-        <th>registration no</th>
         <th>Phone</th>
         <th>Email</th>
-        <th>Country</th>
-        <th>pan/vat</th>
-        <th>vat</th>
-        <th>pan</th>
-        <th>address</th>
-        <th>state</th>
-        <th>city</th>
-        <th>zip</th>
-        <th>bank name</th>
-        <th>account no</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-    <%- include("./navbar.ejs") %>
 
-      <% data.forEach((company) => { %>
+      <% data.result.forEach((company,index) => { %>
         <tr>
+          <td><%= index + 1 %></td>
           <% if(company.company_logo){ %>
-           <td> <img src='<%= company.company_logo %>' style="width: 80px; height: 80px;"></td>
+           <td> <img src='<%= company.company_logo %>' style="width: 30px; height: 30px; border-radius: 50%;"></td>
             <% }else{ %>
             <td>no logo</td>
               <% } %>
-            <td><%= company.company_id %></td>
             <td><%= company.company_name %></td>
-            <td><%= company.registration_no  %></td>
             <td><%= company.phone %></td>
             <td><%= company.email %></td>
-            <td><%= company.country %></td>
-            <td><%= company.pan_vat_no%></td>
-            <td><%= company.isvat?"YES":"No"%></td>
-            <td><%= company.isvat?"NO":"YES"%></td>
-            <td><%= company.address %></td>
-            <td><%= company.state %></td>
-            <td><%= company.city %></td>
-            <td><%= company.zip %></td>
-            <td><%= company.bank_name %></td>
-            <td><%= company.account_no %></td>
           <td>
             <a href="/company/edit?id=<%= company.company_id %>">Edit</a>
             <a href="/company/delete/<%= company.company_id %>" onclick="return confirm('Are you sure?');">Delete</a>
+            <button onclick="tougleViewDetails('<%= company.company_id %>')">View Details</button>
           </td>
         </tr>
+        <tr>
+          <td colspan="5">
+            <div style="display: none;" class="dropdown-content" id="dropdown-<%= company.company_id %>">
+              <p><strong>Email:</strong> <%= company.email %></p>
+              <p><strong>Registration No:</strong> <%= company.registration_no %></p>
+              <p><strong>Country:</strong> <%= company.country %></p>
+              <p><strong>Address:</strong> <%= company.address %></p>
+              <p><strong>State:</strong> <%= company.state %></p>
+              <p><strong>City:</strong> <%= company.city %></p>
+              <p><strong>ZIP:</strong> <%= company.zip %></p>
+              <p><strong>Bank Name:</strong> <%= company.bank_name %></p>
+              <p><strong>Account No:</strong> <%= company.account_no %></p>
+            </div>
+          </td>
+        </tr>
+        
       <% }); %>
     </tbody>
   </table>
+  <% for(let i =1; i<= data.total_page; i++){ %>
+    <a href="?page=<%= i %>"><%= i %></a>
+  <% } %>
 </body>
+<script src="/viewCompany.js"></script>
 </html>
+
+
+
+

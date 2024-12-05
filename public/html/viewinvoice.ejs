@@ -38,13 +38,13 @@
         <% data.forEach((invoice,index) => { %>
         <tr>
           <td class="border border-gray-300 px-4 py-2"><%= index + 1 %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.user%></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.sells_code %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.customer_name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.product_name %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.Quantity %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.Quantity %>-<%=invoice.short_name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.rate %></td>
+          <td class="border border-gray-300 px-4 py-2"><%= invoice.rate %>/<%=invoice.short_name %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.total %></td>
           <td class="border border-gray-300 px-4 py-2"><%= invoice.payment %></td>
           <td class="border border-gray-300 px-4 py-2"><%= new Date(invoice.sales_date).toLocaleDateString() %></td>
