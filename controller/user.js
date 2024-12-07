@@ -273,7 +273,7 @@ module.exports = async function user(req, res) {
       params = [10,page*10]
       countquery = "select count(*) as total from users";
     }else {
-        query = "select users.*,companies.company_name as company_name com from users left join companies on users.user_id = companies.company_id  where users.company_id = ? order by users.created_at asc limit ? offset ?"
+        query = "select users.*,companies.company_name as company_name from users left join companies on users.company_id = companies.company_id  where users.company_id = ? order by users.created_at asc limit ? offset ?"
         params = [user.company,10,page*10]
         countquery ="select count(*) as total from users where company_id = ? ";
         countparams = [user.company]
