@@ -68,6 +68,7 @@ module.exports = async function auth(req, res) {
         company_logo:result.company_logo,
         company_name:result.company_name,
         username:result.name,
+        user_image:result.user_image,
         exipre:'1h',
         createdBy:result.created_by
         

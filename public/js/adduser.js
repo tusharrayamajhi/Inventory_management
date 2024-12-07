@@ -1,15 +1,11 @@
 document.getElementById('adduser').addEventListener("submit",async(e)=>{
     e.preventDefault()
-    let formdata = {}
-    new FormData(document.getElementById("adduser")).forEach((value,key)=>formdata[key] = value)
+    let formdata = new FormData(document.getElementById("adduser"))
     console.log(formdata)
     try{
         const response = await fetch("/user/add",{
             method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(formdata)
+            body:formdata
         })
         const result = await response.json()
         console.log(result)

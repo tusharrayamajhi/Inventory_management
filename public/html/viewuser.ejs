@@ -38,7 +38,8 @@
 <table border="2">
   <thead>
     <tr>
-      <th>User ID</th>
+      <th>SN</th>
+      <th>profile</th>
       <th>Name</th>
       <th>Address</th>
       <th>Phone</th>
@@ -51,22 +52,23 @@
     </tr>
   </thead>
   <tbody>
-    <% data.result.forEach(user => { %>
+    <% data.result.forEach((users,index) => { %>
       <tr>
-        <td><%= user.user_id %></td>
-        <td><%= user.name %></td>
-        <td><%= user.address || 'N/A' %></td>
-        <td><%= user.phone || 'N/A' %></td>
-        <td><%= user.email %></td>
-        <td><%= user.is_active ? 'Yes' : 'No' %></td>
-        <td><%= user.roles %></td>
-        <td><%= user.company_name %></td>
-        <td><%= user.created_by || 'N/A' %></td>
+        <td><%= index + 1 %></td>
+        <td><img src="<%= users.user_image %>" style="width: 50px; height: 50px;" alt="user profile"></td>
+        <td><%= users.name %></td>
+        <td><%= users.address || 'N/A' %></td>
+        <td><%= users.phone || 'N/A' %></td>
+        <td><%= users.email %></td>
+        <td><%= users.is_active ? 'Yes' : 'No' %></td>
+        <td><%= users.roles %></td>
+        <td><%= users.company_name %></td>
+        <td><%= users.created_by || 'N/A' %></td>
         
         <td>
-          <a class="btn btn-edit" href="/user/edit?id=<%= user.user_id %>">Edit</a>
+          <a class="btn btn-edit" href="/user/edit?id=<%= users.user_id %>">Edit</a>
           <form class="deleteuser" style="display:inline;">
-            <input type="hidden" name="id" value="<%= user.user_id %>">
+            <input type="hidden" name="id" value="<%= users.user_id %>">
             <button type="submit" onclick="return confirm('Are you sure you want to delete this user');">Delete</button>
         </form>
         </td>

@@ -19,6 +19,7 @@
         <th>SN</th>
         <th>logo</th>
         <th>Company Name</th>
+        <th>company code</th>
         <th>Phone</th>
         <th>Email</th>
         <th>Actions</th>
@@ -35,6 +36,7 @@
             <td>no logo</td>
               <% } %>
             <td><%= company.company_name %></td>
+            <td><%= company.company_code %></td>
             <td><%= company.phone %></td>
             <td><%= company.email %></td>
           <td>
@@ -44,7 +46,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="5">
+          <td colspan="7">
             <div style="display: none;" class="dropdown-content" id="dropdown-<%= company.company_id %>">
               <p><strong>Email:</strong> <%= company.email %></p>
               <p><strong>Registration No:</strong> <%= company.registration_no %></p>

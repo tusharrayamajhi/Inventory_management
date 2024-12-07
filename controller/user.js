@@ -6,6 +6,8 @@ const { isAdmin } = require("../util/isAdmin");
 const { render, renderFileWithData } = require("../util/renderfile");
 const processPost = require("../util/post");
 const connection = require("../util/connect");
+const partMultipartData = require("../util/parseMultipartData")
+
 const {
   isValidPhoneNo,
   isValidCharacter,
@@ -67,7 +69,13 @@ module.exports = async function user(req, res) {
     }
     return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url == "/user/add" && req.method == "POST") {
-    const body = await processPost(req);
+    let body = {}
+    try{
+      body =  await partMultipartData(req,res)
+    }catch(err){
+      res.statusCode = 404
+      return res.end(JSON.stringify({message:"company logo is not selected"}))
+    }
     if (!body.is_active) {
       body.is_active = 0;
     }
@@ -190,7 +198,7 @@ module.exports = async function user(req, res) {
       let query = ''
       let param =[]
       if(user.roles == roles.superadmin){
-        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
+        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by,user_image) VALUES (?,?,?,?,?,?,?,?,?,?)",
           param = [
             body.name,
             body.address,
@@ -201,9 +209,10 @@ module.exports = async function user(req, res) {
             body.roles,
             body.company,
             user.id,
+            body.image
           ]
       }else{
-        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by) VALUES (?,?,?,?,?,?,?,?,?)",
+        query = "INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id,created_by,user_image) VALUES (?,?,?,?,?,?,?,?,?,?)",
           param = [
             body.name,
             body.address,
@@ -214,6 +223,7 @@ module.exports = async function user(req, res) {
             body.roles,
             user.company,
             user.id,
+            body.image
           ]
       }
       // const [results] = await connection
@@ -242,7 +252,6 @@ module.exports = async function user(req, res) {
       res.statusCode == 200;
       return res.end(JSON.stringify({ message: "user save sccessfully" }));
     } catch (err) {
-      console.log(err)
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
     }
@@ -260,11 +269,11 @@ module.exports = async function user(req, res) {
     let countquery = ""
     let countparams = []
     if(user.roles == roles.superadmin){
-      query = "select * from users inner join companies on users.company_id = companies.company_id order by users.created_at asc limit ? offset ?";
+      query = "select users.*, companies.company_name as company_name from users left join companies on users.company_id = companies.company_id order by users.created_at asc limit ? offset ?";
       params = [10,page*10]
       countquery = "select count(*) as total from users";
     }else {
-        query = "select * from users inner join companies on users.user_id = companies.company_id  where users.company_id = ? order by users.created_at asc limit ? offset ?"
+        query = "select users.*,companies.company_name as company_name com from users left join companies on users.user_id = companies.company_id  where users.company_id = ? order by users.created_at asc limit ? offset ?"
         params = [user.company,10,page*10]
         countquery ="select count(*) as total from users where company_id = ? ";
         countparams = [user.company]
@@ -283,9 +292,8 @@ module.exports = async function user(req, res) {
       res.setHeader("Content-Type", "application/json");
       const [result] = await connection
         .promise()
-        .query("select * from users where user_id = ? AND company_id = ?", [
-          parse_query.query.id,
-          user.company,
+        .query("select * from users where user_id = ?", [
+          parse_query.query.id
         ]);
       if (result.length == 0) {
         res.statusCode = 404;
@@ -295,9 +303,8 @@ module.exports = async function user(req, res) {
       }
       const [results] = await connection
         .promise()
-        .query("delete from users where user_id = ? AND company_id = ?", [
-          parse_query.query.id,
-          user.company,
+        .query("delete from users where user_id = ?", [
+          parse_query.query.id
         ]);
       if (results.affectedRows > 0) {
         res.statusCode = 200;
@@ -341,7 +348,15 @@ module.exports = async function user(req, res) {
     let data = {user,result,company}
     return renderFileWithData(req, res, filepath, data,user);
   } else if (req.url == "/user/edit" && req.method == "PATCH") {
-    const body = await processPost(req);
+    const contentType = req.headers['content-type'];
+  let body = {};
+  if (contentType && contentType.startsWith("application/json")) {
+    // Parse JSON data
+    body = await processPost(req); // Assumes this function parses JSON
+  } else if (contentType && contentType.startsWith("multipart/form-data")) {
+    // Parse multipart form data
+    body = await partMultipartData(req, res);
+  }
     if (!body.is_active) {
       body.is_active = 0;
     }
@@ -447,7 +462,7 @@ module.exports = async function user(req, res) {
           JSON.stringify({ message: "no user found for the given id or you dont have authority to edit this user" })
         );
       }
-      const [rows] = await connection.promise().query("update users set name = ? , address = ?,phone= ?, email = ?, is_active = ?,roles = ?,company_id = ? where user_id = ?",[body.name,body.address,body.phone,body.email,body.is_active,body.roles,body.company != null ? parseInt(body.company):user.company,parseInt(body.user_id)]);
+      const [rows] = await connection.promise().query("update users set name = ? , address = ?,phone= ?, email = ?, is_active = ?,roles = ?,company_id = ? , user_image = ? where user_id = ?",[body.name,body.address,body.phone,body.email,body.is_active,body.roles,body.company != null ? parseInt(body.company):user.company,body.image,parseInt(body.user_id)]);
       
       if(rows.affectedRows > 0){
         res.statusCode = 200;

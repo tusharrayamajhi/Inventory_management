@@ -12,7 +12,8 @@ document.querySelectorAll(".deleteuser").forEach(form=>{
             console.log(result)
             if(response.status == 200){
                 alert(result.message)
-                window.location = "/user/view"
+                // window.location = "/user/view"
+                window.location.reload()
             }else{
                 alert(result.message)
             }

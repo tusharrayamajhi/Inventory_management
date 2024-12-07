@@ -206,7 +206,6 @@ module.exports = async function invoice(req, res) {
         
         const [results] = await connection.promise().query("select products.*,invoices.*, users.*,units.* ,customers.name as customer_name from invoices inner join users on users.user_id = invoices.user inner join customers on invoices.customer_id = customers.customer_id inner join products on invoices.product_id = products.product_id inner join units on products.unit = units.unit_id where users.company_id = ?  order by invoices.created_at desc",[user.company])
         
-        console.log(results)
         return renderFileWithData(
           req,
           res,
@@ -372,7 +371,6 @@ module.exports = async function invoice(req, res) {
         res.statusCode = 200
         return renderFileWithData(req,res,path.join(__dirname,"../public/html","vatbill.ejs"),data,user)
     } catch (err) {
-      console.log(err)
       res.startsWith = 500;
       return res.end(JSON.stringify({ message: "internal server error" }));
     }

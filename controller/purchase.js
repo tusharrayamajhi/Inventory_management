@@ -220,7 +220,6 @@ module.exports = async function purchase(req, res) {
         return res.end(JSON.stringify({message:"purchase save successfully"}))
 
     } catch (err) {
-      console.log(err)
       await connection.promise().rollback();
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
@@ -274,7 +273,6 @@ module.exports = async function purchase(req, res) {
       res.statusCode = 200
       return res.end(JSON.stringify({message:"successfully update purchase"}))
       }catch(err){
-        console.log(err)
         res.statusCode = 500
         return res.end(JSON.stringify({message:"internal server error"}))
     }

@@ -1,13 +1,12 @@
 
--- USE remote_inventory-35303733bc1c;
+
 create database inventory;
 use inventory;
--- select * from purchases  where user = 1 and product = 1 order by pruchase_date asc;
--- drop database inventory;
--- select * from purchases;
+
 CREATE TABLE companies(
 		company_id int primary key auto_increment,
         company_name varchar(100) not null,
+         company_code varchar(50) not null unique;
         registration_no varchar(100) not null,
         phone char(10) not null,
         email varchar(100) not null,
@@ -43,6 +42,7 @@ CREATE TABLE users (
         created_by int,
         created_at TimeStamp DEFAULT CURRENT_TIMESTAMP ,
         updated_at DateTime DEFAULT CURRENT_TIMESTAMP on update current_timestamp,
+        user_image varchar(200) default null,
         foreign key(company_id) references companies(company_id),
         foreign key(created_by) references users(user_id)
 	);
@@ -58,10 +58,7 @@ CREATE TABLE customers(
         updated_at timestamp default current_timestamp on update current_timestamp,
         foreign key(user_id) references users(user_id)
         );
-        use inventory;
-        select * from users;
-select * from customers;
-select * from categorys inner join users on users.user_id = categorys.user where categorys.category_id = 1 and users.company_id = 3;
+        
 Create Table categorys( 
 			category_id int primary key auto_increment,
             category_name varchar(100) not null,
@@ -143,8 +140,7 @@ CREATE TABLE purchases(
         foreign key(vendor) references users(user_id),
         foreign key(product) references products(product_id)
     );
-    -- select * from purchases;
---     drop table purchases;
+   
 CREATE TABLE invoices(
 		invoices_id int primary key auto_increment,
         sells_code varchar(100),
@@ -164,16 +160,8 @@ CREATE TABLE invoices(
         foreign key(product_id) references products(product_id),
         foreign key(user) references users(user_id)
 );
-use inventory;
--- drop table invoices;
-
- select * from users;
-select * from invoices;
-select * from users;
-
-  -- update users set company_id = 1 where user_id = 1;
-  insert into companies (company_name ,registration_no ,phone ,email ,pan_vat_no ,isvat ,address ,country ,state,city ,zip )
-		values   		("stock hub","123423432423","9876543210","stockhub@gmail.com","987654321",1,"butwal","nepal","lumbini","butwal","3390");
+  insert into companies (company_name , company_code,registration_no ,phone ,email ,pan_vat_no ,isvat ,address ,country ,state,city ,zip )
+		values   		("stock hub","StHUB","123423432423","9876543210","stockhub@gmail.com","987654321",1,"butwal","nepal","lumbini","butwal","3390");
 
 INSERT INTO users (name, address, phone, email, password, is_active, roles,company_id)
 VALUES ('tushar rayamajhi', '432 Elm St, butwal', '9798765432', 'tusharrayamajhi@gmail.com',"52dc06ce946e8698385e44a1dd13d95019066f2db319839408020a8fb2b34cb73f46208cb6f62aa50dd748ab53c84ea97492d94978ba4bf025fa80ec3bec4cb9" , 1, 'superadmin',1);

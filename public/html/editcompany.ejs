@@ -18,6 +18,9 @@
     <label for="company_name">Company Name:</label>
     <input type="text" id="company_name" name="company_name" value="<%= data.company_name %>" required />
 
+    <label for="company_code">Company code:</label>
+    <input type="text" id="company_code" name="company_code" value="<%= data.company_code %>" required />
+
     <label for="registration_no">Registration No:</label>
     <input type="text" id="registration_no" name="registration_no" value="<%= data.registration_no %>" required />
 
@@ -71,7 +74,8 @@
 
     <div>
       <label for="company_logo">company logo url</label><br>
-      <input type="url" id="company_logo" name="company_logo" value="<%= data.company_logo %>">
+      <input type="file" id="company_logo" name="image">
+      <img src="<%= data.company_logo %>" alt="company_logo" id="view_company_image" style="width: 100px; height: 100px; ">
     </div>
 
     <button type="submit">Update</button>

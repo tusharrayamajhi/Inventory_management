@@ -47,7 +47,9 @@
                 <%}%>
             </select>
         <% } %>
-
+        <label for="user_image">Email:</label>
+        <input type="file" id="user_image" name="image" />
+        <img src="<%= data.result.user_image %>" alt="user image" id="view_user_image" style="width: 100px; height: 100px;">
         <!-- Submit Button -->
         <button type="submit">Update User</button>
     </form>
