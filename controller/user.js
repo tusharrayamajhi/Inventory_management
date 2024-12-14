@@ -380,7 +380,7 @@ module.exports = async function user(req, res) {
       err.err_email = "invalid email address";
       have_err = true;
     }
-    if (body.roles == "") {
+    if (body.roles == 'select roles') {
       body.roles = null;
     } else if (body.roles && !isValidCharacter(body.roles)) {
       err.err_roles = "roles must be a valid string";
@@ -395,13 +395,13 @@ module.exports = async function user(req, res) {
       have_err = true;
     }
     if (user.roles == roles.superadmin) {
-      if (body.company != "") {
+      if (body.company == 'select company') {
+        body.company = null
+      }else{
         if (!parseInt(body.company)) {
           err.err_company = "company id most be interger";
           have_err = true;
         }
-      }else{
-        body.company = null
       }
     } else if (body.company) {
       err.err_company = "you cannot assign company";
@@ -473,7 +473,32 @@ module.exports = async function user(req, res) {
     } catch (err) {
       return res.end(JSON.stringify({ message: "database error", err }));
     }
-  } else {
+  } else if(req.url == "/users/changepassword" && req.method == "POST"){
+    const body = await processPost(req)
+    if(body.new_password != body.confirm_password){
+      res.statusCode = 400
+      return res.end(JSON.stringify({message:"new password didn't match with confirm password"}))
+    }
+    if(!isValidPassword(body.new_password)){
+      res.statusCode = 400
+      return res.end(JSON.stringify({err_newpassword:"password most be 8 digit long invlude upper and lower case without space and one special character"}))
+    }
+    const hashpassword = crypto.pbkdf2Sync(body.new_password,process.env.salt,1000,64,"sha512").toString('hex')
+    try{
+      const [rows] = await connection.promise().query("update users set password = ? where user_id = ? ",[hashpassword,parseInt(body.user_id)]) 
+      if(rows.affectedRows > 0){
+        res.statusCode = 200
+        return res.end(JSON.stringify({message:"succesfully update user"}))
+      }
+      res.statusCode = 400
+      return res.end(JSON.stringify({message:"something went wrong cannot update user password"}));
+    }catch(err){  
+      res.statusCode = 500
+      return res.end(JSON.stringify({message:"internal server error"}))
+    }
+    return 
+  }
+   else {
     const ext = req.url.split(".");
     filepath = path.join(__dirname, `../public/${ext[1]}`, req.url);
   }

@@ -9,7 +9,6 @@ document.querySelectorAll(".deletevendor").forEach(form=>{
                 method:"DELETE"
             })
             const result = await response.json();
-            console.log(result)
             if(response.status == 200){
                 alert(result.message)
                 window.location = "/vendor/view"

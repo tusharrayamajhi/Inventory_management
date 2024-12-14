@@ -18,6 +18,15 @@ function isValidEmail(email) {
   }
 }
 
+// function isValidPassword(password) {
+//   const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&*!_+.-])[A-Za-z\d@#$%^&*!_+.-]{8,}$/;
+//   if (passwordRegex.test(password)) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
 function isValidPassword(password) {
   const passwordregex = /[A-Za-z0-9.@#$%^&_+*!-]{8,}/;
   if (passwordregex.test(password)) {
@@ -26,6 +35,7 @@ function isValidPassword(password) {
     return false;
   }
 }
+
 
 function isValidDate(date) {
   const dateregex = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-2])$/;

@@ -3,7 +3,6 @@ document.getElementById("addcustomerform").addEventListener("submit",async(e)=>{
 
     let formdata ={}
     new FormData(document.getElementById("addcustomerform")).forEach((value,key)=>formdata[key] = value)
-    console.log(formdata)
     try{
         const response = await fetch("/customer/add",{
             method:"POST",
@@ -19,7 +18,6 @@ document.getElementById("addcustomerform").addEventListener("submit",async(e)=>{
         }else{
             alert(result.message)
         }
-        console.log(result)
     }catch(err){
         console.log(err)
         alert("something went wrong")

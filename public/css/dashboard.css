@@ -83,11 +83,12 @@ header{
 }
 .card_sections{
     width: 100%;
-    height: 200px;
+    flex-wrap: wrap;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center
+    justify-content: space-around;
+    align-items: center;
+    
 }
 .card{
     width: 150px;

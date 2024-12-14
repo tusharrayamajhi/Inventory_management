@@ -136,9 +136,12 @@ CREATE TABLE purchases(
         vendor int not null,
         product int not null,
         user int not null,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         foreign key(user) references users(user_id),
         foreign key(vendor) references users(user_id),
-        foreign key(product) references products(product_id)
+        foreign key(product) references products(product_id),
+        
     );
    
 CREATE TABLE invoices(

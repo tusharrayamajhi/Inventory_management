@@ -17,7 +17,6 @@ document.querySelector('.update').addEventListener("click",async()=>{
             body:JSON.stringify(formsdata)
         })
         const result = await response.json()
-        console.log(result)
         if(response.status == 200){
             alert(result.message)
         }else{
@@ -27,7 +26,6 @@ document.querySelector('.update').addEventListener("click",async()=>{
         console.log(err)
         alert("something went wrong")
     }
-    console.log(formsdata)
 })
 
 document.querySelectorAll(".editpurchase").forEach(form=>{

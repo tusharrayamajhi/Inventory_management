@@ -1,132 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice Table</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-  integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
-</head>
-<body class="bg-gray-100 p-4">
-  <%- include("./navbar.ejs") %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Table</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="bg-gray-100 p-4">
+    <%- include("./navbar.ejs") %>
 
-  <div class="container mx-auto">
-    <h1 class="text-2xl font-bold mb-4">Invoices</h1>
-    <table class="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md">
-      <thead>
-        <tr class="bg-gray-200 text-left">
-          <th class="border border-gray-300 px-4 py-2">SN</th>
-          <th class="border border-gray-300 px-4 py-2">created by</th>
-          <th class="border border-gray-300 px-4 py-2">sells code</th>
-          <th class="border border-gray-300 px-4 py-2">Customer Name</th>
-          <th class="border border-gray-300 px-4 py-2">Product Name</th>
-          <th class="border border-gray-300 px-4 py-2">Quantity</th>
-          <th class="border border-gray-300 px-4 py-2">sells by</th>
-          <th class="border border-gray-300 px-4 py-2">Rate</th>
-          <th class="border border-gray-300 px-4 py-2">Total</th>
-          <th class="border border-gray-300 px-4 py-2">Payment</th>
-          <th class="border border-gray-300 px-4 py-2">Sales Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% data.forEach((invoice,index) => { %>
-        <tr>
-          <td class="border border-gray-300 px-4 py-2"><%= index + 1 %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.sells_code %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.customer_name %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.product_name %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.Quantity %>-<%=invoice.short_name %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.rate %>/<%=invoice.short_name %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.total %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= invoice.payment %></td>
-          <td class="border border-gray-300 px-4 py-2"><%= new Date(invoice.sales_date).toLocaleDateString() %></td>
-          
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
+    <div class="container mx-auto">
+      <h1 class="text-2xl font-bold mb-4">Invoices</h1>
+      <button type="button" id="export_all_to_excel">export to excel</button>
+      <table
+        class="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md"
+      >
+        <thead>
+          <tr class="bg-gray-200 text-left">
+            <th class="border border-gray-300 px-4 py-2">SN</th>
+            <th class="border border-gray-300 px-4 py-2">created by</th>
+            <th class="border border-gray-300 px-4 py-2">sells code</th>
+            <th class="border border-gray-300 px-4 py-2">Customer Name</th>
+            <th class="border border-gray-300 px-4 py-2">Product Name</th>
+            <th class="border border-gray-300 px-4 py-2">Quantity</th>
+            <th class="border border-gray-300 px-4 py-2">sells by</th>
+            <th class="border border-gray-300 px-4 py-2">Rate</th>
+            <th class="border border-gray-300 px-4 py-2">Total</th>
+            <th class="border border-gray-300 px-4 py-2">Payment</th>
+            <th class="border border-gray-300 px-4 py-2">Sales Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% data.result.forEach((invoice,index) => { %>
+          <tr>
+            <td class="border border-gray-300 px-4 py-2"><%= index + 1 %></td>
+            <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.sells_code %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.customer_name %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.product_name %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.Quantity %>-<%=invoice.short_name %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2"><%= invoice.name%></td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.rate %>/<%=invoice.short_name %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.total %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= invoice.payment %>
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              <%= new Date(invoice.sales_date).toLocaleDateString() %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
 
-    <h1>sells Summary</h1>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>customer Name</th>
-          <th>sells Code</th>
-          <th>sells Date</th>
-          <th>Total Amount</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let groupedsells = {}; 
-        for (let sells of data) { 
-        if(!groupedsells[sells.sells_code]) {
-          groupedsells[sells.sells_code] = { 
-            sells_code:sells.sells_code,
-            customer_name: sells.customer_name,
-            sells_date: sells.sales_date, 
-            total: 0, 
-          }; 
-        }
-        groupedsells[sells.sells_code].total += parseFloat(sells.total);
-        } %>
-        <% for (let sells_code in groupedsells) { 
-            let group = groupedsells[sells_code]; 
-        %>
-        <tr>
-          <td><%= group.customer_name %></td>
-          <td><%= group.sells_code %></td>
-          <td><%= new Date(group.sells_date).toLocaleDateString()  %></td>
-          <td><%= group.total %></td>
-          <td>
-            <form class="download_invoice" style="display: inline">
+      <h1>sells Summary</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>customer Name</th>
+            <th>sells Code</th>
+            <th>sells Date</th>
+            <th>Total Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let groupedsells = {}; for (let sells of data.result) {
+          if(!groupedsells[sells.sells_code]) { groupedsells[sells.sells_code] =
+          { sells_code:sells.sells_code, customer_name: sells.customer_name,
+          sells_date: sells.sales_date, total: 0, }; }
+          groupedsells[sells.sells_code].total += parseFloat(sells.total); } %>
+          <% for (let sells_code in groupedsells) { let group =
+          groupedsells[sells_code]; %>
+          <tr>
+            <td><%= group.customer_name %></td>
+            <td><%= group.sells_code %></td>
+            <td><%= new Date(group.sells_date).toLocaleDateString() %></td>
+            <td><%= group.total %></td>
+            <td>
+              <form class="download_invoice" style="display: inline">
                 <input
                   type="hidden"
-                  name="invoice_sells_code",
+                  name="invoice_sells_code"
+                  ,
                   class="invoice_sells_code"
                   value="<%= group.sells_code %>"
                 />
-                <button
-                  type="button"
-                 >
-                 <i class="fa-solid fa-download"></i>
+                <button type="button">
+                  <i class="fa-solid fa-download"></i>
                 </button>
               </form>
-            <a
-              href="/invoice/edit?sells_code=<%= group.sells_code %>"
-              style="text-decoration: none; color: blue"
-              >Edit</a>
-            <form class="deletepurchase" style="display: inline">
-              <input
-                type="hidden"
-                name="purchase_code"
-                value="<%= group.sells_code %>"
-              />
-              <button
-                type="submit"
-                style="text-decoration: none; color: red"
-                onclick="return confirm('Are you sure you want to delete this purchase?')"
-              >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-    
-  </div>
-
-  
-</body>
+              <a
+                href="/invoice/edit?sells_code=<%= group.sells_code %>"
+                style="text-decoration: none; color: blue"
+                >Edit</a>
+              <form class="deletepurchase" style="display: inline">
+                <input
+                  type="hidden"
+                  name="purchase_code"
+                  value="<%= group.sells_code %>"
+                />
+                <button
+                  type="submit"
+                  style="text-decoration: none; color: red"
+                  onclick="return confirm('Are you sure you want to delete this purchase?')"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h1>export to excel customer</h1>
+      <form id="exportToExcel">
+        <select name="customer_id" id="customer" required>
+          <option value="" selected>select customer</option>
+          <% const uniqueCustomers = [];
+          const uniqueCustomerIds = new Set();
+          data.result.forEach(invoice => {
+            if(!uniqueCustomerIds.has(invoice.customer_id)) {
+          uniqueCustomerIds.add(invoice.customer_id);
+          uniqueCustomers.push(invoice); } }); 
+          %>
+          <%uniqueCustomers.forEach(invoice => { %>
+          <option value="<%= invoice.customer_id %>">
+            <%= invoice.customer_name %>
+          </option>
+          <% }) %>
+        </select>
+        <input type="date" name="from" id="date" required />
+        <span>TO</span>
+        <input type="date" name="to" id="date" required />
+        <button type="submit">save to excel</button>
+      </form>
+    </div>
+<% if(user.roles == "admin"){%>
+    <h1>export to excel seller</h1>
+    <form id="seller_excel">
+        <select name="seller_id" id="seller" required>
+          <option value="" selected>select seller</option>
+          <% const uniqueSeller = [];
+          const uniqueSellerIds = new Set();
+          data.result.forEach(invoice => {
+            if(!uniqueSellerIds.has(invoice.user_id)) {
+          uniqueSellerIds.add(invoice.user_id);
+          uniqueSeller.push(invoice); } }); 
+          %>
+          <%uniqueSeller.forEach(invoice => { %>
+          <option value="<%= invoice.user_id %>">
+            <%= invoice.name %>
+          </option>
+          <% }) %>
+        </select>
+        <input type="date" name="from" id="date" required />
+        <span>TO</span>
+        <input type="date" name="to" id="date" required />
+        <button type="submit">save to excel</button>
+      </form>
+    </div>
+    <%}%>
+      </body>
 </html>
 <script src="/viewinvoice.js"></script>

@@ -14,6 +14,7 @@ const vendor = require("./controller/vendor")
 const purchase = require("./controller/purchase")
 const company = require("./controller/company")
 const invoice = require("./controller/invoice");
+const setting = require("./controller/setting")
 const server = http.createServer(async (req, res) => {
   let filepath = "";
   if( req.url == "/" || req.url.startsWith("/auth")){
@@ -40,11 +41,14 @@ const server = http.createServer(async (req, res) => {
     return company(req,res)
   }else if(req.url.startsWith("/invoice")){
     return invoice(req,res)
-  }else {
+  }else if(req.url.startsWith("/setting")){
+    return setting(req,res);
+  }
+  else {
     const ext = req.url.split(".");
     filepath = path.join(__dirname, `public/${ext[1]}`, req.url);
   }
-render(req,res,filepath)
+  render(req,res,filepath)
   
 });
 
