@@ -2,7 +2,6 @@ document
   .getElementById("select_product")
   .addEventListener("change", async () => {
     const option = document.getElementById("select_product");
-    console.log("selected id " + option.value);
     const form = document.getElementById(option.value);
     if (form) {
       alert("already select this product");
@@ -148,7 +147,6 @@ document.getElementById("savepurchase").addEventListener("click", async () => {
     
     formids.push(id);
   });
-  console.log(formids);
   let formsdata = [];
   const vendorid = document.getElementById("vendorlist").value;
   const vendor = {
@@ -159,11 +157,9 @@ document.getElementById("savepurchase").addEventListener("click", async () => {
     new FormData(document.getElementById(id)).forEach(
       (value, key) => (formdata[key] = value)
     );
-    console.log(formdata);
     formsdata.push(formdata);
     formdata = {};
   });
-  console.log(formsdata);
   try {
     const response = await fetch("/purchase/add", {
       method: "POST",
@@ -173,16 +169,56 @@ document.getElementById("savepurchase").addEventListener("click", async () => {
       body: JSON.stringify({ formsdata, vendor }),
     });
     const result = await response.json();
-    console.log(response.status)
     if(response.status == 200){
       alert(result.message)
       window.location = "/purchase/add"
     }else{
       alert(result.message)
     }
-    console.log(result);
   } catch (err) {
     console.log(err);
     alert("something went wrong");
   }
 });
+
+
+
+
+document.getElementById("seeprice").addEventListener("click",async()=>{
+  const product_id = document.getElementById("see_product_price").value
+  if(!product_id){
+    alert("product not selected")
+    return
+  }
+  try{
+    const response = await fetch(`/purchase/priceHistory?product_id=${product_id}`,{
+      method:"GET"
+    });
+    const result = await response.json()
+    if(response.status == 200){
+      let table = document.getElementById("history_table")
+      let tbody = document.createElement('tbody')
+      result.forEach(rows=>{
+        let tr = document.createElement("tr")
+        for(let key in rows){
+          let td = document.createElement("td")
+          td.innerText = rows[key]
+          tr.appendChild(td)
+        }
+        tbody.appendChild(tr)
+      })
+      const existTbody = table.querySelector('tbody');
+      if(existTbody != null){
+        table.removeChild(existTbody);
+      }
+      table.appendChild(tbody);
+      table.style.display = "block";
+      document.getElementById('see_product_price').value = ""
+    }else{
+      document.getElementById("err").innerText = result.message
+    }
+  }catch(err){
+    console.log(err)
+    alert("something went wrong")
+  }
+})

@@ -17,7 +17,6 @@ document
       });
 
       const result = await response.json();
-      console.log(result);
       if ((response.status == 400)) {
         document.getElementById("error_name").innerText = result.error_name;
         document.getElementById("error_phone").innerText = result.error_phone;

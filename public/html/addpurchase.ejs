@@ -36,6 +36,24 @@
 
     </div>
 <button type="button" id="savepurchase">save</button>
+<br><br>
+<select name="product_id" id="see_product_price">
+    <option value="" selected>select product</option>
+    <% for(let product of data.products){ %>
+        <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
+    <% } %>
+</select>
+<button id="seeprice">see purchase price history</button>
+<h1 id="err"></h1>
+<table border="1" style="display: none;" id="history_table">
+    <thead>
+        <th>vendor name</th>
+        <th>product name</th>
+        <th>purchase price</th>
+        <th>purchase date</th>
+    </thead>
+    
+</table>
 </body>
 <script src="/addpurchase.js"></script>
 </html>

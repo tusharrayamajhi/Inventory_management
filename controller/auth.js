@@ -39,7 +39,7 @@ module.exports = async function auth(req, res) {
       res.setHeader("Content-Type", "application/json");
       if (result.password != hashpassword) {
         res.statusCode = 404;
-        return res.end(JSON.stringify({ message: " invalid password" }));
+        return res.end(JSON.stringify({ message: "password most be 8 digit long invlude upper and lower case without space and one special character" }));
       }
       if (!result.roles) {
         res.statusCode = 403;
@@ -67,6 +67,7 @@ module.exports = async function auth(req, res) {
         company:result.company_id,
         company_logo:result.company_logo,
         company_name:result.company_name,
+        company_code:result.company_code,
         username:result.name,
         user_image:result.user_image,
         exipre:'1h',
@@ -157,7 +158,6 @@ module.exports = async function auth(req, res) {
         })
       );
     } catch (err) {
-      console.log(err)
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "Internal server error", err }));
     }

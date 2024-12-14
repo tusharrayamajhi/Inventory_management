@@ -117,7 +117,7 @@ module.exports = async function vendor(req, res) {
     }
   } else if(req.url == "/vendor/view" && req.method == "GET"){
     try{
-      const [result] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where users.company_id = ? order by vendors.created_at asc",[user.company]);
+      const [result] = await connection.promise().query("select vendors.* from vendors left join users on vendors.user = users.user_id  where users.company_id = ? order by vendors.created_at asc",[user.company]);
       return renderFileWithData(req,res,path.join(__dirname,'../public/html','viewvendor.ejs'),result,user)
     }catch(err){
       return render(req,res,path.join(__dirname,"../public/html","error.html"))
@@ -147,7 +147,7 @@ module.exports = async function vendor(req, res) {
   }else if(req.url.startsWith("/vendor/edit") && req.method == "GET"){
     const parseurl = url.parse(req.url,true)
     const id = parseurl.query.id
-    const [result] =  await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id= ?",[id,user.company])
+    const [result] =  await connection.promise().query("select vendors.* from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id= ?",[id,user.company])
     filepath = path.join(__dirname,'../public/html',"editvendor.ejs")
     return renderFileWithData(req,res,filepath,result[0],user)
   }else if(req.url == "/vendor/edit" && req.method == "PATCH"){
@@ -192,12 +192,12 @@ module.exports = async function vendor(req, res) {
       return res.end(JSON.stringify(err));
     }
     try{
-      const [vendor] = await connection.promise().query("select * from vendors inner join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_id,user.company])
+      const [vendor] = await connection.promise().query("select * from vendors left join users on users.user_id = vendors.user where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_id,user.company])
       if(vendor.length == 0){
         res.statusCode = 400;
         return res.end(JSON.stringify({message:"invalid vendor id"}))
       }
-      const [result] = await connection.promise().query("update vendors inner join users on users.user_id = vendors.user set vendors.vendor_name = ?, vendors.email = ?, vendors.phone=?, vendors.pan_no=?, vendors.country=?, vendors.state=?, vendors.address=? where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_name,body.email,body.phone,body.pan_no,body.country,body.state,body.address,parseInt(body.vendor_id),user.company])
+      const [result] = await connection.promise().query("update vendors left join users on users.user_id = vendors.user set vendors.vendor_name = ?, vendors.email = ?, vendors.phone=?, vendors.pan_no=?, vendors.country=?, vendors.state=?, vendors.address=? where vendors.vendor_id = ? and users.company_id = ?",[body.vendor_name,body.email,body.phone,body.pan_no,body.country,body.state,body.address,parseInt(body.vendor_id),user.company])
       if(result.affectedRows > 0){
         res.statusCode = 200
         return res.end(JSON.stringify({message:"vendor update successfully"}))

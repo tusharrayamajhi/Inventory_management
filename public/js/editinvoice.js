@@ -8,7 +8,6 @@ document.querySelector('.update').addEventListener("click",async()=>{
         formsdata.push(temp)
         temp = {}
     })
-    console.log(formsdata)
     try{    
         const response = await fetch("/invoice/edit",{
             method:"PATCH",
@@ -18,7 +17,6 @@ document.querySelector('.update').addEventListener("click",async()=>{
             body:JSON.stringify(formsdata)
         })
         const result = await response.json()
-        console.log(result)
         if(response.status == 200){
             alert(result.message)
         }else{
@@ -28,6 +26,5 @@ document.querySelector('.update').addEventListener("click",async()=>{
         console.log(err)
         alert("something went wrong")
     }
-    console.log(formsdata)
 })
 

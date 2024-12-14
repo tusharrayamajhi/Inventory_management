@@ -12,7 +12,6 @@ document.getElementById("editproduct").addEventListener("submit",async(e)=>{
             body:JSON.stringify(formdata)
         })
         const result = await response.json();
-        console.log(result)
         if(response.status == 200){
             alert(result.message);
         }else{

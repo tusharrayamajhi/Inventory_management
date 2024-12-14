@@ -6,7 +6,6 @@ document
     new FormData(document.getElementById("editbrand")).forEach(
       (value, key) => (formdata[key] = value)
     );
-    console.log(formdata);
     const response = await fetch("/brand/edit", {
       method: "PATCH",
       headers: {
@@ -16,7 +15,6 @@ document
     });
     const result = await response.json();
     if (response.status == 200) {
-      console.log(result);
       alert(result.message);
     } else {
       console.log(err);

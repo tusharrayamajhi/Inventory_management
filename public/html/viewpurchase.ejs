@@ -11,6 +11,7 @@
     <table border="2">
       <thead>
         <tr>
+          <th>SN</th>
           <th>Vendor Name</th>
           <th>Created By</th>
           <th>Product Name</th>
@@ -28,8 +29,9 @@
         </tr>
       </thead>
       <tbody>
-        <% for(let purchase of data){%>
+        <% data.result.forEach((purchase, index) => { %>
         <tr>
+          <td><%= index + 1 %></td>
           <td><%= purchase.vendor_name %></td>
           <td><%= purchase.name %></td>
           <td><%= purchase.product_name %></td>
@@ -39,13 +41,13 @@
           <td><%= purchase.remaining %></td>
           <td><%= purchase.balance %></td>
           <td><%= purchase.unit_rate %></td>
-          <td><%= purchase.vat_rate %>%</td>
+          <td><%= purchase.vat_rate %> %</td>
           <td><%= purchase.total %></td>
           <td><%= purchase.pruchase_date %></td>
           <td><%= purchase.status %></td>
           <td><%= purchase.remarks %></td>
         </tr>
-        <% } %>
+        <% }) %>
       </tbody>
     </table>
 
@@ -61,16 +63,22 @@
         </tr>
       </thead>
       <tbody>
-        <% let groupedPurchases = {}; 
-        for (let purchase of data) { 
-        if(!groupedPurchases[purchase.purchase_code]) {
-            groupedPurchases[purchase.purchase_code] = { purchase_code:
-            purchase.purchase_code, vendor_name: purchase.vendor_name,
-            purchase_date: purchase.pruchase_date, total: 0, }; }
+        <%
+          let groupedPurchases = {};
+          for (let purchase of data.result) {
+            if (!groupedPurchases[purchase.purchase_code]) {
+              groupedPurchases[purchase.purchase_code] = {
+                purchase_code: purchase.purchase_code,
+                vendor_name: purchase.vendor_name,
+                purchase_date: purchase.pruchase_date,
+                total: 0,
+              };
+            }
             groupedPurchases[purchase.purchase_code].total += parseFloat(purchase.total);
-        } %>
-        <% for (let purchase_code in groupedPurchases) { 
-            let group = groupedPurchases[purchase_code]; 
+          }
+        %>
+        <% for (let purchase_code in groupedPurchases) {
+             let group = groupedPurchases[purchase_code];
         %>
         <tr>
           <td><%= group.vendor_name %></td>
@@ -78,20 +86,12 @@
           <td><%= group.purchase_date %></td>
           <td><%= group.total %></td>
           <td>
-            <a
-              href="/purchase/edit?purchase_code=<%= group.purchase_code %>"
-              style="text-decoration: none; color: blue"
-              >Edit</a
-            >
-            <form class="deletepurchase" style="display: inline">
-              <input
-                type="hidden"
-                name="purchase_code"
-                value="<%= group.purchase_code %>"
-              />
+            <a href="/purchase/edit?purchase_code=<%= group.purchase_code %>" style="text-decoration: none; color: blue;">Edit</a>
+            <form class="deletepurchase" style="display: inline;">
+              <input type="hidden" name="purchase_code" value="<%= group.purchase_code %>" />
               <button
                 type="submit"
-                style="text-decoration: none; color: red"
+                style="text-decoration: none; color: red;"
                 onclick="return confirm('Are you sure you want to delete this purchase?')"
               >
                 Delete
@@ -102,6 +102,38 @@
         <% } %>
       </tbody>
     </table>
+
+    <% if (data.total_page > 1) { %>
+      <% for (let i = 1; i <= data.total_page; i++) { %>
+        <a href="?page=<%= i %>"><%= i %></a>
+      <% } %>
+    <% } %>
+
+    <div>
+      <h1>Export to Excel</h1>
+      <form id="exportToExcel">
+        <select name="vendor_id" id="export">
+          <option value="">Select Vendor</option>
+          <%
+            const uniqueVendors = [];
+            const uniqueVendorsIds = new Set();
+            data.result.forEach(purchase => {
+              if (!uniqueVendorsIds.has(purchase.vendor_id)) {
+                uniqueVendorsIds.add(purchase.vendor_id);
+                uniqueVendors.push(purchase);
+              }
+            });
+          %>
+          <% uniqueVendors.forEach(purchase => { %>
+          <option value="<%= purchase.vendor_id %>"><%= purchase.vendor_name %></option>
+          <% }) %>
+        </select>
+        <input type="date" name="from" id="date" required />
+        <span>TO</span>
+        <input type="date" name="to" id="date" required />
+        <button type="submit">Save to Excel</button>
+      </form>
+    </div>
   </body>
   <script src="/viewpurchase.js"></script>
 </html>

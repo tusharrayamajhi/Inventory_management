@@ -32,6 +32,7 @@
         <!-- Roles -->
         <label for="roles">Role:</label>
         <select id="roles" name="roles" required>
+            <option selected> select roles</option>
           <option value="admin" <%= data.result.roles === 'admin' ? 'selected' : '' %>>Admin</option>
           <option value="normal" <%= data.result.roles === 'normal' ? 'selected' : '' %>>Normal</option>
           <% if (data.user.roles === 'superadmin') { %>

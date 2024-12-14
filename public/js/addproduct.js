@@ -3,7 +3,6 @@ document.getElementById("addproduct").addEventListener("submit",async(e)=>{
 
     let formdata ={}
     new FormData(document.getElementById("addproduct")).forEach((value,key)=>formdata[key] = value)
-    console.log(formdata)
     try{
         const response = await fetch("/product/add",{
             method:"POST",

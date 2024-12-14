@@ -10,12 +10,12 @@
 
     <h1>Create Vendor</h1>
     <form id="editvendor">
-        <input type="hidden" name="vendor_id" value="<%=data.vendor_id%>">
+        <input type="hidden" name="vendor_id" value="<%=data.result.vendor_id%>">
         <label for="vendor_name">Vendor Name:</label><br>
         <input type="text" id="vendor_name" name="vendor_name" required value="<%=data.vendor_name%>"><br><br>
 
         <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" value="<%=data.email%>"><br><br>
+        <input type="email" id="email" name="email" value="<%=data.result.email%>"><br><br>
 
         <label for="phone">Phone:</label><br>
         <input type="text" id="phone" name="phone" required pattern="\d{10}" value="<%=data.phone%>" maxlength="10" title="Enter a 10-digit phone number"><br><br>
@@ -36,7 +36,7 @@
 
         
 
-        <button type="submit">Create Vendor</button>
+        <button type="submit">update Vendor</button>
     </form>
 </body>
 <script src="/editvendor.js"></script>

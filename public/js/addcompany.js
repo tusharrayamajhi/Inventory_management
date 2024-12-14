@@ -43,7 +43,6 @@ document.getElementById("addcompany").addEventListener("submit", async (e) => {
 
         // Parse the response
         const result = await response.json();
-        console.log(result);
 
         // Check the response status
         if (response.ok) {

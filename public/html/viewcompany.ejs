@@ -64,9 +64,11 @@
       <% }); %>
     </tbody>
   </table>
-  <% for(let i =1; i<= data.total_page; i++){ %>
-    <a href="?page=<%= i %>"><%= i %></a>
-  <% } %>
+  <% if(data.total_page > 1){%>
+    <% for(let i = 1; i<= data.total_page; i++){%>
+ <a href="?page=<%= i %>"><%= i %></a>
+ <% } %>
+<% } %>
 </body>
 <script src="/viewCompany.js"></script>
 </html>

@@ -13,7 +13,6 @@ document.getElementById("select_product").addEventListener("change",async()=>{
             const formresponse = await fetch('/invoiceform.html',{
                 method:"GET"
             })
-            console.log(result)
             await formresponse.text().then(async formresult=>{
                     let form = document.createElement("form")
                     form.id = result.product_id
@@ -129,10 +128,8 @@ document.getElementById("save").addEventListener("click",async ()=>{
         })
         const result = await response.json();
         if(response.status == 200){
-            console.log(result)
             alert(result.message)
         }else{
-            console.log(result)
             alert(result.message)
         }
     }catch(err){

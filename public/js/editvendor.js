@@ -2,7 +2,6 @@ document.getElementById('editvendor').addEventListener("submit",async(e)=>{
     e.preventDefault()
     let formdata = {}
     new FormData(document.getElementById("editvendor")).forEach((value,key)=>formdata[key] = value)
-console.log(formdata)
     try{
         const response = await fetch("/vendor/edit",{
             method:"PATCH",
@@ -12,7 +11,6 @@ console.log(formdata)
             body:JSON.stringify(formdata)
         })
         const result = await response.json()
-        console.log(result)
         if(response.status == 200){
             alert(result.message)
         }else{

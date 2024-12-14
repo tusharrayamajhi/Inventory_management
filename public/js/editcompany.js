@@ -23,7 +23,6 @@ document.getElementById("editcompany").addEventListener("submit", async (e) => {
       body: formdata,
     });
     const result = await response.json();
-    console.log(result);
     if (response.status == 200) {
       alert(result.message);
     } else {

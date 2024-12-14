@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User and Company Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+    header {
+      background: #0073e6;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    section {
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 600px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .info div {
+      flex: 1;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+    }
+    .image {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .image img {
+      max-width: 150px;
+      border-radius: 8px;
+    }
+    .change-password {
+      margin-top: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input[type="password"], input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    input[type="submit"] {
+      background: #0073e6;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    input[type="submit"]:hover {
+      background: #005bb5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>User and Company Details</h1>
+  </header>
+
+  <%- include("./navbar.ejs") %>
+
+  <!-- User Details -->
+  <section>
+    <h2>User Details</h2>
+    <div class="info">
+     
+      <div>
+        <label>Name:</label>
+        <p><%= data.users.name %></p>
+      </div>
+    </div>
+    <div class="info">
+      <div>
+        <label>Address:</label>
+        <p><%= data.users.address %></p>
+      </div>
+      <div>
+        <label>Phone:</label>
+        <p><%= data.users.phone %></p>
+      </div>
+    </div>
+    <div class="info">
+      <div>
+        <label>Email:</label>
+        <p><%= data.users.email %></p>
+      </div>
+      <div>
+        <label>Roles:</label>
+        <p><%= data.users.roles %></p>
+      </div>
+    </div>
+    
+    <div class="image">
+      <label>User Image:</label>
+      <img src="<%= data.users.user_image %>" alt="User Image">
+    </div>
+  </section>
+
+  <!-- Company Details -->
+  <section>
+    <h2>Company Details</h2>
+    <div class="info">
+      <div>
+        <label>Company Name:</label>
+        <p><%= data.company.company_name %></p>
+      </div>
+      <div>
+        <label>Registration No:</label>
+        <p><%= data.company.registration_no %></p>
+      </div>
+    </div>
+    <div class="info">
+      <div>
+        <label>PAN/VAT No:</label>
+        <p><%= data.company.pan_vat_no %></p>
+      </div>
+      <div>
+        <label>Address:</label>
+        <p><%= data.company.address %></p>
+      </div>
+    </div>
+    <div class="info">
+      <div>
+        <label>Country:</label>
+        <p><%= data.company.country %></p>
+      </div>
+      <div>
+        <label>State:</label>
+        <p><%= data.company.state %></p>
+      </div>
+    </div>
+    <div class="info">
+      <div>
+        <label>City:</label>
+        <p><%= data.company.city %></p>
+      </div>
+      <div>
+        <label>ZIP:</label>
+        <p><%= data.company.zip %></p>
+      </div>
+    </div>
+    <div class="info">
+      <label>Website:</label>
+      <p><a href="<%= data.company.website %>" target="_blank"><%= data.company.website %></a></p>
+    </div>
+    <div class="image">
+      <label>Company Logo:</label>
+      <img src="<%= data.company.company_logo %>" alt="Company Logo">
+    </div>
+  </section>
+
+  <!-- Change Password Form -->
+  <section class="change-password">
+    <h2>Change Password</h2>
+    <form id="changepassword">
+        <input type="hidden" id="user_id" name="user_id" value="<%= data.users.user_id %>">
+      <div class="form-group">
+        <label for="old_password">Old Password:</label>
+        <input type="password" id="old_password" name="old_password" placeholder="Enter old password" required>
+      </div>
+      <div class="form-group">
+        <label for="new_password">New Password:</label>
+        <input type="password" id="new_password" name="new_password" placeholder="Enter new password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirm_password">Confirm New Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm new password" required>
+      </div>
+      <input type="submit" value="Change Password">
+    </form>
+  </section>
+</body>
+<script src="/setting.js"></script>
+</html>

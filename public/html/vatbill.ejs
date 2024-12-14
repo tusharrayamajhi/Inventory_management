@@ -93,11 +93,13 @@
 <body>
 
   <div class="bill-container">
+    <img src="<%= data.company.company_logo %>" style="width: 80px; height: 80px; border-radius: 50%;" alt="company logo">
+    <h3>Bill No: <%= data.invoice[0].sells_code %></h3>
     <!-- Company Info -->
     <div class="company-info">
       <div class="company-logo"></div>
-      <h1><%= data.company.company_name%></h1>
-      <p>VAT No: <%= data.company.pan_vat_no%></p>
+      <h1>company name: <%= data.company.company_name%></h1>
+      <p>VAT/pan No: <%= data.company.pan_vat_no%></p>
       <p>Address: <%= data.company.address%></p>
       <p>Email: <%= data.company.email%></p>
     </div>
@@ -105,7 +107,7 @@
     <!-- Customer Info -->
     <div class="customer-info">
       <p><strong>Customer Name:</strong> <%= data.customers.name%></p>
-      <p><strong>VAT No:</strong> <%= data.customers.phone %></p>
+      <p><strong>VAT No:</strong> <%= data.customers.pan %></p>
       <p><strong>Address:</strong> <%= data.customers.address %></p>
       <p><strong>Email:</strong> <%= data.customers.email %> </p>
       <p><strong>Phone:</strong> <%= data.customers.phone %></p>

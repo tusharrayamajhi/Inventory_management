@@ -21,6 +21,7 @@
     "cloudinary": "^2.5.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "formidable": "^3.5.2",
     "inventory_management": "file:",
     "mysql2": "^3.11.3"
