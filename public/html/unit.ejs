@@ -4,17 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
 
-    <form id="unit_form">
-        <label for="name">name</label>
-        <input type="text" name="unit_name" id="name">
-        <label for="short_name">short name</label>
-        <input type="text" name="short_name" id="short_name">
-        <button type="submit">create</button>
+    <div class="container">
+
+    <h2 class="create_heading">Add Unit</h2>
+
+    <form id="unit_form" class="style_form">
+
+        <!-- Unit Name -->
+        <div class="input_field">
+            <label for="name">Name</label>
+            <input type="text" name="unit_name" id="name" required maxlength="100">
+        </div>
+
+        <!-- Unit short name -->
+        <div class="input_field">
+            <label for="short_name">Short Name</label>
+            <input type="text" name="short_name" id="short_name" required maxlength="100">
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit_btn">
+            <button type="submit">Add Category</button>
+        </div>
     </form>
+</div>
 </body>
 <script src="/unit.js"></script>
 </html>

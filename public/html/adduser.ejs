@@ -4,63 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Form</title>
+    <link rel="stylesheet" href="/common.css">
+    
+    <style>
+        #is_active {
+        height: 1rem;
+        width: 1rem;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        }
+
+        #user_image {
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        text-align: center;
+
+        }
+    </style>
 </head>
 <body>
     <%- include("./navbar.ejs") %>
 
-    <h2>Create/Update User</h2>
-    <form id="adduser">
-        <!-- Name -->
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+    <div class="container">
+        <h2 class="create_heading">Create/Update User</h2>
 
-        <!-- Address -->
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address"><br><br>
+        <form id="adduser" class="style_form">
 
-        <!-- Phone -->
-        <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" maxlength="10" required><br><br>
+            <!-- Name -->
+            <div class="input_field name">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required maxlength="100">
+            </div>
+    
+            <!-- Address -->
+            <div class="input_field address">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required maxlength="100">
+            </div>
+    
+            <!-- Phone -->
+            <div class="input_field phone">
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="phone" pattern="\d{10}" maxlength="10" required>
+            </div>
+    
+            <!-- Email -->
+            <div class="input_field email">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" maxlength="100" required>
+            </div>
 
-        <!-- Email -->
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+            <!-- Password -->
+            <div class="input_field pass">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+    
+            <!-- Roles -->
+            <div class="input_field role">
+                <label for="roles">Role</label>
+                <select class="selected" id="roles" name="roles">
+                    <option selected value=""> select roles </option>
+                    <option value="admin">Admin</option>
+                    <option value="normal">Normal</option>
+                    <%if(data.user.roles == "superadmin"){%>
+                        <option value="superadmin">Superadmin</option>
+                    <%}%>
+                </select>
+            </div>
 
-        <!-- Password -->
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
-
-        <!-- Is Active -->
-        <label for="is_active">Is Active:</label>
-        <input type="checkbox" id="is_active" name="is_active" value=1><br><br>
-
-        <!-- Roles -->
-        <label for="roles">Role:</label>
-        <select id="roles" name="roles">
-            <option selected value=""> select roles </option>
-            <option value="admin">Admin</option>
-            <option value="normal">Normal</option>
+            <!-- Company name field -->
             <%if(data.user.roles == "superadmin"){%>
-                <option value="superadmin">Superadmin</option>
+            <div class="input_field company">
+                <label for="company">Company</label>
+                <select class="selected" id="company" name="company">
+                    <option value="" selected>select company</option>
+                    <% if(data.company){ %>
+                    <%for(let company of data.company){%>
+                        <option value="<%=company.company_id%>"><%=company.company_name%></option>
+                    <%}%>
+                    <%}%>
+                </select>
+            </div>
             <%}%>
-        </select><br><br>
-        <%if(data.user.roles == "superadmin"){%>
-        <label for="company">company:</label>
-        <select id="company" name="company">
-            <option value="" selected>select company</option>
-            <% if(data.company){ %>
-            <%for(let company of data.company){%>
-                <option value="<%=company.company_id%>"><%=company.company_name%></option>
-            <%}%>
-            <%}%>
-        </select><br><br>
-        <%}%>
 
-        <label for="user_image">Address:</label>
-        <input type="file" id="user_image" name="image"><br><br>
+            <!-- Is Active -->
+            <div class="input_field">
+                <span class="status">Status</span>
+                <div class="active">
+                    <input class="is_active" type="checkbox" id="is_active" name="is_active" value=1>
+                    <label for="is_active">Is Active:</label>
+                </div>
+            </div>
+    
+            <!-- Upload an image -->
+            <div class="input_field image">
+                <label for="user_image">Upload an image</label>
+                <div class="active">
+                    <input type="file" id="user_image" name="image">
+                </div>
+            </div>
+            
+            <!-- button -->
+            <div class="input_field submit_btn">
+                <button type="submit">Save User</button>
+            </div>
 
-        <button type="submit">Save User</button>
-    </form>
+        </form>
+    </div>
+    
 </body>
 <script src="/adduser.js"></script>
 </html>

@@ -4,29 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Form</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
 
-    <h2>Customer Form</h2>
-    <form id="addcustomerform">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required maxlength="100"><br><br>
+    <div class="container">
 
-        <label for="phone">Phone:</label><br>
-        <input type="text" id="phone" name="phone" pattern="\d{10}" maxlength="10"><br><br>
+    <h2 class="create_heading">Customer Form</h2>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" maxlength="100"><br><br>
+    <form id="addcustomerform" class="style_form">
 
-        <label for="address">Address:</label><br>
-        <input type="text" id="address" name="address" required maxlength="100"><br><br>
+        <!-- Name -->
+        <div class="input_field name">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required maxlength="100">
+        </div>
 
-        <label for="pan">pan No:</label><br>
-        <input type="number" id="pan" name="pan" required ><br><br>
+        <!-- Phone -->
+        <div class="input_field phone">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" pattern="\d{10}" maxlength="10" required>
+        </div>
 
-        <button type="submit">Submit</button>
+        <!-- Email -->
+        <div class="input_field email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" maxlength="100" required>
+        </div>
+
+        <!-- Address -->
+        <div class="input_field address">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" required maxlength="100">
+        </div>
+
+        <!-- Pan number -->
+        <div class="input_field pan_number">
+            <label for="pan">Pan No.</label>
+            <input type="number" id="pan" name="pan" required ><br><br>
+        </div>
+
+        <!-- button -->
+        <div class="input_field submit_btn three_col">
+            <button type="submit">Submit</button>
+        </div>
+
     </form>
+</div>
 </body>
 <script src="/addcustomer.js"></script>
 </html>

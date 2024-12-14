@@ -4,71 +4,94 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Product</title>
+  <link rel="stylesheet" href="/common.css">
+  <style>
+    #vat {
+      height: 1rem;
+      width: 1rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  </style>
 </head>
 <body>
   <%- include("./navbar.ejs") %>
 
-  <h1>Add Product</h1>
-  <form id="addproduct">
-    <!-- Product Name -->
-    <div>
-      <label for="product_name">Product Name:</label><br>
-      <input type="text" id="product_name" name="product_name" required >
+  <div class="container">
+
+    <h2 class="create_heading">Add Product</h2>
+
+    <form id="addproduct" class="style_form">
+
+      <!-- Product Name -->
+      <div class="input_field product_name">
+        <label for="product_name">Product Name</label><br>
+        <input type="text" id="product_name" name="product_name" required >
+      </div>
+      
+      <!-- Brand -->
+      <div class="input_field brand_name">
+        <label for="brand">Brand</label><br>
+        <select class="selected" id="brand" name="brand" >
+          <option value="">Select Brand</option>
+          <% data.brands.forEach(brand => { %>
+            <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
+          <% }); %>
+        </select>
+      </div>
+      
+      <!-- Unit -->
+      <div class="input_field unit_name">
+        <label for="unit">Unit</label><br>
+        <select class="selected" id="unit" name="unit" >
+          <option value="">Select Unit</option>
+          <% data.units.forEach(unit => { %>
+            <option value="<%= unit.unit_id %>"><%= unit.unit_name %></option>
+          <% }); %>
+        </select>
+      </div>
+      
+      <!-- VAT -->
+      <div class="input_field">
+        <span class="status">Status</span>
+        <div class="active">
+          <input class="is_active" type="checkbox" id="vat" name="vat" value=1>
+          <label for="vat">VAT</label>
+        </div>
     </div>
-    
-    <!-- Brand -->
-    <div>
-      <label for="brand">Brand:</label><br>
-      <select id="brand" name="brand" >
-        <option value="">Select Brand</option>
-        <% data.brands.forEach(brand => { %>
-          <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
-        <% }); %>
-      </select>
-    </div>
-    
-    <!-- Unit -->
-    <div>
-      <label for="unit">Unit:</label><br>
-      <select id="unit" name="unit" >
-        <option value="">Select Unit</option>
-        <% data.units.forEach(unit => { %>
-          <option value="<%= unit.unit_id %>"><%= unit.unit_name %></option>
-        <% }); %>
-      </select>
-    </div>
-    
-    <!-- VAT -->
-    <div>
-      <label for="vat">VAT:</label><br>
-      <input type="checkbox" id="vat" name="vat" ">
-    </div>
-    
-    <!-- Selling Rate -->
-    <div>
-      <label for="selling_rate">Selling Rate:</label><br>
-      <input type="number" id="selling_rate" name="selling_rate" step="0.01">
-    </div>
-    
-    <!-- Stock -->
-    <!-- <div>
-      <label for="stock">Stock:</label><br>
-      <input type="number" id="stock" name="stock" min="0" >
-    </div> -->
-    
-    <!-- Category -->
-    <div>
-      <label for="category">Category:</label><br>
-      <select id="category" name="category">
-        <option value="" selected>Select Category</option>
-        <% data.categories.forEach(category => { %>
-          <option value="<%= category.category_id %>"><%= category.category_name %></option>
-        <% }); %>
-      </select>
-    </div>
-    
-    <button type="submit">Add Product</button>
-  </form>
+      
+      
+      <!-- Selling Rate -->
+      <div class="input_field rate">
+        <label for="selling_rate">Selling Rate:</label><br>
+        <input type="number" id="selling_rate" name="selling_rate" step="0.01">
+      </div>
+      
+      <!-- Stock -->
+      <!-- <div>
+        <label for="stock">Stock:</label><br>
+        <input type="number" id="stock" name="stock" min="0" >
+      </div> -->
+      
+      <!-- Category -->
+      <div class="input_field category_name">
+        <label for="category">Category:</label><br>
+        <select class="selected" id="category" name="category">
+          <option value="" selected>Select Category</option>
+          <% data.categories.forEach(category => { %>
+            <option value="<%= category.category_id %>"><%= category.category_name %></option>
+          <% }); %>
+        </select>
+      </div>
+      
+      <!-- button -->
+      <div class="input_field submit_btn">
+        <button type="submit">Add Product</button>
+      </div>
+
+    </form>
+  </div>
 </body>
 <script src="/addproduct.js"></script>
 </html>

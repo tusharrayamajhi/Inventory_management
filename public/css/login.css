@@ -14,7 +14,7 @@ body {
     min-height: 100vh;
     padding: 0 10px;
     display: flex;
-    background: #8b5cf6;
+    background: rgb(216, 216, 216);
     justify-content: center;
     align-items: center;
 }
