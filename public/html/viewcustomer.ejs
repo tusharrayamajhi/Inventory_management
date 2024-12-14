@@ -73,36 +73,20 @@
 
     <!-- table column change button -->
     <div class="footer">
-        <span>
-          "Showing"
-          <span>"1""-""10"</span>
-          "of"
-          <span>12</span>
-        </span>
+    
   
+        <% if(data.total_page != 1){ %>
         <ul>
-          <li>
-            <button>
-              <i class="fa-solid fa-angle-left"></i>
-            </button>
-          </li>
-          <li>
-            <button>1</button>
-          </li>
-          <li>
-            <button>2</button>
-          </li>
-          <li>
-            <button>
-              <i class="fa-solid fa-angle-right"></i>
-            </button>
-          </li>
+            <% for(let i =1; i<= data.total_page; i++){ %>
+                <li>
+                <a href="?page=<%= i %>"><%= i %></a>
+            </li>
+              <% } %>
         </ul>
+        <% } %>
       </div>
       
-    <% for(let i =1; i<= data.total_page; i++){ %>
-        <a href="?page=<%= i %>"><%= i %></a>
-      <% } %>
+    
     </div>
 </body>
 <script src="/viewcustomer.js"></script>
