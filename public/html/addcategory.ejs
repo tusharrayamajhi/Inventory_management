@@ -4,25 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Category</title>
-  <link rel="stylesheet" href="/addcategory.css">
+  <link rel="stylesheet" href="/common.css">
+  <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
   <%- include("./navbar.ejs") %>
+  <div class="container">
 
-  <h1>Create New Category</h1>
-  <form  id="addcategoryForm">
-    <label for="category_name">Category Name:</label>
-    <input type="text" id="category_name" name="category_name" required maxlength="100">
-    <br><br>
-    
-    <label for="category_des">Category Description:</label>
-    <textarea id="category_des" name="category_des" maxlength="255"></textarea>
-    <br><br>
+    <h2 class="create_heading">Create New Category</h2>
 
-    
-    <button type="submit">Add Category</button>
-  </form>
+    <form  id="addcategoryForm" class="style_form">
 
+      <!-- Category Name -->
+      <div class="input_field">
+        <label for="category_name">Category Name</label>
+        <input type="text" id="category_name" name="category_name" required maxlength="100">
+      </div>
+      
+      <!-- Category Description -->
+      <div class="input_field">
+        <label for="category_des">Category Description</label>
+        <textarea class="desc_textarea" id="category_des" name="category_des" maxlength="255"></textarea>
+      </div>
+
+      
+      <!-- Submit Button -->
+      <div class="submit_btn">
+        <button type="submit">Add Category</button>
+      </div>
+
+    </form>
+  </div>
  
 </body>
 <script src="/addcategory.js"></script>

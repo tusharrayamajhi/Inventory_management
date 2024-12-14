@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unit List</title>
+    <link rel="stylesheet" href="/table.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
+    <div class="container">
 
-    <h1>Unit List</h1>
+    <h2 class="table_heading">Unit List</h2>
+
+    <div class="table_div">
+    
     <table border="1">
         <thead>
             <tr>
@@ -36,6 +41,8 @@
             <% } %>
         </tbody>
     </table>
+    </div>
+    </div>
 </body>
 <script src="/unitview.js"></script>
 </html>

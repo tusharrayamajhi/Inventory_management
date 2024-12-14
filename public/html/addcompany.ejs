@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Registration Form</title>
+    <link rel="stylesheet" href="/common.css">
     <!-- <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,83 +61,128 @@
             flex-direction: column;
         }
     </style> -->
+
+    <style>
+        #vat {
+            height: 1rem;
+            width: 1rem;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <%- include("./navbar.ejs") %>
 
-<div class="container">
-    <h2>Company Registration Form</h2>
-    <form id="addcompany">
-        <div class="form-group">
-            <label for="company_name">Company Name</label>
-            <input type="text" id="company_name" name="company_name" required>
-        </div>
-        <div class="form-group">
-            <label for="company_code">Company code</label>
-            <input type="text" id="company_code" name="company_code" required>
-        </div>
-        <div class="form-group">
-            <label for="registration_no">Registration Number</label>
-            <input type="text" id="registration_no" name="registration_no" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" maxlength="10" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="pan_no">PAN/VAT</label>
-            <input type="text" id="pan_no" name="pan_no" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" id="address" name="address" required>
-        </div>
-        <div class="form-group">
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country" required>
-        </div>
-        <div class="form-group">
-            <label for="state">State</label>
-            <input type="text" id="state" name="state">
-        </div>
-        <div class="form-group">
-            <label for="city">City</label>
-            <input type="text" id="city" name="city">
-        </div>
-        <div class="form-group">
-            <label for="zip">ZIP Code</label>
-            <input type="number" id="zip" name="zip">
-        </div>
-        <div class="form-group">
-            <label for="bank_name">Bank Name</label>
-            <input type="text" id="bank_name" name="bank_name">
-        </div>
-        <div class="form-group">
-            <label for="account_no">Account Number</label>
-            <input type="text" id="account_no" name="account_no">
-        </div>
-       
-        <div class="form-group">
-            <label for="website">Website</label>
-            <input type="url" id="website" name="website">
-        </div>
-        <div>
-            <label for="vat">is company register in vat</label><br>
-            <input type="checkbox" id="vat" name="vat">
-          </div>
+    <div class="container">
+        <h2 class="create_heading">Company Registration Form</h2>
 
-          <div>
-            <label for="company_logo">company logo url</label><br>
-            <input type="file" id="company_logo" name="image">
-          </div>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+        <form id="addcompany" class="style_form">
+
+            <!-- Company Name -->
+            <div class="input_field name">
+                <label for="company_name">Company Name</label>
+                <input type="text" id="company_name" name="company_name" required>
+            </div>
+
+            <!-- Company code -->
+            <div class="input_field com_code">
+                <label for="company_code">Company code</label>
+                <input type="text" id="company_code" name="company_code" required>
+            </div>
+
+            <!-- Registration Number -->
+            <div class="input_field res_number">
+                <label for="registration_no">Registration Number</label>
+                <input type="text" id="registration_no" name="registration_no" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="input_field phone">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" maxlength="10" required>
+            </div>
+
+            <!-- Email -->
+            <div class="input_field email">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- PAN/VAT -->
+            <div class="input_field com_pan_vat">
+                <label for="pan_no">PAN/VAT</label>
+                <input type="text" id="pan_no" name="pan_no" required>
+            </div>
+            
+            <!-- Address -->
+            <div class="input_field address">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <!-- Country -->
+            <div class="input_field country">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" required>
+            </div>
+
+            <!-- State -->
+            <div class="input_field state">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state">
+            </div>
+
+            <!-- City -->
+            <div class="input_field city">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city">
+            </div>
+
+            <div class="input_field zip_code">
+                <label for="zip">ZIP Code</label>
+                <input type="number" id="zip" name="zip">
+            </div>
+
+            <!-- Bank Name -->
+            <div class="input_field bank_name">
+                <label for="bank_name">Bank Name</label>
+                <input type="text" id="bank_name" name="bank_name">
+            </div>
+
+            <!-- Account Number -->
+            <div class="input_field acc_number">
+                <label for="account_no">Account Number</label>
+                <input type="text" id="account_no" name="account_no">
+            </div>
+        
+            <!-- Website -->
+            <div class="input_field com_website">
+                <label for="website">Website</label>
+                <input type="url" id="website" name="website">
+            </div>
+
+            <!-- is company register in vat -->
+            <div class="input_field vat_varification">
+                <span class="status">Status</span>
+                <div class="active">
+                    <input type="checkbox" id="vat" name="vat">
+                    <label for="vat">Is Company Register in Vat</label>
+                </div>
+            </div>
+
+            <!-- Company Logo Url -->
+            <div class="input_field com_logo">
+                    <label for="company_logo">Company Logo Url</label><br>
+                    <input type="file" id="company_logo" name="image">
+            </div>
+
+            <!-- button -->
+            <div class="input_field submit_btn">
+                <button type="submit">Save User</button>
+            </div>
+        </form>
+    </div>
 </body>
 <script src="/addcompany.js"></script>
 </html>

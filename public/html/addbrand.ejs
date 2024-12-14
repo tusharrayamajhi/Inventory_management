@@ -4,19 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Brand</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
-    <h1>Add Brand</h1>
-    <form id="addbrand">
-        <label for="brand_name">Brand Name:</label>
-        <input type="text" id="brand_name" name="brand_name" required maxlength="100"><br><br>
+    <div class="container">
 
-        <label for="brand_desc">Brand Description:</label>
-        <textarea id="brand_desc" name="brand_desc" maxlength="255"></textarea><br><br>
+        <h2 class="create_heading">Add Brand</h2>
 
-        <button type="submit">Add Brand</button>
-    </form>
+        <form id="addbrand" class="style_form">
+
+            <!-- Brand Name -->
+            <div class="input_field">
+                <label for="brand_name">Brand Name</label>
+                <input type="text" id="brand_name" name="brand_name" required maxlength="100">
+            </div>
+
+            <!-- Brand Description -->
+            <div class="input_field">
+                <label for="brand_desc">Brand Description</label>
+                <textarea class="desc_textarea" id="brand_desc" name="brand_desc" maxlength="255"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit_btn">
+                <button type="submit">Add Brand</button>
+            </div>
+
+        </form>
+    </div>
 </body>
 <script src="/addbrand.js"></script>
 </html>

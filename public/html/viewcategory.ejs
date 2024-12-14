@@ -4,38 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/viewcategory.css">
+    <link rel="stylesheet" href="/table.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
+    <div class="container">
 
+    <h2 class="table_heading">Category Table</h2>
+
+    <div class="table_div">
     <table border="1">
         <thead>
             <tr>
+                <th>SN</th>
                 <th>category Name</th>
                 <th>category description</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-    <%for(let category of data){%>
+        <%for(let category of data){%>
         <tr>
+            <!-- <td><%= index + 1 %></td> -->
             <td><%= category.category_name%></td>
             <td><%= category.category_des%></td>
             <td>
                 <form action="/category/edit" method="GET" style="display:inline;">
                     <input type="hidden" name="id" value="<%= category.category_id %>">
-                    <button type="submit">Edit</button>
+                    <button class="btn btn-edit" type="submit">Edit</button>
                 </form>
                 <form class="deletecategory" style="display:inline;">
                     <input type="hidden" name="id" value="<%= category.category_id %>">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
+                    <button class="btn btn-delete" type="submit" onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
                 </form>
             </td>
         </tr>
-    <%}%>
-</tbody>
-</table>
+        <%}%>
+        </tbody>
+    </table>
+    </div>
+</div>
 </body>
 <script src="/viewcategory.js"></script>
 </html>

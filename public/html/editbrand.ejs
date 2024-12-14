@@ -4,23 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Unit</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
+    <div class="container">
 
-    <h1>Edit Unit</h1>
-    <form id="editbrand">
-        <input type="hidden" name="brand_id" value="<%= data.brand_id%>">
-        <label for="brand_name">brand name:</label>
-        <input type="text" id="brand_name" name="brand_name" value="<%= data.brand_name%>" required>
-        <br><br>
-        
-        <label for="brand_desc">brand description:</label>
-        <textarea id="brand_desc" name="brand_desc" required><%= data.brand_desc%></textarea>
-        <br><br>
-        
-        <button type="submit">Update Unit</button>
-    </form>
+        <h2 class="create_heading">Edit Unit</h2>
+    
+        <form id="editbrand" class="style_form">
+
+            <!-- Brand Name -->
+                <div class="input_field">
+                    <input type="hidden" name="brand_id" value="<%= data.brand_id%>">
+                    <label for="brand_name">Brand Name</label>
+                    <input type="text" id="brand_name" name="brand_name" value="<%= data.brand_name%>" required>
+                </div>
+            
+            <!-- Brand Description -->
+            <div class="input_field">
+                <label for="brand_desc">Brand Description</label>
+                <textarea class="desc_textarea" id="brand_desc" name="brand_desc" required><%= data.brand_desc%></textarea>
+            </div>
+            <!-- Submit Button -->
+        <div class="submit_btn">
+            <button type="submit">Update Unit</button>
+        </div>
+        </form>
+    </div>
 </body>
 <script src="/editbrand.js"></script>
 </html>
