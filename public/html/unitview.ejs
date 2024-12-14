@@ -30,11 +30,11 @@
                     <td>
                         <form action="/unit/edit" method="GET" style="display:inline;">
                             <input type="hidden" name="id" value="<%= unit.unit_id %>">
-                            <button type="submit">Edit</button>
+                            <button class="btn btn-edit" type="submit">Edit</button>
                         </form>
                         <form class="deleteunit" style="display:inline;">
                             <input type="hidden" name="id" value="<%= unit.unit_id %>">
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
+                            <button class="btn btn-delete" type="submit" onclick="return confirm('Are you sure you want to delete this unit?');">Delete</button>
                         </form>
                     </td>
                 </tr>

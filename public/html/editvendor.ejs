@@ -9,15 +9,18 @@
 </head>
 <body>
     <%- include("./navbar.ejs") %>
-    
-    <h1>Create Vendor</h1>
-    <form id="editvendor">
-        <input type="hidden" name="vendor_id" value="<%=data.vendor_id%>">
-        <label for="vendor_name">Vendor Name:</label><br>
-        <input type="text" id="vendor_name" name="vendor_name" required value="<%=data.vendor_name%>"><br><br>
+    <div class="container">
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" value="<%=data.email%>"><br><br>
+        <h2 class="create_heading">Create Vendor</h2>
+
+        <form id="editvendor" class="style_form">
+            
+            <!-- Vendor Name -->
+            <div class="input_field">
+                <input type="hidden" name="vendor_id" value="<%=data.vendor_id%>">
+                <label for="vendor_name">Vendor Name</label>
+                <input type="text" id="vendor_name" name="vendor_name" required value="<%=data.vendor_name%>">
+            </div>
 
             <div class="input_field">
                 <label for="email">Email</label>
@@ -52,12 +55,10 @@
             
             <!-- Submit Button -->
             <div class="input_field submit_btn three_col">
-				<button type="submit">Create Vendor</button>
+				<button type="submit">Edit Vendor</button>
 			</div>
         </form>
     </div>
-        <button type="submit">update Vendor</button>
-    </form>
 </body>
 <script src="/editvendor.js"></script>
 </html>
