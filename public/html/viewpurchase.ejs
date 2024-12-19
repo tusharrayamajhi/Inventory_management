@@ -116,8 +116,19 @@
           </tbody>
         </table>
       </div>
+      <div class="footer">
+        
+  
+        <ul>
+          <% for(let i =1; i<= data.total_page; i++){ %>
+          <li>
+              <a href="?page=<%= i %>"><%= i %></a>
+            </li>
+            <% } %>
+        </ul>
       </div>
-    
+      </div>
+        
 
     <div class="container">
 

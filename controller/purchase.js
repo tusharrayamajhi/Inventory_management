@@ -279,7 +279,7 @@ module.exports = async function purchase(req, res) {
           //   new_rec_amt = new_rec_amt +( new_rec_amt * 13 / 100)
           // }
           let total = parseFloat(purchase[0].total) + new_rec_amt
-          await connection.promise().query("update purchases set received_qnt = received_qnt + ?,balance = ordered_qnt - received_qnt,remaining = remaining + ? ,total= ? where purchase_id = ? ",[parseInt(data.new_received),parseInt(data.new_received),total,data.purchase_id])
+          await connection.promise().query("update purchases set received_qnt = received_qnt + ?,balance = ordered_qnt - received_qnt,remaining = remaining + ? ,total= ?,status = ?,remarks = ? where purchase_id = ? ",[parseInt(data.new_received),parseInt(data.new_received),total,data.status,data.remark,data.purchase_id])
           await connection.promise().query("update products set stock = stock + ? where  product_id = ?",[parseFloat(data.new_received),data.product_id])
         }
       }

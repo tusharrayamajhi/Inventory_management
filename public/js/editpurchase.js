@@ -5,6 +5,8 @@ document.querySelector('.update').addEventListener("click",async()=>{
         temp.product_id = form.querySelector(".product_id").value
         temp.new_received = form.querySelector(".new_received").value
         temp.purchase_id = form.querySelector('.purchase_id').value
+        temp.status = form.querySelector('.status').value
+        temp.remark = form.querySelector('.remark').value
         formsdata.push(temp)
         temp = {}
     })
