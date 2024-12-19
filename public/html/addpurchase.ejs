@@ -4,59 +4,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href="/addpurchase.css"> -->
+    <style>
+        /* General Styling */
+#formsection {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-header,
+.forms {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr); /* 11 columns for the headings and inputs */
+  gap: 10px;
+  align-items: center;
+}
+
+.form-header {
+  font-weight: bold;
+  background-color: #e6e6e6;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.forms {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+
+.forms input,
+.forms select,
+.forms textarea
+{
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 90.29px;
+  height: 18.4px;
+}
+
+.forms textarea {
+  resize: none;
+}
+
+.forms button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.forms button:hover {
+  background-color: #d32f2f;
+}
+
+/* Responsive Styling */
+/* @media (max-width: 768px) {
+  .form-header,
+  .forms {
+    grid-template-columns: 1fr;
+  }
+} */
+
+    </style>
+    <link rel="stylesheet" href="/addpurchase.css"> 
+    <link rel="stylesheet" href="/table.css">
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
+
+    <link rel="stylesheet" href="/addpurchase.css">
 </head>
 <body>
-    <%- include("./navbar.ejs") %>
+   <%- include("./navbar.ejs") %>
 
-    <div class="container">
-        <h2 class="create_heading">Product Purchase</h2>
+   <div class="container">
 
-    <select name="vendor_id" id="vendorlist">
-        <option value="" selected>select vendor</option>
-        <% for(let vendor of data.vendors){ %>
-            <option value="<%= vendor.vendor_id  %>"><%=vendor.vendor_name%></option>
-        <% } %>
-    </select>
-    <select name="product_id" id="select_product">
-        <option value="" selected>select product</option>
-        <% for(let product of data.products){ %>
-            <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
-        <% } %>
-    </select>
-    <div id="formsection">
+    <h2 class="create_heading">Product Purchase</h2>
 
-    </div>
-    <div>
-        <label for="total">total amount</label><br>
-        <input readonly id="total_amt" id="total" value=0></input>
-        <label for="vatable">vatable amount</label>
-        <input readonly id="total_vatable_amt"></input>
-        <label for="vatamt">vat amount</label>
-        <input readonly id="vatamt"></input>
-        <label for="amt_after_vat">total amount after vat</label>
-        <input readonly id="total_amt_after_vat" value=0></input>
-
-    </div>
-<button type="button" id="savepurchase">save</button>
-<br><br>
-<select name="product_id" id="see_product_price">
-    <option value="" selected>select product</option>
-    <% for(let product of data.products){ %>
-        <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
-    <% } %>
-</select>
-<button id="seeprice">see purchase price history</button>
-<h1 id="err"></h1>
-<table border="1" style="display: none;" id="history_table">
-    <thead>
-        <th>vendor name</th>
-        <th>product name</th>
-        <th>purchase price</th>
-        <th>purchase date</th>
-    </thead>
+    <div class="input_select">
+        <select class="selected" name="vendor_id" id="vendorlist">
+            <option value="" selected>select vendor</option>
+            <% for(let vendor of data.vendors){ %>
+                <option value="<%= vendor.vendor_id  %>"><%=vendor.vendor_name%></option>
+            <% } %>
+        </select>
     
-</table>
+        <select class="selected" name="product_id" id="select_product">
+            <option value="" selected>select product</option>
+            <% for(let product of data.products){ %>
+                <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
+            <% } %>
+        </select>
+    </div>
+
+    
+          <div id="formsection">
+            <div class="form-header">
+                <span>Product Name</span>
+                <span>Stock</span>
+                <span>Ordered</span>
+                <span>Received</span>
+                <span>Rate</span>
+                <span>Balance</span>
+                <span>Total</span>
+                <span>Status</span>
+                <span>VAT</span>
+                <span>Remark</span>
+                <span>Action</span>
+              </div>
+          </div>
+      
+    <div class="cal_total">
+        
+        <div class="cal">
+            <label for="total">Total Amount:</label>
+            <input readonly id="total_amt" id="total" value=0.00></input>
+        </div>
+        <div class="cal">
+            <label for="vatable">Vatable Amount:</label>
+            <input readonly id="total_vatable_amt" value=0.00></input>
+        </div>
+        <div class="cal">
+            <label for="vatamt">Vat Amount:</label>
+            <input readonly id="vatamt" value=0.00></input>
+        </div>
+        <div class="cal">
+            <label for="amt_after_vat">Total Amount after Vat:</label>
+            <input readonly id="total_amt_after_vat" value=0.00></input>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="submit_btn padding">
+        <button type="button" id="savepurchase">Save</button>
+    </div>
+
+
+    <div class="input_select">
+        <select class="selected" name="product_id" id="see_product_price">
+            <option value="" selected>select product</option>
+            <% for(let product of data.products){ %>
+                <option value="<%=product.product_id%>" class="addproduct"><%=product.product_name%></option>
+            <% } %>
+        </select>
+        
+        <button class="selected" id="seeprice">see purchase price history</button>
+    </div>
+
+    <h1 id="err"></h1>
+
+    <div class="table_div">
+
+        <table border="1" id="history_table">
+            <thead>
+                <tr>
+                    <th>vendor name</th>
+                    <th>product name</th>
+                    <th>purchase price</th>
+                    <th>purchase date</th>
+                </tr>
+            </thead>
+        
+        </table>
+    </div>
+
+    </div>
+
+    
+
 </body>
 <script src="/addpurchase.js"></script>
 </html>

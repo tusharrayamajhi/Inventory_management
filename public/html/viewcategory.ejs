@@ -23,9 +23,9 @@
             </tr>
         </thead>
         <tbody>
-        <%for(let category of data){%>
+        <%data.forEach((category,index)=>{%>
         <tr>
-            
+            <td><%=index + 1%></td>
             <td><%= category.category_name%></td>
             <td><%= category.category_des%></td>
             <td>
@@ -39,11 +39,18 @@
                 </form>
             </td>
         </tr>
-        <%}%>
+        <%})%>
         </tbody>
     </table>
     </div>
 </div>
+
+<div class="back_btn">
+    <a href="/category/add">Add New Catagory</a>
+</div>
+
+<footer></footer>
+
 </body>
 <script src="/viewcategory.js"></script>
 </html>

@@ -20,10 +20,19 @@
   grid-column: 1/3;
 }
 
+.submit_btn.btn_viewuser {
+  grid-column: auto;
+}
+
 .three_col {
   grid-column: unset;
 }
 
 .submit_btn button {
+  padding: 0.5rem 1rem;
+}
+
+
+.submit_btn.padding button {
   padding: 0.5rem 7.75rem;
 }

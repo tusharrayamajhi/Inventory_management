@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="/table.css">
+    <link rel="stylesheet" href="/purchase.css">
+    <link rel="stylesheet" href="/common.css">
   </head>
   <body>
     <%- include("./navbar.ejs") %>
@@ -14,7 +16,7 @@
       <h2 class="table_heading">Purchase List</h2>
 
       <div class="table_div">
-        <table border="2">
+        <table border="1">
           <thead>
             <tr>
               <th>Vendor Name</th>
@@ -57,12 +59,17 @@
       </div>
     </div>
 
+    
+    <div class="back_btn">
+      <a href="/purchase/add">Add New Purchases</a>
+    </div>
+
     <div class="container">
 
       <h2 class="table_heading">Purchases Summary</h2>
     
       <div class="table_div">
-        <table border="2">
+        <table border="1">
           <thead>
             <tr>
               <th>Vendor Name</th>
@@ -91,8 +98,8 @@
               <td><%= group.total %></td>
               <td>
                 <a
+                  class="btn btn-edit"
                   href="/purchase/edit?purchase_code=<%= group.purchase_code %>"
-                  style="text-decoration: none; color: blue"
                   >Edit</a
                 >
                 <form class="deletepurchase" style="display: inline">
@@ -101,13 +108,7 @@
                     name="purchase_code"
                     value="<%= group.purchase_code %>"
                   />
-                  <button
-                    type="submit"
-                    style="text-decoration: none; color: red"
-                    onclick="return confirm('Are you sure you want to delete this purchase?')"
-                  >
-                    Delete
-                  </button>
+                  
                 </form>
               </td>
             </tr>
@@ -115,12 +116,16 @@
           </tbody>
         </table>
       </div>
+      </div>
     
 
-    <div>
-      <h1>Export to Excel</h1>
-      <form id="exportToExcel">
-        <select name="vendor_id" id="export">
+    <div class="container">
+
+      <h2 class="create_heading">Export to Excel</h2>
+
+      <form id="exportToExcel" class="input_select">
+        
+        <select class="selected" name="vendor_id" id="export">
           <option value="">Select Vendor</option>
           <%
             const uniqueVendors = [];
@@ -136,12 +141,20 @@
           <option value="<%= purchase.vendor_id %>"><%= purchase.vendor_name %></option>
           <% }) %>
         </select>
-        <input type="date" name="from" id="date" required />
+
+        <input class="selected" type="date" name="from" id="date" required />
+
         <span>TO</span>
-        <input type="date" name="to" id="date" required />
-        <button type="submit">Save to Excel</button>
+
+        <input class="selected" type="date" name="to" id="date" required />
+
+        
+        <button class="selected btn" type="submit">Save to Excel</button>
       </form>
     </div>
+    
+    <footer></footer>
+    
   </body>
   <script src="/viewpurchase.js"></script>
 </html>

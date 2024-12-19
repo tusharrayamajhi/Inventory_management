@@ -101,7 +101,7 @@
                 <label for="user_image">Change Image</label>
 								<div class="img_active">
 									<input type="file" id="user_image" name="image" />
-									<img src="<%= data.result.user_image %>" alt="user image" id="view_user_image" style="width: 40px; height: 40px;  ">
+									<img src="<%= data.result.user_image %>" alt="user image" id="view_user_image" style="width: 40px; height: 40px; border-radius: 50%; ">
 								</div>
             </div>
 
@@ -110,7 +110,15 @@
 				<button type="submit">Update User</button>
 			</div>
         </form>
-   
+   </div>
+
+	 
+	<div class="back_btn">
+		<a href="/user/view">Back to User List</a>
+	</div>
+
+	<footer></footer>
+
 </body>
 <script src="/edituser.js"></script>
 </html>

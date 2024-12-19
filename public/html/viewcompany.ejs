@@ -68,12 +68,28 @@
           <% }); %>
         </tbody>
       </table>
-      <% for(let i =1; i<= data.total_page; i++){ %>
-        <a href="?page=<%= i %>"><%= i %></a>
-      <% } %>
+      <% if(data.total_page != 1) {%>
+        <div class="footer">
+          
+    
+          <ul>
+            <% for(let i =1; i<= data.total_page; i++){ %>
+            <li>
+                <a href="?page=<%= i %>"><%= i %></a>
+              </li>
+              <% } %>
+          </ul>
+        </div>
+        <%}%>
       </div>
   </div>
      
+  <div class="back_btn">
+    <a href="/company/add">Add New Company</a>
+  </div>
+
+  <footer></footer>
+  
 </body>
 <script src="/viewCompany.js"></script>
 </html>

@@ -16,14 +16,16 @@
     <table border="1">
         <thead>
             <tr>
+                <th>SN</th>
                 <th>Unit Name</th>
                 <th>short_name</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-    <%for(let brand of data){%>
+     <%data.forEach((brand,index)=>{%>
         <tr>
+            <td><%= index + 1%></td>
             <td><%= brand.brand_name%></td>
             <td><%= brand.brand_desc%></td>
             <td>
@@ -38,11 +40,18 @@
                 </form>
             </td>
         </tr>
-            <%}%>
+            <%})%>
         </tbody>
         </table>
     </div>
     </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/brand/add" style="text-decoration: none; padding: 10px 20px; background-color: green; color: white; border: none; border-radius: 5px;">Add New Brand</a>
+    </div>
+    
+    <footer></footer>
+    
 </body>
 <script src="/viewbrand.js"></script>
 </html>

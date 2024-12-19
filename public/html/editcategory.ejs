@@ -4,23 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Unit</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
+    <div class="container">
 
-    <h1>Edit category</h1>
-    <form id="editcategory">
-        <input type="hidden" name="category_id" value="<%= data.category_id%>">
-        <label for="category_name">category name:</label>
-        <input type="text" id="category_name" name="category_name" value="<%= data.category_name%>" required>
-        <br><br>
+        <h2 class="create_heading">Edit category</h2>
+    
+    <form id="editcategory" class="style_form">
+
+        <!-- Category Name -->
+        <div class="input_field">
+            <input type="hidden" name="category_id" value="<%= data.category_id%>">
+            <label for="category_name">Category Name</label>
+            <input type="text" id="category_name" name="category_name" value="<%= data.category_name%>" required>
+        </div>
         
-        <label for="category_description">category description:</label>
-        <textarea id="category_description" name="category_des" required><%= data.category_des%></textarea>
-        <br><br>
-        
-        <button type="submit">Update Unit</button>
+        <div class="input_field">
+            <label for="category_description">Category Description</label>
+            <textarea class="desc_textarea" id="category_description" name="category_des" required><%= data.category_des%></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit_btn padding">
+            <button type="submit">Update</button>
+        </div>
+
     </form>
+    </div>
+
+
+    <div class="back_btn">
+        <a href="/category/view">Back to Category List</a>
+    </div>
+
+    <footer></footer>
+    
+
 </body>
 <script src="/editcategory.js"></script>
 </html>

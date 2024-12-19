@@ -153,4 +153,24 @@ img{
 }
 
 
+/* Back button */
+.back_btn {
+  text-align: center;
+  margin-top: 20px;
+}
 
+.back_btn a {
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+
+footer {
+  height: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+}

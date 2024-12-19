@@ -1,4 +1,4 @@
-
+drop database inventory;
 
 create database inventory;
 use inventory;
@@ -6,7 +6,7 @@ use inventory;
 CREATE TABLE companies(
 		company_id int primary key auto_increment,
         company_name varchar(100) not null,
-         company_code varchar(50) not null unique;
+         company_code varchar(50) not null unique,
         registration_no varchar(100) not null,
         phone char(10) not null,
         email varchar(100) not null,
@@ -28,7 +28,6 @@ CREATE TABLE companies(
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp on update current_timestamp
         );
-        select * from companies;
 CREATE TABLE users (
 		user_id INT NOT NULL PRIMARY KEY auto_increment,
         name VARCHAR(100) NOT NULL,
@@ -140,7 +139,7 @@ CREATE TABLE purchases(
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         foreign key(user) references users(user_id),
         foreign key(vendor) references users(user_id),
-        foreign key(product) references products(product_id),
+        foreign key(product) references products(product_id)
         
     );
    

@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users Table</title>
   <link rel="stylesheet" href="/table.css">
- 
+  <link rel="stylesheet" href="/common.css">
+  <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
   <%- include("./navbar.ejs") %>
@@ -36,7 +37,7 @@
           <% data.result.forEach((users,index) => { %>
             <tr>
               <td><%= index + 1 %></td>
-              <td><img src="<%= users.user_image %>" style="width: 50px; height: 50px;" alt="user profile"></td>
+              <td><img src="<%= users.user_image %>" style="width: 50px; height: 50px; border-radius: 50%;" alt="user profile"></td>
               <td><%= users.name %></td>
               <td><%= users.address || 'N/A' %></td>
               <td><%= users.phone || 'N/A' %></td>
@@ -59,8 +60,9 @@
 
       </table>
     </div>
-
+ 
     <!-- table column change button -->
+     <% if(data.total_page != 1) {%>
     <div class="footer">
       
 
@@ -72,27 +74,33 @@
           <% } %>
       </ul>
     </div>
+    <%}%>
     
+  </div>
 
-</div>
+  <div class="back_btn">
+    <a href="/usesr/add">Add New User</a>
+  </div>
 
-</body>
-<script src="/viewuser.js"></script>
   
+  <div class="container">
 
-    <h2>Change Password</h2>
-    <div>
+  <h2 class="table_heading">Change Password</h2>
       <!-- Change Password Form -->
-      <section class="change-password">
-        <form id="changepassword">
-          <select name="user_id" id="user_id">
+      <!-- <section class="change-password"> -->
+        <form id="changepassword" class="style_form">
+
+          <div class="form-group input_field">
+          <label for="user_id">User Name</label>
+          <select class="selected" name="user_id" id="user_id">
             <option value="" selected>select user</option>
             <% data.result.forEach((users) => { %>
             <option value="<%= users.user_id%>"><%= users.name%>:-<span><%= users.email%></span></option>
             <% }) %>
           </select>
           </div>
-          <div class="form-group">
+
+          <div class="form-group input_field">
             <label for="new_password">New Password:</label>
             <input
               type="password"
@@ -102,7 +110,8 @@
               required
             />
           </div>
-          <div class="form-group">
+
+          <div class="form-group input_field">
             <label for="confirm_password">Confirm New Password:</label>
             <input
               type="password"
@@ -112,10 +121,19 @@
               required
             />
           </div>
-          <input type="submit" value="Change Password" />
+
+          <!-- button -->
+          <div class="input_field submit_btn btn_viewuser">
+            <button type="submit">Change Password</button>
+          </div>
+
+          
         </form>
-      </section>
-    </div>
+      <!-- </section> -->
+      </div>
+
+      <footer></footer>
+      
   </body>
   <script src="/viewuser.js"></script>
 </html>

@@ -19,6 +19,7 @@
 			padding: 0;
 			width: 100%;
 			text-align: center;
+      height: 30px;
     }
   </style>
 </head>
@@ -132,9 +133,9 @@
 
       <div class="input_field">
         <label for="company_logo">Company logo url</label><br>
-        <div class="active">
+        <div class="img_active">
           <input type="file" id="company_logo" name="image">
-          <img src="<%= data.company_logo %>" alt="company_logo" id="view_company_image" style="width: 100px; height: 100px; ">
+          <img src="<%= data.company_logo %>" alt="company_logo" id="view_company_image" style="width: 40px; height: 40px; ">
         </div>
       </div>
 
@@ -146,6 +147,13 @@
     </form>
   </div>
 
+  <div class="back_btn">
+    <a href="/category/view">Back to Category List</a>
+  </div>
+
+  <footer>
+    
+  </footer>
 </body>
 <script src="/editcompany.js"></script>
 </html>

@@ -33,6 +33,7 @@ body {
 }
 
 .table_div {
+  width: 100%;
   overflow-x: auto;
   border: 1px solid #7d4af4;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -40,17 +41,21 @@ body {
 
 table {
   width: 100%;
-  border-collapse: collapse; 
+  border-collapse: collapse;
 }
 
-th, td {
+th { 
   padding: 0.5rem;
   border: 1px solid #ddd;
   text-align: left;
+  background-color: #f4f4f4;
 }
 
-th {
-  background-color: #f4f4f4;
+td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.75rem;
 }
 
 .btn {
@@ -115,4 +120,23 @@ li>button {
   display: none;
 }
 
+/* Back button */
+.back_btn {
+  text-align: center;
+  margin-top: 20px;
+}
 
+.back_btn a {
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+footer {
+  height: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+}

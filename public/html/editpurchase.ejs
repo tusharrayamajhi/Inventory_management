@@ -4,19 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Purchases</title>
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
+
+    <link rel="stylesheet" href="/purchase.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
 
     <!-- Vendor and Product Information at the Top (common for all purchases) -->
-    <div>
-        <h2>Vendor: <%= data[0].vendor_name %> (ID: <%= data[0].vendor_id %>)</h2>
-    </div>
+    <div class="container">
+
+        <h2 class="create_heading">Vendor: <%= data[0].vendor_name %> (ID: <%= data[0].vendor_id %>)</h2>
+    
 
     <!-- Loop through the data to create a form for each purchase -->
     <% data.forEach((purchase) => { %>
         
-        <form class="editpurchase">
+        <form class="editpurchase" >
             <input type="hidden" class="purchase_id" value="<%=purchase.purchase_id%>" name="product_id">
             <input type="hidden" class="product_id" value="<%=purchase.product_id%>" name="product_id">
             <input type="text" class="productName" name="productName" value="<%=purchase.product_name%>" placeholder="Product Name" readonly required>
@@ -34,19 +39,44 @@
             </select>
             <input type="text" step="0.01" class="vat" name="vat" placeholder="VAT" value="<%=purchase.vat_rate%>%" required readonly>
             <textarea class="remark" name="remark" placeholder="Remark"><%=purchase.remarks%></textarea>
+            
+            
         </form>
         <% }); %>
-        <div>
-            <label for="total">total amount</label><br>
-            <input readonly id="total_amt" value=0></input>
-            <label for="total_vatable_amt">vatable amount</label>
-            <input readonly id="total_vatable_amt" value=0></input>
-            <label for="vatamt">vat amount</label>
-            <input readonly id="vatamt" value=0></input>
-            <label for="amt_after_vat">total amount after vat</label>
-            <input readonly id="total_amt_after_vat" value=0></input>  
+
+        <div class="cal_total">
+
+            <div class="cal">
+                <label for="total">Total Amount:</label>
+                <input readonly id="total_amt" id="total" value=0.00></input>
+            </div>
+            <div class="cal">
+                <label for="total_vatable_amt">Vatable Amount:</label>
+                <input readonly id="total_vatable_amt" value=0.00></input>
+            </div>
+            <div class="cal">
+                <label for="vatamt">Vat Amount:</label>
+                <input readonly id="vatamt" value=0.00></input>
+            </div>
+            <div class="cal">
+                <label for="amt_after_vat">Total Amount after Vat:</label>
+                <input readonly id="total_amt_after_vat" value=0.00></input>
+            </div>
+
         </div>
-        <button type="button" class="update">update</button>
+
+        <div class="submit_btn padding">
+            <button type="button" class="update">Update</button>
+        </div>
+
+    </div>
+
+    
+    <div class="back_btn">
+        <a href="/purchase/view">Back to Purchase List</a>
+    </div>
+
+    <footer></footer>
 
 </body>
 <script src="/editpurchase.js"></script>
