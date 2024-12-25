@@ -4,17 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User and Company Details</title>
+  <link rel="stylesheet" href="/common.css">
   <link rel="stylesheet" href="/setting.css">
 </head>
 <body>
 
   <%- include("./navbar.ejs") %>
 
-    <h1>User and Company Details</h1>
+  <div class="container">
+  <h1>User and Company Details</h1>
 
   <!-- User Details -->
   <section>
-    <h2>User Details</h2>
+    <h2 class="create_heading">User Details</h2>
     
     <div class="info">
       <div>
@@ -56,7 +58,7 @@
 
   <!-- Company Details -->
   <section>
-    <h2>Company Details</h2>
+    <h2 class="create_heading">Company Details</h2>
     <div class="info">
       <div>
         <label>Company Name:</label>
@@ -98,8 +100,10 @@
       </div>
     </div>
     <div class="info">
-      <label>Website:</label>
-      <p><a href="<%= data.company.website %>" target="_blank"><%= data.company.website %></a></p>
+      <div> 
+        <label>Website:</label>
+        <p><a href="<%= data.company.website %>" target="_blank"><%= data.company.website %></a></p>
+      </div>
     </div>
     <div class="image">
       <label>Company Logo:</label>
@@ -109,7 +113,7 @@
 
   <!-- Change Password Form -->
   <section class="change-password">
-    <h2>Change Password</h2>
+    <h2 class="create_heading">Change Password</h2>
     <form id="changepassword">
         <input type="hidden" id="user_id" name="user_id" value="<%= data.users.user_id %>">
       <div class="form-group">
@@ -127,6 +131,9 @@
       <input type="submit" value="Change Password">
     </form>
   </section>
+</div>
+  <footer></footer>
+  
 </body>
 <script src="/setting.js"></script>
 </html>

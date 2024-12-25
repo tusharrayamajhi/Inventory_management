@@ -15,24 +15,6 @@ body {
   max-height: 100vh;
 }
 
-.container {
-  margin: 3.75rem 2rem 1rem 2rem;
-  width: 95%;
-  height: auto;
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.create_heading {
-  padding-bottom: 1rem;
-}
 
 .container .input_select {
   width: 100%;
@@ -107,4 +89,28 @@ hr {
 .formsection table tr td input {
   width: 100px;
   height: 20px;
+}
+
+
+#formsection {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-header,
+.forms {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr); /* 11 columns for the headings and inputs */
+  gap: 10px;
+  align-items: center;
+}
+
+.form-header {
+  font-weight: bold;
+  background-color: #e6e6e6;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
 }

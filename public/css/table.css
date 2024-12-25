@@ -37,6 +37,7 @@ body {
   overflow-x: auto;
   border: 1px solid #7d4af4;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
 }
 
 table {
@@ -85,7 +86,7 @@ td {
   align-items: center;
 }
 
-ul {
+.change_table {
   list-style: none;
   display: inline-flex;
   justify-content: space-around;
@@ -139,4 +140,8 @@ footer {
   height: 2rem;
   width: 100%;
   margin-top: 1rem;
+}
+
+a {
+  text-decoration: none;
 }

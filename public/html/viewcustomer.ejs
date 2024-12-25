@@ -29,7 +29,6 @@
             </tr>
         </thead>
         <tbody>
-    <!-- <%- include("./navbar.ejs") %> -->
 
             <% data.result.forEach((customer,index)=>{ %>
                 <tr>
@@ -61,7 +60,7 @@
     
   
         <% if(data.total_page != 1){ %>
-        <ul>
+        <ul class="change_table">
             <% for(let i =1; i<= data.total_page; i++){ %>
                 <li>
                 <a href="?page=<%= i %>"><%= i %></a>

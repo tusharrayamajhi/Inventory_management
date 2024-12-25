@@ -1,41 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    header {
-      background: #0073e6;
-      color: white;
-      padding: 10px 15px;
-      text-align: center;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    section {
-      margin: 20px auto;
-      padding: 20px;
-      max-width: 600px;
-      background: white;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+/* Resetting default styling and setting font-family */
+*, 
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+    
+body {
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  max-height: 100vh;
+  background-color: rgb(216, 216, 216);
+}
+   
+h1, h2 {
+  text-align: center;
+}
 
-    }
+section {
+  margin: 1.25rem auto;
+  padding: 1.25rem;
+  width: 80%;
+  /* background: red; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 0.5rem;
+
+}
+
     .info {
+      /* background-color: yellow; */
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.5rem;
       margin-bottom: 15px;
     }
+
     .info div {
       flex: 1;
     }
     label {
       font-weight: bold;
       display: block;
+    }
+
+    .info p {
+      height: 2rem;
+      width: 100%;
+      border: 1px solid #aaa;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+      padding:  0.5rem 1rem;
     }
     .image {
       text-align: center;
@@ -55,16 +73,28 @@
       width: 100%;
       padding: 10px;
       margin-top: 5px;
-      border: 1px solid #ddd;
+      border: 1px solid #aaa;
       border-radius: 5px;
       font-size: 1rem;
     }
     input[type="submit"] {
-      background: #0073e6;
+      background-color: #7d4af4;
       color: white;
       cursor: pointer;
-      border: none;
+      border:  1.5px solid #4200dc;
+      border-radius: 0.5rem;
+      font-size: 1.25rem;
     }
     input[type="submit"]:hover {
-      background: #005bb5;
+      background-color: #4200dc;
     }
+  
+    a {
+      text-decoration: none;
+    }
+    
+footer {
+  height: 2rem;
+  width: 100%;
+  margin-top: 1rem;
+}

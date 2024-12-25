@@ -13,15 +13,16 @@ body {
   font-family: "Montserrat", sans-serif;
   width: 100%;
   max-height: 100vh;
+  background-color: rgb(216, 216, 216);
 }
 
 .container {
-  margin: 3.75rem 2rem 1rem 2rem;
+  margin: 5.75rem 2rem 1rem 2rem;
   width: 95%;
   height: auto;
   background-color: #fff;
   padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 
   display: flex;
@@ -52,10 +53,15 @@ body {
 .input_field {
   height: 100%;
   width: 100%;
-  padding: 0 0.5rem;
+  /* padding: 0 0.5rem; */
   font-size: 1rem;
   font-weight: 600;
   line-height: 1rem;
+}
+
+.margin_label {
+  margin-top: 1rem;
+  display: block;
 }
 
 .input_field input {
@@ -64,7 +70,7 @@ body {
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
   border: 1px solid #7d4af4;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   line-height: 2rem; /*no effect */
 }
@@ -75,7 +81,7 @@ body {
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
   border: 1px solid #7d4af4;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
 }
 
@@ -90,7 +96,7 @@ body {
   border: 1px solid #7d4af4;
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 500;
 }
@@ -102,7 +108,7 @@ body {
   border: 1px solid #7d4af4;
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   font-weight: 500;
 
@@ -116,7 +122,7 @@ body {
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
   border: 1px solid #7d4af4;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   line-height: 1.5rem;
 }
@@ -129,7 +135,7 @@ body {
   color: #fff;
   padding: 0.5rem 1rem;
   border:  1.5px solid #4200dc;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1.25rem;
   margin-top: 1.5rem;
 }
@@ -174,3 +180,8 @@ footer {
   width: 100%;
   margin-top: 1rem;
 }
+
+a {
+  text-decoration: none;
+}
+

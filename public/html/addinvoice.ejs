@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="/common2.css">
     
-    <link rel="stylesheet" href="/purchase.css">
+    <link rel="stylesheet" href="/addpurchase.css">
 </head>
 <body>
     <%- include("./navbar.ejs") %>
@@ -35,35 +35,24 @@
         </div>
 
 
-        <div class="table_div">
-
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>product name</th>
-                        <th>current stock</th>
-                        <th>order qnt</th>
-                        <th>received qnt</th>
-                        <th>buyung price</th>
-                        <th>remaining</th>
-                        <th>total</th>
-                        <th>status</th>
-                        <th>vat</th>
-                        <th>remarks</th>
-                        <th>action</th>
-                    </tr>
-                </thead>
-                <tbody>
                     <div id="formsection">
-                
+                        <div class="form-header">
+                            <span>Product Name</span>
+                            <span>Current Stock</span>
+                            <span>Quantity Ordered</span>
+                            <span>Quantity Received</span>
+                            <span>Buying Price</span>
+                            <span>Remaining</span>
+                            <span>Total</span>
+                            <span>Status</span>
+                            <span>VAT</span>
+                            <span>Remarks</span>
+                            <span>Action</span>
+                          </div>
                     </div>
-                </tbody>
-            </table>
-        </div>
 
 
         <div class="cal_total">
-        <div>
             <div class="cal">
                 <label for="total">Total Amount:</label>
                 <input readonly id="total_amt" id="total" value=0.00></input>
@@ -91,7 +80,6 @@
                 <button type="button" id="save_and_print_Bill">save and print bill</button>
             </div>
         </div>
-    </div>
 
 
 </div>

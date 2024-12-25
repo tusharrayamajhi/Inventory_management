@@ -1,17 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
-body{
-    background-color: rgb(216, 216, 216);
-
+/* Resetting default styling and setting font-family */
+*, 
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+body {
+  font-family: "Montserrat", sans-serif;
+  width: 100%;
+  max-height: 100vh;
+  background-color: rgb(216, 216, 216);
+}
+
 header{
+    background-color: #7d4af4;
+    color: #ffffff;
     width: 100%;
-    height: 50px;
+    height: 60px;
     border-bottom: 2px solid black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 2px;
+
+    position: fixed;
+    top: 0;
 }
 .logo_section{
     height: 100%;
@@ -20,8 +38,10 @@ header{
     flex-direction: row;
     justify-content: start;
     align-items: center;
+    gap: 1rem;
+    flex: 1;
 }
-.logo_section > div{
+.logo_section .bar{
    
     display: flex;
     flex-direction: row;
@@ -30,9 +50,11 @@ header{
     margin-left: 20px;
 }
 .bar{
-    font-size: x-large;
+    font-size: 1.5rem;
+    opacity: 0.75;
+    cursor: pointer;
 }
-.logo > img{
+img{
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -46,6 +68,8 @@ header{
     flex-direction: row;
     justify-content: end;
     align-items: center;
+    gap: 1rem;
+    flex: 1;
 }
 
 .pro_pic{
@@ -61,11 +85,14 @@ header{
 .pro_pic:hover{
     cursor: pointer;
 }
+
 .profile_option{
     display: none;
     position:relative;
-    left: -40px;
-    width: 100px;
+    left: -140px;
+    top: 10px;
+    width: 200px;
+    height: 100px;
     background-color: white;
     flex-direction: column;
     justify-content: center;
@@ -74,64 +101,122 @@ header{
 }
 
 .profile_option > a{
-    padding:10px 5px 10px 5px;
+    padding:1rem 2rem;
 }
+
 .profile_option > a:hover{
     background-color: rgb(24, 68, 180);
     color: white;
     border-radius: 5px;
 }
-.card_sections{
-    width: 100%;
-    height: 200px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center
-}
-.card{
-    width: 150px;
-    height: 90px;
-    border: 1px solid black;
-    border-radius: 20px;
-    background: #cfcdcd;
-}
-.card_title{
-    width: 100%;
-    height: 50%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    font-size: x-large;
-}
-.card_btm{
-    width: 100%;
-    height: 50%;
-    display: flex;
-    flex-direction: row;
-}
-.card_logo{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.card_logo:hover{
-    cursor: pointer;
-    color: white;
-}
- a{
-    text-decoration: none;
-    color: #000;
- }
-.add:hover{
-    background-color: rgb(24, 68, 180);
-    border-bottom-left-radius: 20px;
-}
-.see:hover{
-    background-color: rgb(46, 194, 71);
-    border-bottom-right-radius: 20px;
 
+
+/* sidebar menu */
+.sidebar_menu {
+    background-color: #7d4af4;
+    height: 100vh;
+    width: 15.645rem;
+    overflow-y: hidden; 
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: -300px;
+
+    display: flex;
+    flex-direction: column;
+    transition: left 0.3s ease;
+}
+
+.sidebar_menu .sidebar_logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    
+    padding: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar_menu .sidebar_logo a {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sidebar_menu .sidebar_logo i {
+    font-size: 1.25rem;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: all 0.1s linear;
+}
+
+.sidebar_menu .menu_list i{
+    font-size: 1rem;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: all 0.1s linear;
+}
+
+.sidebar_menu .menu_list ul li {
+    margin: 0.5rem 1rem;
+    list-style: none;
+    padding: 0.5rem 0.5rem;
+}
+
+.sidebar_menu .menu_list nav a {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 500;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+nav a .arrow_btn{
+    margin-left: auto;
+}
+
+
+.features {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.features a {
+    opacity: 0.75;
+}
+
+.up {
+    display: none;
+}
+
+/* hover styleing */
+.bar:hover {
+    font-size: 2rem;
+    opacity: 1;
+}
+.sidebar_menu .sidebar_logo i:hover {
+    font-size: 1.5rem;
+    opacity: 1;
+}
+
+.sidebar_menu .menu_list i:hover {
+    font-size: 1.5rem;
+    opacity: 1;
+}
+
+.sidebar_menu .menu_list ul li:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+
+}
+
+
+.features a:hover {
+    opacity: 1;
 }

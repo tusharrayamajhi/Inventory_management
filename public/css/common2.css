@@ -11,7 +11,7 @@
   padding: 0.5rem 1rem;
   margin-top: 0.5rem;
   border: 1px solid #7d4af4;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-size: 1rem;
   line-height: 1.5rem;
 }
@@ -35,4 +35,15 @@
 
 .submit_btn.padding button {
   padding: 0.5rem 7.75rem;
+}
+
+
+.to_span {
+  width: 100%;
+  margin-top: .5rem;
+}
+
+.submit_btn.excel {
+  margin: auto;
+  width: 30%;
 }

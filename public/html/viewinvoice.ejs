@@ -15,29 +15,35 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="stylesheet" href="/table.css">
+    <link rel="stylesheet" href="/common.css">
+    <link rel="stylesheet" href="/common2.css">
   </head>
-  <body class="bg-gray-100 p-4">
+  <body>
     <%- include("./navbar.ejs") %>
 
-    <div class="container mx-auto">
-      <h1 class="text-2xl font-bold mb-4">Invoices</h1>
+    <div class="container">
+      <h1 class="table_heading">Invoices</h1>
+
+      <div class="submit_btn">
       <button type="button" id="export_all_to_excel">export to excel</button>
-      <table
-        class="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md"
-      >
+      </div><br>
+
+      <div class="table_div">
+      <table border="1">
         <thead>
-          <tr class="bg-gray-200 text-left">
-            <th class="border border-gray-300 px-4 py-2">SN</th>
-            <th class="border border-gray-300 px-4 py-2">created by</th>
-            <th class="border border-gray-300 px-4 py-2">sells code</th>
-            <th class="border border-gray-300 px-4 py-2">Customer Name</th>
-            <th class="border border-gray-300 px-4 py-2">Product Name</th>
-            <th class="border border-gray-300 px-4 py-2">Quantity</th>
-            <th class="border border-gray-300 px-4 py-2">sells by</th>
-            <th class="border border-gray-300 px-4 py-2">Rate</th>
-            <th class="border border-gray-300 px-4 py-2">Total</th>
-            <th class="border border-gray-300 px-4 py-2">Payment</th>
-            <th class="border border-gray-300 px-4 py-2">Sales Date</th>
+          <tr>
+            <th >SN</th>
+            <th >created by</th>
+            <th >sells code</th>
+            <th >Customer Name</th>
+            <th >Product Name</th>
+            <th >Quantity</th>
+            <th >sells by</th>
+            <th >Rate</th>
+            <th >Total</th>
+            <th >Payment</th>
+            <th >Sales Date</th>
           </tr>
         </thead>
         <tbody>
@@ -74,8 +80,10 @@
           <% }); %>
         </tbody>
       </table>
+    </div>
 
-      <h1>sells Summary</h1>
+      <h1 class="table_heading">sells Summary</h1>
+      <div class="table_div">
       <table border="1">
         <thead>
           <tr>
@@ -136,10 +144,12 @@
         </tbody>
       </table>
     </div>
-    <div>
-      <h1>export to excel customer</h1>
-      <form id="exportToExcel">
-        <select name="customer_id" id="customer" required>
+    </div>
+    
+    <div class="container">
+      <h2 class="table_heading">export to excel customer</h2>
+      <form id="exportToExcel" style="width: 100%; text-align: center;">
+        <select class="selected" name="customer_id" id="customer" required>
           <option value="" selected>select customer</option>
           <% const uniqueCustomers = [];
           const uniqueCustomerIds = new Set();
@@ -154,16 +164,27 @@
           </option>
           <% }) %>
         </select>
-        <input type="date" name="from" id="date" required />
-        <span>TO</span>
-        <input type="date" name="to" id="date" required />
-        <button type="submit">save to excel</button>
-      </form>
-    </div>
+
+        <div class="input_field">
+          <input type="date" name="from" id="date" required />
+        </div>
+
+        <div class="input_field to_span">
+          <span>TO</span>
+        </div>
+        
+        <div class="input_field">
+          <input type="date" name="to" id="date" required />
+        </div>
+        <div class="submit_btn excel">
+          <button type="submit">save to excel</button>
+        </div>
+      </form><br>
+
 <% if(user.roles == "admin"){%>
-    <h1>export to excel seller</h1>
-    <form id="seller_excel">
-        <select name="seller_id" id="seller" required>
+    <h1 class="table_heading">export to excel seller</h1>
+    <form id="seller_excel" style="width: 100%; text-align: center;">
+        <select class="selected" name="seller_id" id="seller" required>
           <option value="" selected>select seller</option>
           <% const uniqueSeller = [];
           const uniqueSellerIds = new Set();
@@ -178,13 +199,27 @@
           </option>
           <% }) %>
         </select>
-        <input type="date" name="from" id="date" required />
-        <span>TO</span>
-        <input type="date" name="to" id="date" required />
-        <button type="submit">save to excel</button>
+
+        <div class="input_field">
+          <input type="date" name="from" id="date" required />
+        </div>
+        
+        <div class="input_field to_span">
+          <span>TO</span>
+        </div>
+        
+        <div class="input_field">
+          <input type="date" name="to" id="date" required />
+        </div>
+        
+        <div class="submit_btn excel">
+          <button type="submit">save to excel</button>
+        </div>
       </form>
     </div>
     <%}%>
+
+    <footer></footer>
       </body>
 </html>
 <script src="/viewinvoice.js"></script>
