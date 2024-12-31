@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
+  <%- include("./success.ejs") %>
+  <%- include("./errormessage.ejs") %>
+
   <%- include("./navbar.ejs") %>
 
   <div class="container">
@@ -79,7 +82,7 @@
   </div>
 
   <div class="back_btn">
-    <a href="/usesr/add">Add New User</a>
+    <a href="/user/add">Add New User</a>
   </div>
 
   
@@ -121,7 +124,7 @@
               required
             />
           </div>
-
+          <span id="err_pass"></span>
           <!-- button -->
           <div class="input_field submit_btn btn_viewuser">
             <button type="submit">Change Password</button>

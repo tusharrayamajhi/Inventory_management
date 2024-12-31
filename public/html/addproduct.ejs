@@ -16,6 +16,9 @@
   </style>
 </head>
 <body>
+  <%- include("./success.ejs") %>
+  <%- include("./errormessage.ejs") %>
+
   <%- include("./navbar.ejs") %>
 
   <div class="container">
@@ -28,6 +31,7 @@
       <div class="input_field product_name">
         <label for="product_name">Product Name</label><br>
         <input type="text" id="product_name" name="product_name" required >
+        <span id="err_name"></span>
       </div>
       
       <!-- Brand -->
@@ -39,6 +43,8 @@
             <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
           <% }); %>
         </select>
+        <span id="err_brand"></span>
+
       </div>
       
       <!-- Unit -->
@@ -50,6 +56,8 @@
             <option value="<%= unit.unit_id %>"><%= unit.unit_name %></option>
           <% }); %>
         </select>
+        <span id="err_unit"></span>
+
       </div>
       
       <!-- VAT -->
@@ -66,6 +74,8 @@
       <div class="input_field rate">
         <label for="selling_rate">Selling Rate:</label><br>
         <input type="number" id="selling_rate" name="selling_rate" step="0.01">
+        <span id="err_rate"></span>
+        
       </div>
       
       <!-- Stock -->
@@ -83,6 +93,8 @@
             <option value="<%= category.category_id %>"><%= category.category_name %></option>
           <% }); %>
         </select>
+        <span id="err_cat"></span>
+
       </div>
       
       <!-- button -->

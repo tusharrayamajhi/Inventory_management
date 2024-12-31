@@ -1,32 +1,19 @@
-// document.getElementById("addcompany").addEventListener("submit",async(e)=>{
-//     e.preventDefault()
-//     let formdata ={}
-//      new FormData(document.getElementById("addcompany")).forEach((value, key)=>formdata[key]= value)
-
-//     try{
-//         const response = await fetch("/company/add",{
-//             method:"POST",
-//             headers:{
-//                 "Content-Type":"application/json"
-//                 // "Content-Type":"multipart/form-data"
-//             },
-//             body:JSON.stringify(formdata)
-//         })
-//         const result = await response.json();
-//         console.log(result)
-//         if(response.status == 200){
-//             alert(result.message)
-//         } else{
-//             alert(result.message)
-//         }
-//     }catch(err){
-//         console.log(err)
-//         alert("something went wrong")
-//     }
-
-
-// })
-
+if (localStorage.getItem("success") != null) {
+    document.getElementById("message").innerText =localStorage.getItem("success")
+    document.getElementById("messagebox").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("messagebox").style.display = "none";
+      localStorage.removeItem("success");
+    }, 1000);
+  }
+  if (localStorage.getItem("error") != null) {
+    document.getElementById("err_message").innerText =localStorage.getItem("error")
+    document.getElementById("error_message_box").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("error_message_box").style.display = "none";
+      localStorage.removeItem("error");
+    }, 1000);
+  }
 
 document.getElementById("addcompany").addEventListener("submit", async (e) => {
     e.preventDefault();

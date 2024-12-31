@@ -55,14 +55,16 @@ module.exports = async function brand(req, res) {
       return res.end(JSON.stringify(err));
     }
     try {
+      console.log(user)
       const [result] = await connection
         .promise()
         .query(
-          "select * from brands inner join users on users.user_id = brands.user where brands.brand_name = ? AND users.company_id = ?",
-          [body.category_name, user.company]
+          "select * from brands inner join users on users.user_id = brands.user where brands.brand_name = ? and users.company_id = ?;",
+          [body.brand_name, user.company]
         );
+        console.log(result)
       if (result.length > 0) {
-        res.statusCode = 400;
+        res.statusCode = 500;
         return res.end(JSON.stringify({ message: "brand already exits" }));
       }
       const [results] = await connection
@@ -72,7 +74,7 @@ module.exports = async function brand(req, res) {
           [body.brand_name, body.brand_desc, user.id]
         );
       if (results.affectedRows == 0) {
-        res.statusCode == 400;
+        res.statusCode == 500;
         return res.end(
           JSON.stringify({ message: "cannot save data in database" })
         );

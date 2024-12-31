@@ -152,11 +152,11 @@ module.exports = async function user(req, res) {
         .promise()
         .query("select * from users where email = ?", [body.email]);
       if (result.length > 0) {
-        res.statusCode = 400;
+        res.statusCode = 500;
         return res.end(
           JSON.stringify({
             message:
-              "user already exits with given email address user different email address",
+              "user already exits",
           })
         );
       }
@@ -167,7 +167,7 @@ module.exports = async function user(req, res) {
             parseInt(body.company),
           ]);
         if (result.length == 0) {
-          res.statusCode = 404;
+          res.statusCode = 500;
           return res.end(
             JSON.stringify({
               message: "invalid company id",
@@ -180,7 +180,7 @@ module.exports = async function user(req, res) {
             parseInt(body.company),
           ]);
         if (results.length > 0) {
-          res.statusCode = 400;
+          res.statusCode = 500;
           return res.end(
             JSON.stringify({
               message: `${result[0].company_name} is already assign to other user`,
@@ -244,7 +244,7 @@ module.exports = async function user(req, res) {
       //   );
       const [results] = await connection.promise().query(query,param)
       if (results.affectedRows == 0) {
-        res.statusCode == 400;
+        res.statusCode == 500;
         return res.end(
           JSON.stringify({ message: "cannot save data in database" })
         );
@@ -476,7 +476,7 @@ module.exports = async function user(req, res) {
   } else if(req.url == "/users/changepassword" && req.method == "POST"){
     const body = await processPost(req)
     if(body.new_password != body.confirm_password){
-      res.statusCode = 400
+      res.statusCode = 500
       return res.end(JSON.stringify({message:"new password didn't match with confirm password"}))
     }
     if(!isValidPassword(body.new_password)){
@@ -488,15 +488,15 @@ module.exports = async function user(req, res) {
       const [rows] = await connection.promise().query("update users set password = ? where user_id = ? ",[hashpassword,parseInt(body.user_id)]) 
       if(rows.affectedRows > 0){
         res.statusCode = 200
-        return res.end(JSON.stringify({message:"succesfully update user"}))
+        return res.end(JSON.stringify({message:"successfully update user password"}))
       }
-      res.statusCode = 400
+      res.statusCode = 500
       return res.end(JSON.stringify({message:"something went wrong cannot update user password"}));
     }catch(err){  
       res.statusCode = 500
       return res.end(JSON.stringify({message:"internal server error"}))
     }
-    return 
+    
   }
    else {
     const ext = req.url.split(".");

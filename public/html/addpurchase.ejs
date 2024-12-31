@@ -4,53 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        /* General Styling */
-
-/* .forms {
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
-  background-color: #fff;
-  margin-bottom: 10px;
-}
-
-.forms input,
-.forms select,
-.forms textarea
-{
-  padding: 5px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  width: 90.29px;
-  height: 18.4px;
-}
-
-.forms textarea {
-  resize: none;
-}
-
-.forms button {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.forms button:hover {
-  background-color: #d32f2f;
-} */
-
-/* Responsive Styling */
-/* @media (max-width: 768px) {
-  .form-header,
-  .forms {
-    grid-template-columns: 1fr;
-  }
-} */
-
-    </style>
-    <link rel="stylesheet" href="/addpurchase.css"> 
     <link rel="stylesheet" href="/table.css">
     <link rel="stylesheet" href="/common.css">
     <link rel="stylesheet" href="/common2.css">
@@ -58,6 +11,9 @@
     <link rel="stylesheet" href="/addpurchase.css">
 </head>
 <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+    
    <%- include("./navbar.ejs") %>
 
    <div class="container">

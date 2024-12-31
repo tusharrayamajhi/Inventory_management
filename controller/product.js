@@ -62,7 +62,7 @@ module.exports = async function product(req, res) {
     };
     let have_err = false;
     if (body.product_name == '') {
-      err.err_product_name = "name is required";
+      err.err_product_name = "product name most be string";
       have_err = true;
     }
     if (body.brand == '') {

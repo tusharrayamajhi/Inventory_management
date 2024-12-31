@@ -1,3 +1,22 @@
+if (localStorage.getItem("success") != null) {
+    document.getElementById("message").innerText =localStorage.getItem("success")
+    document.getElementById("messagebox").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("messagebox").style.display = "none";
+      localStorage.removeItem("success");
+    }, 1000);
+  }
+  if (localStorage.getItem("error") != null) {
+    document.getElementById("err_message").innerText =localStorage.getItem("error")
+    document.getElementById("error_message_box").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("error_message_box").style.display = "none";
+      localStorage.removeItem("error");
+    }, 1000);
+  }
+
+
+
 document.getElementById("select_product").addEventListener("change",async()=>{
     let option = document.getElementById('select_product')
     if(document.getElementById(option.value)){
@@ -14,11 +33,13 @@ document.getElementById("select_product").addEventListener("change",async()=>{
                 method:"GET"
             })
             await formresponse.text().then(async formresult=>{
+                    console.log(formresult)
                     let form = document.createElement("form")
                     form.id = result.product_id
                     form.classList.add(`forms`)
+                    form.classList.add(`form-container`)
                     form.innerHTML = formresult
-                    document.getElementById("form_section").appendChild(form)
+                    document.getElementById("formsection").appendChild(form)
                     let newform = document.getElementById(`${result.product_id}`);
                     newform.querySelector("input[name='product_id']").value = result.product_id
                     newform.querySelector("input[name='productName']").value = result.product_name
@@ -91,6 +112,7 @@ document.getElementById("select_product").addEventListener("change",async()=>{
                      document.getElementById("total_amt_after_vat").value = total_amt + vatamt 
                 })
         }).catch(err=>{
+            console.log(err)
             throw(err)
         })
         }).catch(err=>{

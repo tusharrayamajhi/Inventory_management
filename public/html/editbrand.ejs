@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <%- include("./navbar.ejs") %>
     <div class="container">
 
@@ -20,16 +23,19 @@
                     <input type="hidden" name="brand_id" value="<%= data.brand_id%>">
                     <label class="margin_label" for="brand_name">Brand Name</label>
                     <input type="text" id="brand_name" name="brand_name" value="<%= data.brand_name%>" required>
+                    <span id="err_name"></span>
                 </div>
             
             <!-- Brand Description -->
             <div class="input_field">
                 <label class="margin_label" for="brand_desc">Brand Description</label>
                 <textarea class="desc_textarea" id="brand_desc" name="brand_desc" required><%= data.brand_desc%></textarea>
+                <span id="err_desc"></span>
+
             </div>
             <!-- Submit Button -->
         <div class="submit_btn excel">
-            <button type="submit">Update Unit</button>
+            <button type="submit">Update</button>
         </div>
         </form>
     </div>

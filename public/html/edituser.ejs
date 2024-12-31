@@ -29,35 +29,44 @@
 		</style>
 </head>
 <body>
+	<%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <%- include("./navbar.ejs") %>
 
     <div class="container">
 
-			<h2 class="create_heading">Update (user_name) details</h2>
+			<h2 class="create_heading">Update user details</h2>
 
         <form id="edituser" class="style_form">
             <!-- Name -->
             <div class="input_field">			
 				<label for="name">Name</label>
 				<input type="text" id="name" name="name" value="<%= data.result.name %>" required />
+				<span id="err_name"></span>
 			</div>
 
             <!-- Address -->
             <div class="input_field">
 				<label for="address">Address</label>
 				<input type="text" id="address" name="address" value="<%= data.result.address %>" />
+				
 			</div>
 
             <!-- Phone -->
             <div class="input_field">
 				<label for="phone">Phone</label>
 				<input type="text" id="phone" name="phone" value="<%= data.result.phone %>" maxlength="10" />
+				<span id="err_phone"></span>
+				
 			</div>
 
             <!-- Email -->
             <div class="input_field">
 				<label for="email">Email</label>
 				<input type="email" id="email" name="email" value="<%= data.result.email %>" required />
+				<span id="err_email"></span>
+				
 			</div>
             
             <!-- Roles -->
@@ -71,6 +80,7 @@
 						<option value="superadmin" <%= data.result.roles === 'superadmin' ? 'selected' : '' %>>Superadmin</option>
 					<% } %>
 				</select>
+				<span id="err_role"></span>
 			</div>
 
             <!-- company -->

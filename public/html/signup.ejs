@@ -1,36 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form id="signupDetails">
-        <label for="">name</label>
-        <input type="text" name="name" id="name">
-        
 
-        <label for="">address</label>
-        <input type="text" name="address" id="name">
-    
-        <label for="">phone</label>
-        <input type="text" name="phone" id="name">
-        
-        
-        <label for="">email</label>
-        <input type="email" name="email" id="name" >
-        
-        
-        <label for="">password</label>
-        <input type="password" name="password" id="name" >
-       
-
-        <button type="submit">submit</button>
-    </form>
-</body>
-<script src="/signup.js"></script>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -40,6 +8,9 @@
     <link rel="stylesheet" href="/signup.css" />
   </head>
   <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <!-- Login from container -->
     <div class="signup_form">
       <form id="signupDetails">

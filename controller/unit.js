@@ -58,7 +58,7 @@ module.exports = async function units(req, res) {
       error = true;
     }
     if (error) {
-      res.statusCode = 404;
+      res.statusCode = 400;
       return res.end(JSON.stringify(err));
     }
     try {
@@ -69,7 +69,7 @@ module.exports = async function units(req, res) {
           [body.unit_name, body.short_name, user.company]
         );
       if (results.length > 0) {
-        res.statusCode = 400;
+        res.statusCode = 500;
         return res.end(JSON.stringify({ message: "unit already exits" }));
       }
       const [result] = await connection
@@ -86,6 +86,7 @@ module.exports = async function units(req, res) {
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "something went wrong" }));
     } catch (err) {
+      res.statusCode = 500
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else if (req.url == "/unit/view" && req.method == "GET") {
@@ -179,6 +180,7 @@ module.exports = async function units(req, res) {
         res.statusCode = 409
         return res.end(JSON.stringify({message:"The unit cannot be deleted because it is associated with one or more products."}))
       }
+      res.statusCode = 500
       return res.end(JSON.stringify({ message: "database error", err }));
     }
   } else {

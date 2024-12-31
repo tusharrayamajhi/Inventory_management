@@ -29,9 +29,14 @@ module.exports = async function auth(req, res) {
     try {
       const body = await processPost(req);
       const result = await getUserByEmail(body.email);
+      let err ={
+        err_email:"",
+        err_password:""
+      }
       if (!result) {
         res.statusCode = 404;
-        return res.end(JSON.stringify({ message: "give email id not found" }));
+        err.err_email = "invalid email"
+        return res.end(JSON.stringify(err));
       }
       const hashpassword = crypto
         .pbkdf2Sync(body.password, process.env.salt, 1000, 64, "sha512")
@@ -39,12 +44,13 @@ module.exports = async function auth(req, res) {
       res.setHeader("Content-Type", "application/json");
       if (result.password != hashpassword) {
         res.statusCode = 404;
-        return res.end(JSON.stringify({ message: "password most be 8 digit long invlude upper and lower case without space and one special character" }));
+        err.err_password = "invalid password"
+        return res.end(JSON.stringify(err));
       }
       if (!result.roles) {
         res.statusCode = 403;
         return res.end(
-          JSON.stringify({ message: "your have not assign any roles" })
+          JSON.stringify({ message: "you have not assign any roles" })
         );
       }
       if (result.is_active == 0) {

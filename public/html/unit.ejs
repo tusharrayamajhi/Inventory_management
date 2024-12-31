@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <%- include("./navbar.ejs") %>
 
     <div class="container">
@@ -20,17 +23,20 @@
         <div class="input_field">
             <label for="name">Name</label>
             <input type="text" name="unit_name" id="name" required maxlength="100">
+            <span id="err_name"></span>
+            
         </div>
 
         <!-- Unit short name -->
         <div class="input_field">
             <label for="short_name">Short Name</label>
             <input type="text" name="short_name" id="short_name" required maxlength="100">
+            <span id="err_short_name"></span>
         </div>
 
         <!-- Submit Button -->
         <div class="submit_btn padding">
-            <button type="submit">Add Category</button>
+            <button type="submit">Add unit</button>
         </div>
     </form>
 </div>

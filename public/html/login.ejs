@@ -1,42 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>login page</h1>
-    <h1>superadmin</h1>
-    <form id="loginform1">
-        <label for="email"> email</label>
-        <input type="text" name="email" id="email" value="tusharrayamajhi@gmail.com">
-        <label for="password"> password</label>
-        <input type="password" name="password" id="password" value="tusharrayamajhi">
-        <span id="error_message"></span>
-        <button type="submit">login</button>
-    </form>
-    <h1>admin</h1>
-    <form id="loginform2">
-        <label for="email"> email</label>
-        <input type="text" name="email" id="email" value="john.doe@example.com">
-        <label for="password"> password</label>
-        <input type="password" name="password" id="password" value="tusharrayamajhi">
-        <button type="submit">login</button>
-    </form>
-    <h1>normal</h1>
-    <form id="loginform3">
-        <label for="email"> email</label>
-        <input type="text" name="email" id="email" value="alice.smith@example.com">
-        <label for="password"> password</label>
-        <input type="password" name="password" id="password" value="tusharrayamajhi">
-        <button type="submit">login</button>
-    </form>
-    <a href="/auth/signup">signup</a>
-</body>
-<script src="/login.js"></script>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,6 +7,10 @@
     <link rel="stylesheet" href="/login.css">
 </head>
 <body>
+
+  <%- include("./errormessage.ejs") %>
+
+
 
 	<div class="login_form">
 
@@ -58,18 +23,20 @@
       <div class="input_box">
         <label for="email">Email</label>
         <input class="items_input" type="email" id="email" name="email"  placeholder="Enter email address" required />
+        <span id="error_email"></span>
       </div>
 
       <!-- Paswwrod input box -->
       <div class="input_box">
           <label for="password">Password</label>
           <input class="items_input" type="password" name="password" id="password"  placeholder="Enter your password" required />
+          <span id="error_pass"></span>
           <div class="password_title">
             <a href="#">Forgot Password?</a>
           </div>
       </div>
 
-      <span id="error"></span>
+      <span id="othererror"></span>
 
        <!-- Login button -->
       <button type="submit">Log In</button>

@@ -38,6 +38,9 @@
     </style> -->
 </head>
 <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <%- include("./navbar.ejs") %>
 
     <div class="container">
@@ -50,28 +53,36 @@
                 <input type="hidden" id="id" name="id" value="<%= data.customer_id %>" required>
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" value="<%= data.customer_name %>" required>
+                <span id="err_name"></span>
             </div>
     
             
             <div class="input_field">
                 <label for="phone">Phone</label>
                 <input type="text" id="phone" name="phone" value="<%= data.customer_phone %>" required>
+                <span id="err_phone"></span>
+                
             </div>
     
             <div class="input_field">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" value="<%= data.customer_email %>" required>
+                <span id="err_email"></span>
+                
             </div>
                 
     
             <div class="input_field">
                 <label for="address">Address</label>
                 <textarea class="desc_textarea" id="address" name="address" rows="3" required><%= data.customer_address %></textarea>
+                
             </div>
             
             <div class="input_field">
                 <label for="pan">PAN:</label>
                 <input type="text" id="pan" name="pan" value="<%= data.customer_pan %>" required>
+                <span id="err_pan"></span>
+
             </div>
     
             <!-- Submit Button -->

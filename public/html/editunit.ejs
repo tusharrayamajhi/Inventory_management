@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="/common2.css">
 </head>
 <body>
+    <%- include("./success.ejs") %>
+    <%- include("./errormessage.ejs") %>
+
     <%- include("./navbar.ejs") %>
 
     <div class="container">
@@ -19,11 +22,13 @@
             <input type="hidden" name="unit_id" value="<%= data.unit_id %>">
             <label for="unit_name">Unit Name:</label>
             <input type="text" id="unit_name" name="unit_name" value="<%= data.unit_name %>" required>
+            <span id="err_name"></span>
         </div>
         
         <div class="input_field">
             <label for="unit_description">Unit short name:</label>
             <textarea class="desc_textarea" id="unit_description" name="short_name" required><%= data.short_name %></textarea>
+            <span id="err_desc"></span>
         </div>
         
         <!-- Submit Button -->

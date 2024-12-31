@@ -58,11 +58,11 @@ module.exports = async function category(req, res) {
       const [result] = await connection
         .promise()
         .query(
-          "select * from categorys where (category_name = ?) AND user = ?",
-          [body.category_name, user.id]
+          "select * from categorys inner join users on users.user_id = categorys.user where categorys.category_name = ? AND users.company_id = ?",
+          [body.category_name, user.company]
         );
       if (result.length > 0) {
-        res.statusCode = 400;
+        res.statusCode = 500;
         return res.end(JSON.stringify({ message: "category already exits" }));
       }
       const [results] = await connection
@@ -72,7 +72,7 @@ module.exports = async function category(req, res) {
           [body.category_name, body.category_des, user.id]
         );
       if (results.affectedRows == 0) {
-        res.statusCode == 400;
+        res.statusCode == 500;
         return res.end(
           JSON.stringify({ message: "cannot save data in database" })
         );
@@ -176,7 +176,7 @@ module.exports = async function category(req, res) {
       if (result.affectedRows > 0) {
         res.statusCode = 200;
         return res.end(
-          JSON.stringify({ message: "unit updated successfully" })
+          JSON.stringify({ message: "category updated successfully" })
         );
       } else {
         res.statusCode = 500;
