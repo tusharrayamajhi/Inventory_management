@@ -39,7 +39,7 @@ document.getElementById("select_product").addEventListener("change",async()=>{
                     form.classList.add(`forms`)
                     form.classList.add(`form-container`)
                     form.innerHTML = formresult
-                    document.getElementById("formsection").appendChild(form)
+                    document.getElementById("invoice_formsection").appendChild(form)
                     let newform = document.getElementById(`${result.product_id}`);
                     newform.querySelector("input[name='product_id']").value = result.product_id
                     newform.querySelector("input[name='productName']").value = result.product_name

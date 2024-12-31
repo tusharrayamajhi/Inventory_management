@@ -93,6 +93,7 @@ hr {
 
 
 #formsection {
+  width: 100%;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
@@ -102,7 +103,7 @@ hr {
 .form-header,
 .forms {
   display: grid;
-  grid-template-columns: repeat(11, 1fr); /* 11 columns for the headings and inputs */
+  grid-template-columns: repeat(11, 1fr); /* 9 columns for the headings and inputs */
   gap: 10px;
   align-items: center;
 }
@@ -113,4 +114,58 @@ hr {
   padding: 10px;
   border-bottom: 1px solid #ccc;
   text-align: center;
+}
+.form-header > span{
+  border-right: 1px solid black;
+}
+#formsection > .forms > input, select,textarea{
+  width: 90px;
+  align-items: center;
+}
+
+
+
+/* .formsection table tr td input {
+  width: 100px;
+  height: 20px;
+} */
+
+
+/* invocie */
+#invoice_formsection {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.invoice_form-header,
+.forms {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr); /* 9 columns for the headings and inputs */
+  gap: 10px;
+  align-items: center;
+}
+
+.invoice_form-header {
+  font-weight: bold;
+  background-color: #e6e6e6;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+.invoice_form-header > span{
+  border-right: 1px solid black;
+}
+#invoice_formsection  .forms  input, select,textarea{
+  width: 110px;
+  align-items: center;
+}
+
+#invoice_formsection > .forms > input[type='text'],input[class='stock'],input[class='total']{
+  border: none;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0);
+  pointer-events: none;
 }
