@@ -142,10 +142,10 @@ hr {
 
 .invoice_form-header,
 .forms {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr); /* 9 columns for the headings and inputs */
-  gap: 10px;
-  align-items: center;
+  display: flex;
+  /* grid-template-columns: repeat(9, fr); 9 columns for the headings and inputs */
+  justify-content: space-between;
+  /* align-items: center; */
 }
 
 .invoice_form-header {

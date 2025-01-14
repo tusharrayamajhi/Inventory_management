@@ -85,6 +85,7 @@ module.exports = async function auth(req, res) {
       });
       return res.end(JSON.stringify({ message: "login Successfully" }));
     } catch (err) {
+      console.log(err)
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "Internal server error", err }));
     }

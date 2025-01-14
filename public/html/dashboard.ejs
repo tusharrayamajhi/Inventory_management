@@ -4,118 +4,780 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/dashboard.css">
-   
+    <link rel="stylesheet" href="/dashboard.css" />
   </head>
   <body>
+    <%- include("./success.ejs") %> <%- include("./navbar.ejs") %>
 
-    <%- include("./success.ejs") %>
-
-    <%- include("./navbar.ejs") %>
-    
     <main>
       <div class="card_sections">
         <%if(user.roles == "superadmin"){%>
         <div class="card">
           <div class="card_title">users</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/user/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/user/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">company</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/company/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/company/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/company/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/company/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <%}else if(user.roles === "admin"){%>
         <div class="card">
           <div class="card_title">category</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/category/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/category/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/category/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/category/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">brand</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/brand/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/brand/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/brand/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/brand/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">unit</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/unit/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/unit/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/unit/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/unit/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">user</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/user/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/user/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/user/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/user/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">customer</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/customer/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/customer/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/customer/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/customer/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">product</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/product/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/product/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/product/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/product/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">vendor</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/vendor/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/vendor/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/vendor/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/vendor/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">purchases</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/purchase/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/purchase/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/purchase/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/purchase/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">invoices</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/invoice/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/invoice/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/invoice/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/invoice/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
-        
+
         <%}else if(user.roles == "normal"){%>
         <div class="card">
           <div class="card_title">invoices</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/invoice/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/invoice/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/invoice/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/invoice/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <div class="card">
           <div class="card_title">customer</div>
           <div class="card_btm">
-            <a class="card_logo add" href="/customer/add"><i class="fa-solid fa-user-plus"></i></a>
-            <a class="card_logo see" href="/customer/view"><i class="fa-solid fa-eye"></i></a>
+            <a class="card_logo add" href="/customer/add"
+              ><i class="fa-solid fa-user-plus"></i
+            ></a>
+            <a class="card_logo see" href="/customer/view"
+              ><i class="fa-solid fa-eye"></i
+            ></a>
           </div>
         </div>
         <%}%>
       </div>
     </main>
 
-    <footer></footer>
+    <%if(user.roles === "admin"){%>
+    <section id="reports">
+      <!-- Sales Report Section -->
+      <div id="sales-report">
+        <h2>Sales Report</h2>
+        <form id="sales-report-form">
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date" name="start" required />
+      
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date" name="end" required />
+      
+          <button type="submit">Get Sales Report</button>
+        </form>
+        <div id="sales-report-results"></div>
+      </div>
+      
     
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+        
+        // Set the default value for start and end dates to today
+        document.getElementById("start-date").value = today;
+        document.getElementById("end-date").value = today;
+    
+        // Call the API automatically when the page loads
+        fetchSalesReport(today, today);
+      });
+    
+      // Function to fetch the sales report
+      async function fetchSalesReport(startDate, endDate) {
+        try {
+          const response = await fetch("/report/sales", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ start: startDate, end: endDate }),
+          });
+    
+          if (!response.ok) {
+            throw new Error("Failed to fetch sales report");
+          }
+    
+          const data = await response.json();
+          console.log(data);
+    
+          // Render results
+          const resultsContainer = document.getElementById("sales-report-results");
+          resultsContainer.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Total Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <td>${data.data}</td>  
+              </tbody>
+            </table>
+          `;
+        } catch (error) {
+          console.error(error);
+          alert("An error occurred while fetching the sales report.");
+        }
+      }
+    
+      document.getElementById("sales-report-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+    
+        const startDate = document.getElementById("start-date").value;
+        const endDate = document.getElementById("end-date").value;
+    
+        fetchSalesReport(startDate, endDate);
+      });
+    </script>
+       
+
+
+       <section id="user-sales-report">
+        <h2>User Sales Report</h2>
+      
+        <!-- User Selection and Date Range Form -->
+        <form id="user-sales-report-form">
+          <label for="user-select">Select User:</label>
+          <select id="user-select" name="userId" required>
+            <!-- Options will be populated from backend -->
+          </select>
+      
+          <label for="start-date">Start Date:</label>
+          <input type="date" id="start-date" name="start" required />
+      
+          <label for="end-date">End Date:</label>
+          <input type="date" id="end-date" name="end" required />
+      
+          <button type="submit">Get Sales Report</button>
+        </form>
+      
+        <!-- Display the sales amount -->
+        <div id="sales-report-results">
+          <h3>Sales Amount:</h3>
+          <p id="sales-amount">---</p>
+        </div>
+      </section>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+          // Default date as today
+          const today = new Date().toISOString().split("T")[0];
+          document.getElementById("start-date").value = today;
+          document.getElementById("end-date").value = today;
+      
+          // Fetch user list from backend to populate the select dropdown
+          try {
+            const response = await fetch("/report/user/get",{method:"GET"}); // Fetch all users for the dropdown
+            const users = await response.json();
+            
+            const userSelect = document.getElementById("user-select");
+            users.forEach(user => {
+              const option = document.createElement("option");
+              option.value = user.user_id; // Assuming the response contains 'id' and 'name' for each user
+              option.textContent = `${user.name}`;
+              userSelect.appendChild(option);
+            });
+          } catch (error) {
+            console.error("Error fetching users:", error);
+          }
+        });
+      
+        document.getElementById("user-sales-report-form").addEventListener("submit", async function (event) {
+          event.preventDefault();
+      
+          const userId = document.getElementById("user-select").value;
+          const startDate = document.getElementById("start-date").value;
+          const endDate = document.getElementById("end-date").value;
+      
+          try {
+            // Fetch sales report data for the selected user and date range
+            const response = await fetch("/report/sales-by-user", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ userId, start: startDate, end: endDate }),
+            });
+      
+            if (!response.ok) {
+              throw new Error("Failed to fetch sales report");
+            }
+      
+            const data = await response.json();
+            
+            // Show the fetched sales amount
+            document.getElementById("sales-amount").textContent = `${data.data || 0}`;
+          } catch (error) {
+            console.error("Error fetching sales data:", error);
+            alert("An error occurred while fetching the sales report.");
+          }
+        });
+      </script>
+      
+       
+
+
+
+
+      <section id="vendor-report">
+        <h2>Top Vendors</h2>
+    
+        <!-- Vendor report form -->
+        <form id="vendor-report-form">
+            <!-- Number of Vendors to Display -->
+            <label for="num-vendors">Number of Top Vendors:</label>
+            <input type="number" id="num-vendors"  name="num-vendors" placeholder="Enter number of vendors" min="1" value="10" required />
+    
+            <!-- Start and End Date Fields -->
+            <label for="start_date_id">Start Date:</label>
+            <input type="date" id="start_date_id" name="start" required />
+    
+            <label for="end_date_id">End Date:</label>
+            <input type="date" id="end_date_id" name="end" required />
+    
+            <button type="submit">Get Vendor Report</button>
+        </form>
+    
+        <!-- Vendor results will be shown here -->
+        <div id="vendor-report-results">
+            <h3>Top Vendors</h3>
+            <table id="vendor-table">
+                <thead>
+                    <tr>
+                        <th>Vendor Name</th>
+                        <th>Purchase Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Vendor data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Set the default date range to 1 year ago
+            const today = new Date();
+            const lastYear = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+    
+            const formattedToday = today.toISOString().split('T')[0];
+            const formattedLastYear = lastYear.toISOString().split('T')[0];
+    
+            // Set default values for start and end date inputs
+            document.getElementById("start_date_id").value = formattedLastYear;
+            document.getElementById("end_date_id").value = formattedToday;
+    
+            // Set default number of top vendors to 10
+            const noofvendor = document.getElementById("num-vendors").value;
+    
+            // Automatically fetch the data when the page loads
+            fetchVendorData(formattedLastYear, formattedToday, parseInt(noofvendor));
+        });
+    
+        // Event listener for the form submission
+        document.getElementById("vendor-report-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+    
+            const numVendors = document.getElementById("num-vendors").value;
+            const startDate = document.getElementById("start_date_id").value;
+            const endDate = document.getElementById("end_date_id").value;
+    
+            // Fetch the vendor data for the selected date range and other parameters
+            fetchVendorData(startDate, endDate, numVendors);
+        });
+    
+        async function fetchVendorData(startDate, endDate, numVendors) {
+            try {
+                // Send a request to the backend to get the top vendors data
+                const response = await fetch("/report/top-vendor", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ 
+                        start: startDate, 
+                        end: endDate, 
+                        numVendors: numVendors,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    throw new Error("Failed to fetch vendor data");
+                }
+    
+                const data = await response.json();
+                console.log(data);
+    
+                // Render results in the table
+                const tableBody = document.getElementById("vendor-table").getElementsByTagName("tbody")[0];
+                tableBody.innerHTML = ""; // Clear any previous results
+    
+                data.vendors.forEach(vendor => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${vendor.vendor_name}</td>
+                        <td>${vendor.total_purchase}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+    
+            } catch (error) {
+                console.error("Error fetching vendor data:", error);
+                alert("Error fetching vendor data");
+            }
+        }
+    </script>
+    
+
+
+
+
+
+    <section id="top-buyers-report">
+      <h2 class="text-2xl font-bold text-center mb-6">Top Buyers Report</h2>
+    
+      <form id="report-form" class="mb-6">
+        <div class="mb-4">
+          <label for="start-date-cus" class="block font-medium">Start Date:</label>
+          <input type="date" id="start-date-cus" name="start" class="p-2 border rounded" />
+        </div>
+    
+        <div class="mb-4">
+          <label for="end-date-cus" class="block font-medium">End Date:</label>
+          <input type="date" id="end-date-cus" name="end" class="p-2 border rounded" />
+        </div>
+    
+        <div class="mb-4">
+          <label for="num-customers" class="block font-medium">Number of Customers:</label>
+          <input type="number" id="num-customers" name="num-customers" value="10" min="1" class="p-2 border rounded" />
+        </div>
+    
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Get Top Buyers</button>
+      </form>
+    
+      <div id="buyers-results">
+        <!-- Results will be displayed here -->
+      </div>
+    </section>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set default dates (last 3 months)
+        const today = new Date();
+        const startDate = new Date();
+        startDate.setMonth(today.getMonth() - 3);
+        document.getElementById("start-date-cus").value = startDate.toISOString().split("T")[0];
+        document.getElementById("end-date-cus").value = today.toISOString().split("T")[0];
+    
+        // Function to fetch and display the report
+        async function fetchReport() {
+          const startDate = document.getElementById("start-date-cus").value;
+          const endDate = document.getElementById("end-date-cus").value;
+          const numCustomers = document.getElementById("num-customers").value;
+    
+          try {
+            const response = await fetch("/report/top-buyers", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                start: startDate,
+                end: endDate,
+                numCustomers: numCustomers,
+              }),
+            });
+    
+            if (!response.ok) {
+              throw new Error("Failed to fetch top buyers.");
+            }
+    
+            const data = await response.json();
+            displayResults(data)
+          } catch (error) {
+            console.error("Error fetching top buyers:", error);
+            alert("An error occurred while fetching the data.");
+          }
+        }
+    
+        // Function to display the fetched results
+        function displayResults(data) {
+          console.log(data)
+          const resultsContainer = document.getElementById("buyers-results");
+          if (data && data.buyers.length > 0) {
+            let htmlContent = `
+              <table class="min-w-full table-auto">
+                <thead>
+                  <tr>
+                    <th class="border px-4 py-2">Customer Name</th>
+                    <th class="border px-4 py-2">Total Purchase</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+    
+            data.buyers.forEach((buyer) => {
+              htmlContent += `
+                <tr>
+                  <td class="border px-4 py-2">${buyer.customer_name}</td>
+                  <td class="border px-4 py-2">${buyer.total_purchase}</td>
+                </tr>
+              `;
+            });
+    
+            htmlContent += "</tbody></table>";
+            resultsContainer.innerHTML = htmlContent;
+          } else {
+            resultsContainer.innerHTML = "<p>No data found for the selected period.</p>";
+          }
+        }
+    
+        // Automatically fetch the report when the page loads
+        fetchReport();
+    
+        // Fetch and display the report when the form is submitted
+        document.getElementById("report-form").addEventListener("submit", function (event) {
+          event.preventDefault();
+          fetchReport();
+        });
+      });
+    </script>
+    
+    
+
+
+
+
+
+
+    <section id="top-selling-products-report">
+      <h2 class="text-2xl font-bold text-center mb-6">Top Selling Products Report</h2>
+    
+      <form id="pro-report-form" class="mb-6">
+        <div class="mb-4">
+          <label for="start-date" class="block font-medium">Start Date:</label>
+          <input type="date" id="start-date-prod" name="start" class="p-2 border rounded" />
+        </div>
+    
+        <div class="mb-4">
+          <label for="end-date" class="block font-medium">End Date:</label>
+          <input type="date" id="end-date-prod" name="end" class="p-2 border rounded" />
+        </div>
+    
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Get Top Selling Products</button>
+      </form>
+    
+      <div id="products-results">
+        <!-- Results will be displayed here -->
+      </div>
+    </section>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", async function() {
+        // Set default dates to one year ago and today
+        const today = new Date();
+        const startDate = new Date();
+        startDate.setFullYear(today.getFullYear() - 1);
+        document.getElementById("start-date-prod").value = startDate.toISOString().split("T")[0];
+        document.getElementById("end-date-prod").value = today.toISOString().split("T")[0];
+    
+        // Fetch and display the report automatically on page load
+        await fetchAndDisplayReport();
+    
+        // Fetch and display the report when the form is submitted
+        document.getElementById("pro-report-form").addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent the default GET request
+          await fetchAndDisplayReport(); // Make the POST request explicitly
+        });
+    
+        async function fetchAndDisplayReport() {
+          const startDate = document.getElementById("start-date-prod").value;
+          const endDate = document.getElementById("end-date-prod").value;
+    
+          try {
+            const response = await fetch("/report/top-selling-products", {
+              method: "POST", // Explicitly send POST request
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                start: startDate,
+                end: endDate,
+              }),
+            });
+    
+            if (!response.ok) {
+              throw new Error("Failed to fetch top selling products.");
+            }
+    
+            const data = await response.json();
+            displayResults(data);
+          } catch (error) {
+            console.error("Error fetching top selling products:", error);
+            alert("An error occurred while fetching the data.");
+          }
+        }
+    
+        // Function to display the fetched results
+        function displayResults(data) {
+          const resultsContainer = document.getElementById("products-results");
+          if (data && data.products.length > 0) {
+            let htmlContent = `
+              <table class="min-w-full table-auto">
+                <thead>
+                  <tr>
+                    <th class="border px-4 py-2">Product Name</th>
+                    <th class="border px-4 py-2">Product qnt</th>
+                    <th class="border px-4 py-2">Total Sales</th>
+                  </tr>
+                </thead>
+                <tbody>
+            `;
+    
+            data.products.forEach((product) => {
+              htmlContent += `
+                <tr>
+                  <td class="border px-4 py-2">${product.product_name}</td>
+                  <td class="border px-4 py-2">${product.qnt}</td>
+                  <td class="border px-4 py-2">${product.total_sales}</td>
+                </tr>
+              `;
+            });
+    
+            htmlContent += "</tbody></table>";
+            resultsContainer.innerHTML = htmlContent;
+          } else {
+            resultsContainer.innerHTML = "<p>No data found for the selected period.</p>";
+          }
+        }
+      });
+    </script>
+    
+
+
+
+    <section id="profit-loss-report">
+      <h2 class="text-2xl font-bold text-center mb-6">Profit and Loss Report</h2>
+    
+      <form id="profit-loss-form" class="mb-6">
+        <div class="mb-4">
+          <label for="start-date-pl" class="block font-medium">Start Date:</label>
+          <input type="date" id="start-date-pl" name="start" class="p-2 border rounded" />
+        </div>
+    
+        <div class="mb-4">
+          <label for="end-date-pl" class="block font-medium">End Date:</label>
+          <input type="date" id="end-date-pl" name="end" class="p-2 border rounded" />
+        </div>
+    
+        <button type="submit" class="bg-blue-500 text-white p-2 rounded">Get Profit and Loss</button>
+      </form>
+    
+      <div id="profit-loss-results">
+        <!-- Results will be displayed here -->
+      </div>
+    </section>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const today = new Date();
+        const startDate = new Date();
+        startDate.setFullYear(today.getFullYear() - 1);
+    
+        // Set default dates to one year ago and today
+        document.getElementById("start-date-pl").value = startDate.toISOString().split("T")[0];
+        document.getElementById("end-date-pl").value = today.toISOString().split("T")[0];
+    
+        // Fetch and display the report automatically on page load
+        await fetchAndDisplayReport();
+    
+        // Fetch and display the report when the form is submitted
+        document.getElementById("profit-loss-form").addEventListener("submit", async function (event) {
+          event.preventDefault();
+          await fetchAndDisplayReport();
+        });
+    
+        async function fetchAndDisplayReport() {
+          const startDate = document.getElementById("start-date").value;
+          const endDate = document.getElementById("end-date").value;
+    
+          try {
+            const response = await fetch("/report/profit_loss", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ start: startDate, end: endDate }),
+            });
+    
+            if (!response.ok) {
+              throw new Error("Failed to fetch profit and loss data.");
+            }
+    
+            const data = await response.json();
+            console.log(data.result)
+            displayResults(data);
+          } catch (error) {
+            console.error("Error fetching profit and loss:", error);
+            alert("An error occurred while fetching the data.");
+          }
+        }
+    
+        // Function to display the fetched results
+        function displayResults(data) {
+          const resultsContainer = document.getElementById("profit-loss-results");
+    
+          if (data.result.total_sales_amount && data.result.total_purchase_amount) {
+            resultsContainer.innerHTML = `
+              <p class="mb-4">Report Period: ${data.start} to ${data.end}</p>
+              <table class="min-w-full table-auto border-collapse border border-gray-400">
+                <thead>
+                  <tr>
+                    <th class="border px-4 py-2">Metric</th>
+                    <th class="border px-4 py-2">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="border px-4 py-2">Total Sales Amount</td>
+                    <td class="border px-4 py-2">${data.result.total_sales_amount}</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">Total Purchase Amount</td>
+                    <td class="border px-4 py-2">${data.result.total_purchase_amount}</td>
+                  </tr>
+                  <tr>
+                    <td class="border px-4 py-2">Profit/Loss</td>
+                    <td class="border px-4 py-2">${data.result.profit_or_loss}</td>
+                  </tr>
+                </tbody>
+              </table>
+            `;
+          } else {
+            resultsContainer.innerHTML = "<p>No data found for the selected period.</p>";
+          }
+        }
+      });
+    </script>
+    
+       
+       
+       <%}%>
+    
+
+
+    <footer></footer>
   </body>
   <script src="/dashboard.js"></script>
 </html>

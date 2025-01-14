@@ -74,6 +74,7 @@ module.exports = async function purchase(req, res) {
     }
   } else if (req.url == "/purchase/add" && req.method == "POST") {
     const body = await processPost(req);
+    console.log(body)
     let finalerr = [];
     let haserr = false;
     if (body.vendor.vendorid == "") {
@@ -221,6 +222,7 @@ module.exports = async function purchase(req, res) {
         return res.end(JSON.stringify({message:"purchase save successfully"}))
 
     } catch (err) {
+      console.log(err)
       await connection.promise().rollback();
       res.statusCode = 500;
       return res.end(JSON.stringify({ message: "internal server error", err }));
